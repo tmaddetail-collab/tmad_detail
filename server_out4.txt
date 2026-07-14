@@ -1,0 +1,103 @@
+INFO:     Started server process [11140]
+INFO:     Waiting for application startup.
+2026-06-28 21:33:13,418 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-06-28 21:33:13,419 INFO sqlalchemy.engine.Engine PRAGMA main.table_info("users")
+2026-06-28 21:33:13,419 INFO sqlalchemy.engine.Engine [raw sql] ()
+2026-06-28 21:33:13,422 INFO sqlalchemy.engine.Engine PRAGMA main.table_info("vehicles")
+2026-06-28 21:33:13,422 INFO sqlalchemy.engine.Engine [raw sql] ()
+2026-06-28 21:33:13,424 INFO sqlalchemy.engine.Engine PRAGMA main.table_info("services")
+2026-06-28 21:33:13,424 INFO sqlalchemy.engine.Engine [raw sql] ()
+2026-06-28 21:33:13,426 INFO sqlalchemy.engine.Engine PRAGMA main.table_info("appointments")
+2026-06-28 21:33:13,426 INFO sqlalchemy.engine.Engine [raw sql] ()
+2026-06-28 21:33:13,429 INFO sqlalchemy.engine.Engine PRAGMA main.table_info("appointment_services")
+2026-06-28 21:33:13,429 INFO sqlalchemy.engine.Engine [raw sql] ()
+2026-06-28 21:33:13,431 INFO sqlalchemy.engine.Engine PRAGMA main.table_info("service_orders")
+2026-06-28 21:33:13,432 INFO sqlalchemy.engine.Engine [raw sql] ()
+2026-06-28 21:33:13,433 INFO sqlalchemy.engine.Engine PRAGMA main.table_info("order_services")
+2026-06-28 21:33:13,433 INFO sqlalchemy.engine.Engine [raw sql] ()
+2026-06-28 21:33:13,435 INFO sqlalchemy.engine.Engine PRAGMA main.table_info("order_photos")
+2026-06-28 21:33:13,435 INFO sqlalchemy.engine.Engine [raw sql] ()
+2026-06-28 21:33:13,436 INFO sqlalchemy.engine.Engine PRAGMA main.table_info("checklist_items")
+2026-06-28 21:33:13,436 INFO sqlalchemy.engine.Engine [raw sql] ()
+2026-06-28 21:33:13,437 INFO sqlalchemy.engine.Engine PRAGMA main.table_info("payments")
+2026-06-28 21:33:13,438 INFO sqlalchemy.engine.Engine [raw sql] ()
+2026-06-28 21:33:13,439 INFO sqlalchemy.engine.Engine PRAGMA main.table_info("expenses")
+2026-06-28 21:33:13,439 INFO sqlalchemy.engine.Engine [raw sql] ()
+2026-06-28 21:33:13,440 INFO sqlalchemy.engine.Engine PRAGMA main.table_info("notifications")
+2026-06-28 21:33:13,440 INFO sqlalchemy.engine.Engine [raw sql] ()
+2026-06-28 21:33:13,442 INFO sqlalchemy.engine.Engine PRAGMA main.table_info("audit_logs")
+2026-06-28 21:33:13,443 INFO sqlalchemy.engine.Engine [raw sql] ()
+2026-06-28 21:33:13,447 INFO sqlalchemy.engine.Engine COMMIT
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://0.0.0.0:8003 (Press CTRL+C to quit)
+2026-06-28 21:33:13,494 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-06-28 21:33:13,607 INFO sqlalchemy.engine.Engine SELECT users.id, users.name, users.email, users.cpf, users.phone, users.password_hash, users.role, users.google_id, users.avatar_url, users.is_active, users.created_at, users.updated_at 
+FROM users 
+WHERE users.email = ?
+2026-06-28 21:33:13,608 INFO sqlalchemy.engine.Engine [generated in 0.00040s] ('admin@detailapp.com',)
+2026-06-28 21:33:14,303 INFO sqlalchemy.engine.Engine INSERT INTO audit_logs (id, user_id, action, entity, entity_id, ip_address) VALUES (?, ?, ?, ?, ?, ?) RETURNING created_at
+2026-06-28 21:33:14,303 INFO sqlalchemy.engine.Engine [generated in 0.00055s] ('5a7720777a9d4b398e363427172ece67', 'dcf1720758d54cc0aa8a22e3fffe2687', 'login', 'user', 'dcf1720758d54cc0aa8a22e3fffe2687', '127.0.0.1')
+2026-06-28 21:33:14,306 INFO sqlalchemy.engine.Engine COMMIT
+INFO:     127.0.0.1:49622 - "POST /api/v1/auth/login HTTP/1.1" 200 OK
+2026-06-28 21:33:14,336 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-06-28 21:33:14,338 INFO sqlalchemy.engine.Engine SELECT users.id, users.name, users.email, users.cpf, users.phone, users.password_hash, users.role, users.google_id, users.avatar_url, users.is_active, users.created_at, users.updated_at 
+FROM users 
+WHERE users.id = ?
+2026-06-28 21:33:14,338 INFO sqlalchemy.engine.Engine [generated in 0.00034s] ('dcf1720758d54cc0aa8a22e3fffe2687',)
+2026-06-28 21:33:14,351 INFO sqlalchemy.engine.Engine SELECT services.id, services.name, services.category, services.description, services.estimated_time, services.price, services.is_active, services.created_at, services.updated_at 
+FROM services 
+WHERE services.id = ?
+2026-06-28 21:33:14,351 INFO sqlalchemy.engine.Engine [generated in 0.00045s] ('c48d3b14339b4161b84a3cc3aff08453',)
+2026-06-28 21:33:14,355 INFO sqlalchemy.engine.Engine UPDATE services SET is_active=?, updated_at=CURRENT_TIMESTAMP WHERE services.id = ?
+2026-06-28 21:33:14,355 INFO sqlalchemy.engine.Engine [generated in 0.00033s] (0, 'c48d3b14339b4161b84a3cc3aff08453')
+2026-06-28 21:33:14,361 INFO sqlalchemy.engine.Engine SELECT services.updated_at AS services_updated_at 
+FROM services 
+WHERE services.id = ?
+2026-06-28 21:33:14,363 INFO sqlalchemy.engine.Engine [generated in 0.00203s] ('c48d3b14339b4161b84a3cc3aff08453',)
+2026-06-28 21:33:14,363 INFO sqlalchemy.engine.Engine ROLLBACK
+INFO:     127.0.0.1:49622 - "PUT /api/v1/services/c48d3b14-339b-4161-b84a-3cc3aff08453 HTTP/1.1" 500 Internal Server Error
+ERROR:    Exception in ASGI application
+Traceback (most recent call last):
+  File "C:\Users\tadeu\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.12_qbz5n2kfra8p0\LocalCache\local-packages\Python312\site-packages\uvicorn\protocols\http\httptools_impl.py", line 401, in run_asgi
+    result = await app(  # type: ignore[func-returns-value]
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\tadeu\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.12_qbz5n2kfra8p0\LocalCache\local-packages\Python312\site-packages\uvicorn\middleware\proxy_headers.py", line 70, in __call__
+    return await self.app(scope, receive, send)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\tadeu\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.12_qbz5n2kfra8p0\LocalCache\local-packages\Python312\site-packages\fastapi\applications.py", line 1054, in __call__
+    await super().__call__(scope, receive, send)
+  File "C:\Users\tadeu\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.12_qbz5n2kfra8p0\LocalCache\local-packages\Python312\site-packages\starlette\applications.py", line 113, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "C:\Users\tadeu\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.12_qbz5n2kfra8p0\LocalCache\local-packages\Python312\site-packages\starlette\middleware\errors.py", line 187, in __call__
+    raise exc
+  File "C:\Users\tadeu\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.12_qbz5n2kfra8p0\LocalCache\local-packages\Python312\site-packages\starlette\middleware\errors.py", line 165, in __call__
+    await self.app(scope, receive, _send)
+  File "C:\Users\tadeu\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.12_qbz5n2kfra8p0\LocalCache\local-packages\Python312\site-packages\starlette\middleware\cors.py", line 85, in __call__
+    await self.app(scope, receive, send)
+  File "C:\Users\tadeu\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.12_qbz5n2kfra8p0\LocalCache\local-packages\Python312\site-packages\starlette\middleware\exceptions.py", line 62, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "C:\Users\tadeu\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.12_qbz5n2kfra8p0\LocalCache\local-packages\Python312\site-packages\starlette\_exception_handler.py", line 62, in wrapped_app
+    raise exc
+  File "C:\Users\tadeu\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.12_qbz5n2kfra8p0\LocalCache\local-packages\Python312\site-packages\starlette\_exception_handler.py", line 51, in wrapped_app
+    await app(scope, receive, sender)
+  File "C:\Users\tadeu\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.12_qbz5n2kfra8p0\LocalCache\local-packages\Python312\site-packages\starlette\routing.py", line 715, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "C:\Users\tadeu\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.12_qbz5n2kfra8p0\LocalCache\local-packages\Python312\site-packages\starlette\routing.py", line 735, in app
+    await route.handle(scope, receive, send)
+  File "C:\Users\tadeu\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.12_qbz5n2kfra8p0\LocalCache\local-packages\Python312\site-packages\starlette\routing.py", line 288, in handle
+    await self.app(scope, receive, send)
+  File "C:\Users\tadeu\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.12_qbz5n2kfra8p0\LocalCache\local-packages\Python312\site-packages\starlette\routing.py", line 76, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "C:\Users\tadeu\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.12_qbz5n2kfra8p0\LocalCache\local-packages\Python312\site-packages\starlette\_exception_handler.py", line 62, in wrapped_app
+    raise exc
+  File "C:\Users\tadeu\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.12_qbz5n2kfra8p0\LocalCache\local-packages\Python312\site-packages\starlette\_exception_handler.py", line 51, in wrapped_app
+    await app(scope, receive, sender)
+  File "C:\Users\tadeu\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.12_qbz5n2kfra8p0\LocalCache\local-packages\Python312\site-packages\starlette\routing.py", line 73, in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+  File "C:\Users\tadeu\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.12_qbz5n2kfra8p0\LocalCache\local-packages\Python312\site-packages\fastapi\routing.py", line 327, in app
+    content = await serialize_response(
+              ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\tadeu\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.12_qbz5n2kfra8p0\LocalCache\local-packages\Python312\site-packages\fastapi\routing.py", line 176, in serialize_response
+    raise ResponseValidationError(
+fastapi.exceptions.ResponseValidationError: <exception str() failed>

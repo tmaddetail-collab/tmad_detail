@@ -1,0 +1,1365 @@
+INFO:     Started server process [12976]
+INFO:     Waiting for application startup.
+2026-06-28 21:52:49,747 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-06-28 21:52:49,748 INFO sqlalchemy.engine.Engine PRAGMA main.table_info("users")
+2026-06-28 21:52:49,748 INFO sqlalchemy.engine.Engine [raw sql] ()
+2026-06-28 21:52:49,751 INFO sqlalchemy.engine.Engine PRAGMA main.table_info("vehicles")
+2026-06-28 21:52:49,752 INFO sqlalchemy.engine.Engine [raw sql] ()
+2026-06-28 21:52:49,754 INFO sqlalchemy.engine.Engine PRAGMA main.table_info("services")
+2026-06-28 21:52:49,755 INFO sqlalchemy.engine.Engine [raw sql] ()
+2026-06-28 21:52:49,758 INFO sqlalchemy.engine.Engine PRAGMA main.table_info("appointments")
+2026-06-28 21:52:49,758 INFO sqlalchemy.engine.Engine [raw sql] ()
+2026-06-28 21:52:49,760 INFO sqlalchemy.engine.Engine PRAGMA main.table_info("appointment_services")
+2026-06-28 21:52:49,760 INFO sqlalchemy.engine.Engine [raw sql] ()
+2026-06-28 21:52:49,762 INFO sqlalchemy.engine.Engine PRAGMA main.table_info("service_orders")
+2026-06-28 21:52:49,763 INFO sqlalchemy.engine.Engine [raw sql] ()
+2026-06-28 21:52:49,765 INFO sqlalchemy.engine.Engine PRAGMA main.table_info("order_services")
+2026-06-28 21:52:49,765 INFO sqlalchemy.engine.Engine [raw sql] ()
+2026-06-28 21:52:49,767 INFO sqlalchemy.engine.Engine PRAGMA main.table_info("order_photos")
+2026-06-28 21:52:49,767 INFO sqlalchemy.engine.Engine [raw sql] ()
+2026-06-28 21:52:49,769 INFO sqlalchemy.engine.Engine PRAGMA main.table_info("checklist_items")
+2026-06-28 21:52:49,769 INFO sqlalchemy.engine.Engine [raw sql] ()
+2026-06-28 21:52:49,771 INFO sqlalchemy.engine.Engine PRAGMA main.table_info("payments")
+2026-06-28 21:52:49,771 INFO sqlalchemy.engine.Engine [raw sql] ()
+2026-06-28 21:52:49,774 INFO sqlalchemy.engine.Engine PRAGMA main.table_info("expenses")
+2026-06-28 21:52:49,775 INFO sqlalchemy.engine.Engine [raw sql] ()
+2026-06-28 21:52:49,777 INFO sqlalchemy.engine.Engine PRAGMA main.table_info("notifications")
+2026-06-28 21:52:49,777 INFO sqlalchemy.engine.Engine [raw sql] ()
+2026-06-28 21:52:49,779 INFO sqlalchemy.engine.Engine PRAGMA main.table_info("audit_logs")
+2026-06-28 21:52:49,779 INFO sqlalchemy.engine.Engine [raw sql] ()
+2026-06-28 21:52:49,781 INFO sqlalchemy.engine.Engine COMMIT
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://0.0.0.0:8006 (Press CTRL+C to quit)
+INFO:     127.0.0.1:50017 - "GET /health HTTP/1.1" 200 OK
+2026-06-28 21:53:01,897 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-06-28 21:53:02,016 INFO sqlalchemy.engine.Engine SELECT users.id, users.name, users.email, users.cpf, users.phone, users.password_hash, users.role, users.google_id, users.avatar_url, users.is_active, users.created_at, users.updated_at 
+FROM users 
+WHERE users.email = ?
+2026-06-28 21:53:02,016 INFO sqlalchemy.engine.Engine [generated in 0.00044s] ('admin@detailapp.com',)
+2026-06-28 21:53:02,718 INFO sqlalchemy.engine.Engine INSERT INTO audit_logs (id, user_id, action, entity, entity_id, ip_address) VALUES (?, ?, ?, ?, ?, ?) RETURNING created_at
+2026-06-28 21:53:02,719 INFO sqlalchemy.engine.Engine [generated in 0.00048s] ('c1115c74620d4c3ab87c970ced533b6a', 'dcf1720758d54cc0aa8a22e3fffe2687', 'login', 'user', 'dcf1720758d54cc0aa8a22e3fffe2687', '127.0.0.1')
+2026-06-28 21:53:02,725 INFO sqlalchemy.engine.Engine COMMIT
+INFO:     127.0.0.1:50019 - "POST /api/v1/auth/login HTTP/1.1" 200 OK
+2026-06-28 21:53:02,758 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-06-28 21:53:02,764 INFO sqlalchemy.engine.Engine SELECT users.id, users.name, users.email, users.cpf, users.phone, users.password_hash, users.role, users.google_id, users.avatar_url, users.is_active, users.created_at, users.updated_at 
+FROM users 
+WHERE users.id = ?
+2026-06-28 21:53:02,764 INFO sqlalchemy.engine.Engine [generated in 0.00038s] ('dcf1720758d54cc0aa8a22e3fffe2687',)
+2026-06-28 21:53:02,769 INFO sqlalchemy.engine.Engine SELECT count(users.id) AS count_1 
+FROM users 
+WHERE users.role = ?
+2026-06-28 21:53:02,770 INFO sqlalchemy.engine.Engine [generated in 0.00036s] ('client',)
+2026-06-28 21:53:02,776 INFO sqlalchemy.engine.Engine SELECT users.id, users.name, users.email, users.cpf, users.phone, users.password_hash, users.role, users.google_id, users.avatar_url, users.is_active, users.created_at, users.updated_at 
+FROM users 
+WHERE users.role = ? ORDER BY users.name
+ LIMIT ? OFFSET ?
+2026-06-28 21:53:02,776 INFO sqlalchemy.engine.Engine [generated in 0.00042s] ('client', 10, 0)
+2026-06-28 21:53:02,779 INFO sqlalchemy.engine.Engine COMMIT
+INFO:     127.0.0.1:50019 - "GET /api/v1/users?role=client&page=1&page_size=10 HTTP/1.1" 200 OK
+2026-06-28 21:53:08,231 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-06-28 21:53:08,231 INFO sqlalchemy.engine.Engine SELECT users.id, users.name, users.email, users.cpf, users.phone, users.password_hash, users.role, users.google_id, users.avatar_url, users.is_active, users.created_at, users.updated_at 
+FROM users 
+WHERE users.email = ?
+2026-06-28 21:53:08,232 INFO sqlalchemy.engine.Engine [cached since 6.216s ago] ('admin@detailapp.com',)
+2026-06-28 21:53:08,876 INFO sqlalchemy.engine.Engine INSERT INTO audit_logs (id, user_id, action, entity, entity_id, ip_address) VALUES (?, ?, ?, ?, ?, ?) RETURNING created_at
+2026-06-28 21:53:08,876 INFO sqlalchemy.engine.Engine [cached since 6.158s ago] ('7926b6f45bd745e2b0fd8c397e02ad16', 'dcf1720758d54cc0aa8a22e3fffe2687', 'login', 'user', 'dcf1720758d54cc0aa8a22e3fffe2687', '127.0.0.1')
+2026-06-28 21:53:08,879 INFO sqlalchemy.engine.Engine COMMIT
+INFO:     127.0.0.1:50023 - "POST /api/v1/auth/login HTTP/1.1" 200 OK
+2026-06-28 21:53:08,914 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-06-28 21:53:08,915 INFO sqlalchemy.engine.Engine SELECT users.id, users.name, users.email, users.cpf, users.phone, users.password_hash, users.role, users.google_id, users.avatar_url, users.is_active, users.created_at, users.updated_at 
+FROM users 
+WHERE users.id = ?
+2026-06-28 21:53:08,915 INFO sqlalchemy.engine.Engine [cached since 6.152s ago] ('dcf1720758d54cc0aa8a22e3fffe2687',)
+2026-06-28 21:53:08,918 INFO sqlalchemy.engine.Engine SELECT count(users.id) AS count_1 
+FROM users 
+WHERE users.role = ?
+2026-06-28 21:53:08,918 INFO sqlalchemy.engine.Engine [cached since 6.149s ago] ('client',)
+2026-06-28 21:53:08,922 INFO sqlalchemy.engine.Engine SELECT users.id, users.name, users.email, users.cpf, users.phone, users.password_hash, users.role, users.google_id, users.avatar_url, users.is_active, users.created_at, users.updated_at 
+FROM users 
+WHERE users.role = ? ORDER BY users.name
+ LIMIT ? OFFSET ?
+2026-06-28 21:53:08,923 INFO sqlalchemy.engine.Engine [cached since 6.147s ago] ('client', 10, 0)
+2026-06-28 21:53:08,925 INFO sqlalchemy.engine.Engine COMMIT
+INFO:     127.0.0.1:50026 - "GET /api/v1/users?role=client&page=1&page_size=10 HTTP/1.1" 200 OK
+2026-06-28 21:58:19,821 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-06-28 21:58:19,821 INFO sqlalchemy.engine.Engine SELECT users.id, users.name, users.email, users.cpf, users.phone, users.password_hash, users.role, users.google_id, users.avatar_url, users.is_active, users.created_at, users.updated_at 
+FROM users 
+WHERE users.email = ?
+2026-06-28 21:58:19,822 INFO sqlalchemy.engine.Engine [cached since 317.8s ago] ('admin@detailapp.com',)
+2026-06-28 21:58:20,445 INFO sqlalchemy.engine.Engine INSERT INTO audit_logs (id, user_id, action, entity, entity_id, ip_address) VALUES (?, ?, ?, ?, ?, ?) RETURNING created_at
+2026-06-28 21:58:20,445 INFO sqlalchemy.engine.Engine [cached since 317.7s ago] ('cf4de009f3c748369a9038315683e637', 'dcf1720758d54cc0aa8a22e3fffe2687', 'login', 'user', 'dcf1720758d54cc0aa8a22e3fffe2687', '127.0.0.1')
+2026-06-28 21:58:20,448 INFO sqlalchemy.engine.Engine COMMIT
+INFO:     127.0.0.1:50067 - "POST /api/v1/auth/login HTTP/1.1" 200 OK
+2026-06-28 21:58:20,658 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-06-28 21:58:20,659 INFO sqlalchemy.engine.Engine SELECT users.id, users.name, users.email, users.cpf, users.phone, users.password_hash, users.role, users.google_id, users.avatar_url, users.is_active, users.created_at, users.updated_at 
+FROM users 
+WHERE users.id = ?
+2026-06-28 21:58:20,660 INFO sqlalchemy.engine.Engine [cached since 317.9s ago] ('dcf1720758d54cc0aa8a22e3fffe2687',)
+2026-06-28 21:58:20,670 INFO sqlalchemy.engine.Engine SELECT CAST(STRFTIME('%m', payments.paid_at) AS INTEGER) AS month, sum(payments.amount) AS total 
+FROM payments 
+WHERE CAST(STRFTIME('%Y', payments.paid_at) AS INTEGER) = ? AND payments.status = ? GROUP BY CAST(STRFTIME('%m', payments.paid_at) AS INTEGER) ORDER BY CAST(STRFTIME('%m', payments.paid_at) AS INTEGER)
+2026-06-28 21:58:20,670 INFO sqlalchemy.engine.Engine [generated in 0.00049s] (2026, 'paid')
+2026-06-28 21:58:20,672 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-06-28 21:58:20,673 INFO sqlalchemy.engine.Engine SELECT users.id, users.name, users.email, users.cpf, users.phone, users.password_hash, users.role, users.google_id, users.avatar_url, users.is_active, users.created_at, users.updated_at 
+FROM users 
+WHERE users.id = ?
+2026-06-28 21:58:20,673 INFO sqlalchemy.engine.Engine [cached since 317.9s ago] ('dcf1720758d54cc0aa8a22e3fffe2687',)
+2026-06-28 21:58:20,673 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-06-28 21:58:20,673 INFO sqlalchemy.engine.Engine SELECT users.id, users.name, users.email, users.cpf, users.phone, users.password_hash, users.role, users.google_id, users.avatar_url, users.is_active, users.created_at, users.updated_at 
+FROM users 
+WHERE users.id = ?
+2026-06-28 21:58:20,674 INFO sqlalchemy.engine.Engine [cached since 317.9s ago] ('dcf1720758d54cc0aa8a22e3fffe2687',)
+2026-06-28 21:58:20,682 INFO sqlalchemy.engine.Engine SELECT CAST(STRFTIME('%m', expenses.date) AS INTEGER) AS month, sum(expenses.amount) AS total 
+FROM expenses 
+WHERE CAST(STRFTIME('%Y', expenses.date) AS INTEGER) = ? GROUP BY CAST(STRFTIME('%m', expenses.date) AS INTEGER) ORDER BY CAST(STRFTIME('%m', expenses.date) AS INTEGER)
+2026-06-28 21:58:20,682 INFO sqlalchemy.engine.Engine [generated in 0.00056s] (2026,)
+2026-06-28 21:58:20,690 INFO sqlalchemy.engine.Engine SELECT order_services.service_id, sum(order_services.quantity) AS total_quantity, sum(order_services.price_at_time * order_services.quantity) AS total_revenue 
+FROM order_services GROUP BY order_services.service_id ORDER BY sum(order_services.price_at_time * order_services.quantity) DESC
+ LIMIT ? OFFSET ?
+2026-06-28 21:58:20,690 INFO sqlalchemy.engine.Engine [generated in 0.00069s] (5, 0)
+2026-06-28 21:58:20,693 INFO sqlalchemy.engine.Engine SELECT count(users.id) AS count_1 
+FROM users 
+WHERE users.role = ?
+2026-06-28 21:58:20,694 INFO sqlalchemy.engine.Engine [cached since 317.9s ago] ('client',)
+2026-06-28 21:58:20,699 INFO sqlalchemy.engine.Engine COMMIT
+2026-06-28 21:58:20,716 INFO sqlalchemy.engine.Engine SELECT count(vehicles.id) AS count_1 
+FROM vehicles
+2026-06-28 21:58:20,716 INFO sqlalchemy.engine.Engine [generated in 0.00061s] ()
+2026-06-28 21:58:20,718 INFO sqlalchemy.engine.Engine COMMIT
+INFO:     127.0.0.1:50077 - "GET /api/v1/reports/revenue?period=month HTTP/1.1" 200 OK
+2026-06-28 21:58:20,724 INFO sqlalchemy.engine.Engine SELECT count(service_orders.id) AS count_1 
+FROM service_orders 
+WHERE service_orders.status IN (?, ?)
+2026-06-28 21:58:20,725 INFO sqlalchemy.engine.Engine [generated in 0.00069s] ('open', 'in_progress')
+2026-06-28 21:58:20,735 INFO sqlalchemy.engine.Engine SELECT count(appointments.id) AS count_1 
+FROM appointments 
+WHERE date(appointments.scheduled_at) = ? AND appointments.status != ?
+2026-06-28 21:58:20,735 INFO sqlalchemy.engine.Engine [generated in 0.00058s] ('2026-06-28', 'cancelled')
+INFO:     127.0.0.1:50078 - "GET /api/v1/reports/top-services?limit=5 HTTP/1.1" 200 OK
+2026-06-28 21:58:20,751 INFO sqlalchemy.engine.Engine SELECT coalesce(sum(payments.amount), ?) AS coalesce_1 
+FROM payments 
+WHERE CAST(STRFTIME('%m', payments.paid_at) AS INTEGER) = ? AND CAST(STRFTIME('%Y', payments.paid_at) AS INTEGER) = ? AND payments.status = ?
+2026-06-28 21:58:20,751 INFO sqlalchemy.engine.Engine [generated in 0.00065s] (0, 6, 2026, 'paid')
+2026-06-28 21:58:20,760 INFO sqlalchemy.engine.Engine SELECT coalesce(sum(expenses.amount), ?) AS coalesce_1 
+FROM expenses 
+WHERE CAST(STRFTIME('%m', expenses.date) AS INTEGER) = ? AND CAST(STRFTIME('%Y', expenses.date) AS INTEGER) = ?
+2026-06-28 21:58:20,760 INFO sqlalchemy.engine.Engine [generated in 0.00047s] (0, 6, 2026)
+2026-06-28 21:58:20,767 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-06-28 21:58:20,768 INFO sqlalchemy.engine.Engine SELECT users.id, users.name, users.email, users.cpf, users.phone, users.password_hash, users.role, users.google_id, users.avatar_url, users.is_active, users.created_at, users.updated_at 
+FROM users 
+WHERE users.id = ?
+2026-06-28 21:58:20,768 INFO sqlalchemy.engine.Engine [cached since 318s ago] ('dcf1720758d54cc0aa8a22e3fffe2687',)
+2026-06-28 21:58:20,772 INFO sqlalchemy.engine.Engine SELECT count(service_orders.id) AS count_1 
+FROM service_orders 
+WHERE service_orders.client_signature IS NULL
+2026-06-28 21:58:20,772 INFO sqlalchemy.engine.Engine [generated in 0.00047s] ()
+2026-06-28 21:58:20,776 INFO sqlalchemy.engine.Engine SELECT CAST(STRFTIME('%m', payments.paid_at) AS INTEGER) AS month, sum(payments.amount) AS total 
+FROM payments 
+WHERE CAST(STRFTIME('%Y', payments.paid_at) AS INTEGER) = ? AND payments.status = ? GROUP BY CAST(STRFTIME('%m', payments.paid_at) AS INTEGER) ORDER BY CAST(STRFTIME('%m', payments.paid_at) AS INTEGER)
+2026-06-28 21:58:20,776 INFO sqlalchemy.engine.Engine [cached since 0.1064s ago] (2026, 'paid')
+2026-06-28 21:58:20,779 INFO sqlalchemy.engine.Engine COMMIT
+2026-06-28 21:58:20,785 INFO sqlalchemy.engine.Engine SELECT CAST(STRFTIME('%m', expenses.date) AS INTEGER) AS month, sum(expenses.amount) AS total 
+FROM expenses 
+WHERE CAST(STRFTIME('%Y', expenses.date) AS INTEGER) = ? GROUP BY CAST(STRFTIME('%m', expenses.date) AS INTEGER) ORDER BY CAST(STRFTIME('%m', expenses.date) AS INTEGER)
+2026-06-28 21:58:20,786 INFO sqlalchemy.engine.Engine [cached since 0.1031s ago] (2026,)
+2026-06-28 21:58:20,787 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-06-28 21:58:20,787 INFO sqlalchemy.engine.Engine SELECT users.id, users.name, users.email, users.cpf, users.phone, users.password_hash, users.role, users.google_id, users.avatar_url, users.is_active, users.created_at, users.updated_at 
+FROM users 
+WHERE users.id = ?
+2026-06-28 21:58:20,787 INFO sqlalchemy.engine.Engine [cached since 318s ago] ('dcf1720758d54cc0aa8a22e3fffe2687',)
+2026-06-28 21:58:20,790 INFO sqlalchemy.engine.Engine COMMIT
+INFO:     127.0.0.1:50076 - "GET /api/v1/dashboard/admin HTTP/1.1" 200 OK
+2026-06-28 21:58:20,794 INFO sqlalchemy.engine.Engine SELECT order_services.service_id, sum(order_services.quantity) AS total_quantity, sum(order_services.price_at_time * order_services.quantity) AS total_revenue 
+FROM order_services GROUP BY order_services.service_id ORDER BY sum(order_services.price_at_time * order_services.quantity) DESC
+ LIMIT ? OFFSET ?
+2026-06-28 21:58:20,794 INFO sqlalchemy.engine.Engine [cached since 0.1049s ago] (5, 0)
+2026-06-28 21:58:20,802 INFO sqlalchemy.engine.Engine COMMIT
+INFO:     127.0.0.1:50081 - "GET /api/v1/reports/revenue?period=month HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50084 - "GET /api/v1/reports/top-services?limit=5 HTTP/1.1" 200 OK
+2026-06-28 21:58:20,825 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-06-28 21:58:20,826 INFO sqlalchemy.engine.Engine SELECT users.id, users.name, users.email, users.cpf, users.phone, users.password_hash, users.role, users.google_id, users.avatar_url, users.is_active, users.created_at, users.updated_at 
+FROM users 
+WHERE users.id = ?
+2026-06-28 21:58:20,827 INFO sqlalchemy.engine.Engine [cached since 318.1s ago] ('dcf1720758d54cc0aa8a22e3fffe2687',)
+2026-06-28 21:58:20,832 INFO sqlalchemy.engine.Engine SELECT count(users.id) AS count_1 
+FROM users 
+WHERE users.role = ?
+2026-06-28 21:58:20,832 INFO sqlalchemy.engine.Engine [cached since 318.1s ago] ('client',)
+2026-06-28 21:58:20,835 INFO sqlalchemy.engine.Engine SELECT count(vehicles.id) AS count_1 
+FROM vehicles
+2026-06-28 21:58:20,836 INFO sqlalchemy.engine.Engine [cached since 0.1195s ago] ()
+2026-06-28 21:58:20,839 INFO sqlalchemy.engine.Engine SELECT count(service_orders.id) AS count_1 
+FROM service_orders 
+WHERE service_orders.status IN (?, ?)
+2026-06-28 21:58:20,839 INFO sqlalchemy.engine.Engine [cached since 0.1148s ago] ('open', 'in_progress')
+2026-06-28 21:58:20,843 INFO sqlalchemy.engine.Engine SELECT count(appointments.id) AS count_1 
+FROM appointments 
+WHERE date(appointments.scheduled_at) = ? AND appointments.status != ?
+2026-06-28 21:58:20,843 INFO sqlalchemy.engine.Engine [cached since 0.1082s ago] ('2026-06-28', 'cancelled')
+2026-06-28 21:58:20,848 INFO sqlalchemy.engine.Engine SELECT coalesce(sum(payments.amount), ?) AS coalesce_1 
+FROM payments 
+WHERE CAST(STRFTIME('%m', payments.paid_at) AS INTEGER) = ? AND CAST(STRFTIME('%Y', payments.paid_at) AS INTEGER) = ? AND payments.status = ?
+2026-06-28 21:58:20,849 INFO sqlalchemy.engine.Engine [cached since 0.09801s ago] (0, 6, 2026, 'paid')
+2026-06-28 21:58:20,852 INFO sqlalchemy.engine.Engine SELECT coalesce(sum(expenses.amount), ?) AS coalesce_1 
+FROM expenses 
+WHERE CAST(STRFTIME('%m', expenses.date) AS INTEGER) = ? AND CAST(STRFTIME('%Y', expenses.date) AS INTEGER) = ?
+2026-06-28 21:58:20,853 INFO sqlalchemy.engine.Engine [cached since 0.09306s ago] (0, 6, 2026)
+2026-06-28 21:58:20,856 INFO sqlalchemy.engine.Engine SELECT count(service_orders.id) AS count_1 
+FROM service_orders 
+WHERE service_orders.client_signature IS NULL
+2026-06-28 21:58:20,856 INFO sqlalchemy.engine.Engine [cached since 0.08463s ago] ()
+2026-06-28 21:58:20,859 INFO sqlalchemy.engine.Engine COMMIT
+INFO:     127.0.0.1:50087 - "GET /api/v1/dashboard/admin HTTP/1.1" 200 OK
+2026-06-28 21:58:24,478 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-06-28 21:58:24,479 INFO sqlalchemy.engine.Engine SELECT users.id, users.name, users.email, users.cpf, users.phone, users.password_hash, users.role, users.google_id, users.avatar_url, users.is_active, users.created_at, users.updated_at 
+FROM users 
+WHERE users.id = ?
+2026-06-28 21:58:24,479 INFO sqlalchemy.engine.Engine [cached since 321.7s ago] ('dcf1720758d54cc0aa8a22e3fffe2687',)
+2026-06-28 21:58:24,485 INFO sqlalchemy.engine.Engine SELECT count(service_orders.id) AS count_1 
+FROM service_orders
+2026-06-28 21:58:24,485 INFO sqlalchemy.engine.Engine [generated in 0.00049s] ()
+2026-06-28 21:58:24,507 INFO sqlalchemy.engine.Engine SELECT service_orders.id, service_orders.order_number, service_orders.appointment_id, service_orders.client_id, service_orders.vehicle_id, service_orders.responsible_id, service_orders.total_value, service_orders.status, service_orders.notes, service_orders.client_signature, service_orders.client_approved_at, service_orders.client_observations, service_orders.created_at, service_orders.updated_at 
+FROM service_orders ORDER BY service_orders.created_at DESC
+ LIMIT ? OFFSET ?
+2026-06-28 21:58:24,507 INFO sqlalchemy.engine.Engine [generated in 0.00076s] (20, 0)
+2026-06-28 21:58:24,517 INFO sqlalchemy.engine.Engine COMMIT
+INFO:     127.0.0.1:50091 - "GET /api/v1/orders HTTP/1.1" 200 OK
+2026-06-28 21:58:24,549 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-06-28 21:58:24,549 INFO sqlalchemy.engine.Engine SELECT users.id, users.name, users.email, users.cpf, users.phone, users.password_hash, users.role, users.google_id, users.avatar_url, users.is_active, users.created_at, users.updated_at 
+FROM users 
+WHERE users.id = ?
+2026-06-28 21:58:24,550 INFO sqlalchemy.engine.Engine [cached since 321.8s ago] ('dcf1720758d54cc0aa8a22e3fffe2687',)
+2026-06-28 21:58:24,554 INFO sqlalchemy.engine.Engine SELECT count(service_orders.id) AS count_1 
+FROM service_orders
+2026-06-28 21:58:24,554 INFO sqlalchemy.engine.Engine [cached since 0.06883s ago] ()
+2026-06-28 21:58:24,558 INFO sqlalchemy.engine.Engine SELECT service_orders.id, service_orders.order_number, service_orders.appointment_id, service_orders.client_id, service_orders.vehicle_id, service_orders.responsible_id, service_orders.total_value, service_orders.status, service_orders.notes, service_orders.client_signature, service_orders.client_approved_at, service_orders.client_observations, service_orders.created_at, service_orders.updated_at 
+FROM service_orders ORDER BY service_orders.created_at DESC
+ LIMIT ? OFFSET ?
+2026-06-28 21:58:24,559 INFO sqlalchemy.engine.Engine [cached since 0.05183s ago] (20, 0)
+2026-06-28 21:58:24,562 INFO sqlalchemy.engine.Engine COMMIT
+INFO:     127.0.0.1:50094 - "GET /api/v1/orders HTTP/1.1" 200 OK
+2026-06-28 21:58:26,144 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-06-28 21:58:26,145 INFO sqlalchemy.engine.Engine SELECT users.id, users.name, users.email, users.cpf, users.phone, users.password_hash, users.role, users.google_id, users.avatar_url, users.is_active, users.created_at, users.updated_at 
+FROM users 
+WHERE users.id = ?
+2026-06-28 21:58:26,145 INFO sqlalchemy.engine.Engine [cached since 323.4s ago] ('dcf1720758d54cc0aa8a22e3fffe2687',)
+2026-06-28 21:58:26,160 INFO sqlalchemy.engine.Engine SELECT count(users.id) AS count_1 
+FROM users 
+WHERE users.role = ?
+2026-06-28 21:58:26,160 INFO sqlalchemy.engine.Engine [cached since 323.4s ago] ('client',)
+2026-06-28 21:58:26,162 INFO sqlalchemy.engine.Engine SELECT users.id, users.name, users.email, users.cpf, users.phone, users.password_hash, users.role, users.google_id, users.avatar_url, users.is_active, users.created_at, users.updated_at 
+FROM users 
+WHERE users.role = ? ORDER BY users.name
+ LIMIT ? OFFSET ?
+2026-06-28 21:58:26,163 INFO sqlalchemy.engine.Engine [cached since 323.4s ago] ('client', 10, 0)
+2026-06-28 21:58:26,172 INFO sqlalchemy.engine.Engine COMMIT
+INFO:     127.0.0.1:50097 - "GET /api/v1/users?page=1&page_size=10&search=&role=client HTTP/1.1" 200 OK
+2026-06-28 21:58:26,206 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-06-28 21:58:26,206 INFO sqlalchemy.engine.Engine SELECT users.id, users.name, users.email, users.cpf, users.phone, users.password_hash, users.role, users.google_id, users.avatar_url, users.is_active, users.created_at, users.updated_at 
+FROM users 
+WHERE users.id = ?
+2026-06-28 21:58:26,207 INFO sqlalchemy.engine.Engine [cached since 323.4s ago] ('dcf1720758d54cc0aa8a22e3fffe2687',)
+2026-06-28 21:58:26,213 INFO sqlalchemy.engine.Engine SELECT count(users.id) AS count_1 
+FROM users 
+WHERE users.role = ?
+2026-06-28 21:58:26,214 INFO sqlalchemy.engine.Engine [cached since 323.4s ago] ('client',)
+2026-06-28 21:58:26,217 INFO sqlalchemy.engine.Engine SELECT users.id, users.name, users.email, users.cpf, users.phone, users.password_hash, users.role, users.google_id, users.avatar_url, users.is_active, users.created_at, users.updated_at 
+FROM users 
+WHERE users.role = ? ORDER BY users.name
+ LIMIT ? OFFSET ?
+2026-06-28 21:58:26,218 INFO sqlalchemy.engine.Engine [cached since 323.4s ago] ('client', 10, 0)
+2026-06-28 21:58:26,221 INFO sqlalchemy.engine.Engine COMMIT
+INFO:     127.0.0.1:50100 - "GET /api/v1/users?page=1&page_size=10&search=&role=client HTTP/1.1" 200 OK
+2026-06-28 21:58:26,840 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-06-28 21:58:26,841 INFO sqlalchemy.engine.Engine SELECT users.id, users.name, users.email, users.cpf, users.phone, users.password_hash, users.role, users.google_id, users.avatar_url, users.is_active, users.created_at, users.updated_at 
+FROM users 
+WHERE users.id = ?
+2026-06-28 21:58:26,841 INFO sqlalchemy.engine.Engine [cached since 324.1s ago] ('dcf1720758d54cc0aa8a22e3fffe2687',)
+2026-06-28 21:58:26,848 INFO sqlalchemy.engine.Engine SELECT count(users.id) AS count_1 
+FROM users 
+WHERE users.role = ?
+2026-06-28 21:58:26,849 INFO sqlalchemy.engine.Engine [cached since 324.1s ago] ('client',)
+2026-06-28 21:58:26,854 INFO sqlalchemy.engine.Engine SELECT users.id, users.name, users.email, users.cpf, users.phone, users.password_hash, users.role, users.google_id, users.avatar_url, users.is_active, users.created_at, users.updated_at 
+FROM users 
+WHERE users.role = ? ORDER BY users.name
+ LIMIT ? OFFSET ?
+2026-06-28 21:58:26,854 INFO sqlalchemy.engine.Engine [cached since 324.1s ago] ('client', 10, 0)
+2026-06-28 21:58:26,857 INFO sqlalchemy.engine.Engine COMMIT
+INFO:     127.0.0.1:50103 - "GET /api/v1/users?page=1&page_size=10&search=&role=client HTTP/1.1" 200 OK
+2026-06-28 21:58:26,891 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-06-28 21:58:26,892 INFO sqlalchemy.engine.Engine SELECT users.id, users.name, users.email, users.cpf, users.phone, users.password_hash, users.role, users.google_id, users.avatar_url, users.is_active, users.created_at, users.updated_at 
+FROM users 
+WHERE users.id = ?
+2026-06-28 21:58:26,892 INFO sqlalchemy.engine.Engine [cached since 324.1s ago] ('dcf1720758d54cc0aa8a22e3fffe2687',)
+2026-06-28 21:58:26,896 INFO sqlalchemy.engine.Engine SELECT count(users.id) AS count_1 
+FROM users 
+WHERE users.role = ?
+2026-06-28 21:58:26,898 INFO sqlalchemy.engine.Engine [cached since 324.1s ago] ('client',)
+2026-06-28 21:58:26,901 INFO sqlalchemy.engine.Engine SELECT users.id, users.name, users.email, users.cpf, users.phone, users.password_hash, users.role, users.google_id, users.avatar_url, users.is_active, users.created_at, users.updated_at 
+FROM users 
+WHERE users.role = ? ORDER BY users.name
+ LIMIT ? OFFSET ?
+2026-06-28 21:58:26,901 INFO sqlalchemy.engine.Engine [cached since 324.1s ago] ('client', 10, 0)
+2026-06-28 21:58:26,905 INFO sqlalchemy.engine.Engine COMMIT
+INFO:     127.0.0.1:50106 - "GET /api/v1/users?page=1&page_size=10&search=&role=client HTTP/1.1" 200 OK
+2026-06-28 21:58:29,516 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-06-28 21:58:29,517 INFO sqlalchemy.engine.Engine SELECT users.id, users.name, users.email, users.cpf, users.phone, users.password_hash, users.role, users.google_id, users.avatar_url, users.is_active, users.created_at, users.updated_at 
+FROM users 
+WHERE users.id = ?
+2026-06-28 21:58:29,517 INFO sqlalchemy.engine.Engine [cached since 326.8s ago] ('dcf1720758d54cc0aa8a22e3fffe2687',)
+2026-06-28 21:58:29,520 INFO sqlalchemy.engine.Engine SELECT users.id, users.name, users.email, users.cpf, users.phone, users.password_hash, users.role, users.google_id, users.avatar_url, users.is_active, users.created_at, users.updated_at 
+FROM users 
+WHERE users.id = ?
+2026-06-28 21:58:29,520 INFO sqlalchemy.engine.Engine [cached since 326.8s ago] ('bd2b8c66bd304ffda498330560a3eab2',)
+2026-06-28 21:58:29,525 INFO sqlalchemy.engine.Engine UPDATE users SET is_active=?, updated_at=CURRENT_TIMESTAMP WHERE users.id = ?
+2026-06-28 21:58:29,525 INFO sqlalchemy.engine.Engine [generated in 0.00035s] (1, 'bd2b8c66bd304ffda498330560a3eab2')
+2026-06-28 21:58:29,527 INFO sqlalchemy.engine.Engine INSERT INTO audit_logs (id, user_id, action, entity, entity_id, details, ip_address) VALUES (?, ?, ?, ?, ?, ?, ?) RETURNING created_at
+2026-06-28 21:58:29,528 INFO sqlalchemy.engine.Engine [generated in 0.00040s] ('77858ced42754e659366079ecfadec57', 'dcf1720758d54cc0aa8a22e3fffe2687', 'toggle_active', 'user', 'bd2b8c66bd304ffda498330560a3eab2', '{"is_active": true}', '127.0.0.1')
+2026-06-28 21:58:29,531 INFO sqlalchemy.engine.Engine COMMIT
+INFO:     127.0.0.1:50109 - "PATCH /api/v1/users/bd2b8c66-bd30-4ffd-a498-330560a3eab2/toggle-active HTTP/1.1" 200 OK
+2026-06-28 21:58:47,253 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-06-28 21:58:47,256 INFO sqlalchemy.engine.Engine SELECT count(services.id) AS count_1 
+FROM services
+2026-06-28 21:58:47,257 INFO sqlalchemy.engine.Engine [generated in 0.00073s] ()
+2026-06-28 21:58:47,267 INFO sqlalchemy.engine.Engine SELECT services.id, services.name, services.category, services.description, services.estimated_time, services.price, services.is_active, services.created_at, services.updated_at 
+FROM services ORDER BY services.name
+ LIMIT ? OFFSET ?
+2026-06-28 21:58:47,267 INFO sqlalchemy.engine.Engine [generated in 0.00058s] (10, 0)
+2026-06-28 21:58:47,273 INFO sqlalchemy.engine.Engine COMMIT
+INFO:     127.0.0.1:50114 - "GET /api/v1/services?page=1&page_size=10&search= HTTP/1.1" 200 OK
+2026-06-28 21:58:47,304 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-06-28 21:58:47,305 INFO sqlalchemy.engine.Engine SELECT count(services.id) AS count_1 
+FROM services
+2026-06-28 21:58:47,305 INFO sqlalchemy.engine.Engine [cached since 0.04921s ago] ()
+2026-06-28 21:58:47,308 INFO sqlalchemy.engine.Engine SELECT services.id, services.name, services.category, services.description, services.estimated_time, services.price, services.is_active, services.created_at, services.updated_at 
+FROM services ORDER BY services.name
+ LIMIT ? OFFSET ?
+2026-06-28 21:58:47,309 INFO sqlalchemy.engine.Engine [cached since 0.04231s ago] (10, 0)
+2026-06-28 21:58:47,313 INFO sqlalchemy.engine.Engine COMMIT
+INFO:     127.0.0.1:50117 - "GET /api/v1/services?page=1&page_size=10&search= HTTP/1.1" 200 OK
+2026-06-28 22:01:24,858 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-06-28 22:01:24,859 INFO sqlalchemy.engine.Engine SELECT users.id, users.name, users.email, users.cpf, users.phone, users.password_hash, users.role, users.google_id, users.avatar_url, users.is_active, users.created_at, users.updated_at 
+FROM users 
+WHERE users.email = ?
+2026-06-28 22:01:24,860 INFO sqlalchemy.engine.Engine [cached since 502.8s ago] ('tadeu_madeira@hotmail.com',)
+2026-06-28 22:01:25,447 INFO sqlalchemy.engine.Engine INSERT INTO audit_logs (id, user_id, action, entity, entity_id, ip_address) VALUES (?, ?, ?, ?, ?, ?) RETURNING created_at
+2026-06-28 22:01:25,447 INFO sqlalchemy.engine.Engine [cached since 502.7s ago] ('1b9bcfc4befd4447b64d0183a6362710', 'bd2b8c66bd304ffda498330560a3eab2', 'login', 'user', 'bd2b8c66bd304ffda498330560a3eab2', '127.0.0.1')
+2026-06-28 22:01:25,449 INFO sqlalchemy.engine.Engine COMMIT
+INFO:     127.0.0.1:50125 - "POST /api/v1/auth/login HTTP/1.1" 200 OK
+2026-06-28 22:01:25,624 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-06-28 22:01:25,625 INFO sqlalchemy.engine.Engine SELECT users.id, users.name, users.email, users.cpf, users.phone, users.password_hash, users.role, users.google_id, users.avatar_url, users.is_active, users.created_at, users.updated_at 
+FROM users 
+WHERE users.id = ?
+2026-06-28 22:01:25,625 INFO sqlalchemy.engine.Engine [cached since 502.9s ago] ('bd2b8c66bd304ffda498330560a3eab2',)
+2026-06-28 22:01:25,632 INFO sqlalchemy.engine.Engine SELECT count(service_orders.id) AS count_1 
+FROM service_orders 
+WHERE service_orders.client_id = ?
+2026-06-28 22:01:25,632 INFO sqlalchemy.engine.Engine [generated in 0.00089s] ('bd2b8c66bd304ffda498330560a3eab2',)
+2026-06-28 22:01:25,641 INFO sqlalchemy.engine.Engine SELECT service_orders.id, service_orders.order_number, service_orders.appointment_id, service_orders.client_id, service_orders.vehicle_id, service_orders.responsible_id, service_orders.total_value, service_orders.status, service_orders.notes, service_orders.client_signature, service_orders.client_approved_at, service_orders.client_observations, service_orders.created_at, service_orders.updated_at 
+FROM service_orders 
+WHERE service_orders.client_id = ? ORDER BY service_orders.created_at DESC
+ LIMIT ? OFFSET ?
+2026-06-28 22:01:25,641 INFO sqlalchemy.engine.Engine [generated in 0.00047s] ('bd2b8c66bd304ffda498330560a3eab2', 5, 0)
+2026-06-28 22:01:25,643 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-06-28 22:01:25,644 INFO sqlalchemy.engine.Engine SELECT users.id, users.name, users.email, users.cpf, users.phone, users.password_hash, users.role, users.google_id, users.avatar_url, users.is_active, users.created_at, users.updated_at 
+FROM users 
+WHERE users.id = ?
+2026-06-28 22:01:25,644 INFO sqlalchemy.engine.Engine [cached since 502.9s ago] ('bd2b8c66bd304ffda498330560a3eab2',)
+2026-06-28 22:01:25,644 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-06-28 22:01:25,645 INFO sqlalchemy.engine.Engine SELECT users.id, users.name, users.email, users.cpf, users.phone, users.password_hash, users.role, users.google_id, users.avatar_url, users.is_active, users.created_at, users.updated_at 
+FROM users 
+WHERE users.id = ?
+2026-06-28 22:01:25,645 INFO sqlalchemy.engine.Engine [cached since 502.9s ago] ('bd2b8c66bd304ffda498330560a3eab2',)
+2026-06-28 22:01:25,646 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-06-28 22:01:25,646 INFO sqlalchemy.engine.Engine SELECT users.id, users.name, users.email, users.cpf, users.phone, users.password_hash, users.role, users.google_id, users.avatar_url, users.is_active, users.created_at, users.updated_at 
+FROM users 
+WHERE users.id = ?
+2026-06-28 22:01:25,646 INFO sqlalchemy.engine.Engine [cached since 502.9s ago] ('bd2b8c66bd304ffda498330560a3eab2',)
+2026-06-28 22:01:25,653 INFO sqlalchemy.engine.Engine COMMIT
+2026-06-28 22:01:25,657 INFO sqlalchemy.engine.Engine SELECT count(vehicles.id) AS count_1 
+FROM vehicles 
+WHERE vehicles.owner_id = ?
+2026-06-28 22:01:25,658 INFO sqlalchemy.engine.Engine [generated in 0.00049s] ('bd2b8c66bd304ffda498330560a3eab2',)
+2026-06-28 22:01:25,679 INFO sqlalchemy.engine.Engine SELECT count(payments.id) AS count_1 
+FROM payments JOIN service_orders ON payments.order_id = service_orders.id 
+WHERE service_orders.client_id = ?
+2026-06-28 22:01:25,679 INFO sqlalchemy.engine.Engine [generated in 0.00062s] ('bd2b8c66bd304ffda498330560a3eab2',)
+2026-06-28 22:01:25,685 INFO sqlalchemy.engine.Engine SELECT count(appointments.id) AS count_1 
+FROM appointments 
+WHERE appointments.client_id = ?
+2026-06-28 22:01:25,686 INFO sqlalchemy.engine.Engine [generated in 0.00058s] ('bd2b8c66bd304ffda498330560a3eab2',)
+INFO:     127.0.0.1:50136 - "GET /api/v1/orders?client_id=bd2b8c66-bd30-4ffd-a498-330560a3eab2&page_size=5 HTTP/1.1" 200 OK
+2026-06-28 22:01:25,694 INFO sqlalchemy.engine.Engine SELECT count(appointments.id) AS count_1 
+FROM appointments 
+WHERE appointments.client_id = ? AND appointments.scheduled_at >= ? AND appointments.status != ?
+2026-06-28 22:01:25,694 INFO sqlalchemy.engine.Engine [generated in 0.00077s] ('bd2b8c66bd304ffda498330560a3eab2', '2026-06-29 01:01:25.691119', 'cancelled')
+2026-06-28 22:01:25,709 INFO sqlalchemy.engine.Engine SELECT payments.id, payments.order_id, payments.amount, payments.method, payments.status, payments.due_date, payments.paid_at, payments.notes, payments.created_at, payments.updated_at 
+FROM payments JOIN service_orders ON payments.order_id = service_orders.id 
+WHERE service_orders.client_id = ? ORDER BY payments.created_at DESC
+ LIMIT ? OFFSET ?
+2026-06-28 22:01:25,709 INFO sqlalchemy.engine.Engine [generated in 0.00060s] ('bd2b8c66bd304ffda498330560a3eab2', 20, 0)
+2026-06-28 22:01:25,717 INFO sqlalchemy.engine.Engine SELECT appointments.id, appointments.client_id, appointments.vehicle_id, appointments.scheduled_at, appointments.duration_minutes, appointments.status, appointments.notes, appointments.created_by, appointments.created_at, appointments.updated_at 
+FROM appointments 
+WHERE appointments.client_id = ? ORDER BY appointments.scheduled_at DESC
+ LIMIT ? OFFSET ?
+2026-06-28 22:01:25,718 INFO sqlalchemy.engine.Engine [generated in 0.00044s] ('bd2b8c66bd304ffda498330560a3eab2', 5, 0)
+2026-06-28 22:01:25,726 INFO sqlalchemy.engine.Engine COMMIT
+2026-06-28 22:01:25,735 INFO sqlalchemy.engine.Engine SELECT count(service_orders.id) AS count_1 
+FROM service_orders 
+WHERE service_orders.client_id = ? AND service_orders.status IN (?, ?)
+2026-06-28 22:01:25,735 INFO sqlalchemy.engine.Engine [generated in 0.00076s] ('bd2b8c66bd304ffda498330560a3eab2', 'open', 'in_progress')
+INFO:     127.0.0.1:50138 - "GET /api/v1/financial/payments?client_id=bd2b8c66-bd30-4ffd-a498-330560a3eab2 HTTP/1.1" 200 OK
+2026-06-28 22:01:25,746 INFO sqlalchemy.engine.Engine SELECT coalesce(sum(payments.amount), ?) AS coalesce_1 
+FROM payments JOIN service_orders ON payments.order_id = service_orders.id 
+WHERE service_orders.client_id = ? AND payments.status = ?
+2026-06-28 22:01:25,747 INFO sqlalchemy.engine.Engine [generated in 0.00079s] (0, 'bd2b8c66bd304ffda498330560a3eab2', 'paid')
+2026-06-28 22:01:25,757 INFO sqlalchemy.engine.Engine SELECT vehicles.id AS vehicles_id, vehicles.owner_id AS vehicles_owner_id, vehicles.brand AS vehicles_brand, vehicles.model AS vehicles_model, vehicles.year AS vehicles_year, vehicles.color AS vehicles_color, vehicles.plate AS vehicles_plate, vehicles.mileage AS vehicles_mileage, vehicles.notes AS vehicles_notes, vehicles.created_at AS vehicles_created_at, vehicles.updated_at AS vehicles_updated_at 
+FROM vehicles 
+WHERE vehicles.id IN (?, ?, ?, ?)
+2026-06-28 22:01:25,757 INFO sqlalchemy.engine.Engine [generated in 0.00060s] ('2e52c36f4f9e4d8491808b818f730eeb', '447e521b43ac4d6e8026bc60dc95aedf', 'b5b8eef656e74f0b936cece4c16a2740', 'f83bc409d25b4db9a11adcb54b499c9a')
+2026-06-28 22:01:25,762 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-06-28 22:01:25,763 INFO sqlalchemy.engine.Engine SELECT users.id, users.name, users.email, users.cpf, users.phone, users.password_hash, users.role, users.google_id, users.avatar_url, users.is_active, users.created_at, users.updated_at 
+FROM users 
+WHERE users.id = ?
+2026-06-28 22:01:25,763 INFO sqlalchemy.engine.Engine [cached since 503s ago] ('bd2b8c66bd304ffda498330560a3eab2',)
+2026-06-28 22:01:25,766 INFO sqlalchemy.engine.Engine COMMIT
+2026-06-28 22:01:25,773 INFO sqlalchemy.engine.Engine SELECT users.id AS users_id, users.name AS users_name, users.email AS users_email, users.cpf AS users_cpf, users.phone AS users_phone, users.password_hash AS users_password_hash, users.role AS users_role, users.google_id AS users_google_id, users.avatar_url AS users_avatar_url, users.is_active AS users_is_active, users.created_at AS users_created_at, users.updated_at AS users_updated_at 
+FROM users 
+WHERE users.id IN (?)
+2026-06-28 22:01:25,773 INFO sqlalchemy.engine.Engine [generated in 0.00051s] ('bd2b8c66bd304ffda498330560a3eab2',)
+2026-06-28 22:01:25,779 INFO sqlalchemy.engine.Engine SELECT count(service_orders.id) AS count_1 
+FROM service_orders 
+WHERE service_orders.client_id = ?
+2026-06-28 22:01:25,779 INFO sqlalchemy.engine.Engine [cached since 0.1476s ago] ('bd2b8c66bd304ffda498330560a3eab2',)
+INFO:     127.0.0.1:50131 - "GET /api/v1/dashboard/client HTTP/1.1" 200 OK
+2026-06-28 22:01:25,788 INFO sqlalchemy.engine.Engine SELECT service_orders.id, service_orders.order_number, service_orders.appointment_id, service_orders.client_id, service_orders.vehicle_id, service_orders.responsible_id, service_orders.total_value, service_orders.status, service_orders.notes, service_orders.client_signature, service_orders.client_approved_at, service_orders.client_observations, service_orders.created_at, service_orders.updated_at 
+FROM service_orders 
+WHERE service_orders.client_id = ? ORDER BY service_orders.created_at DESC
+ LIMIT ? OFFSET ?
+2026-06-28 22:01:25,788 INFO sqlalchemy.engine.Engine [cached since 0.1479s ago] ('bd2b8c66bd304ffda498330560a3eab2', 5, 0)
+2026-06-28 22:01:25,789 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-06-28 22:01:25,789 INFO sqlalchemy.engine.Engine SELECT users.id, users.name, users.email, users.cpf, users.phone, users.password_hash, users.role, users.google_id, users.avatar_url, users.is_active, users.created_at, users.updated_at 
+FROM users 
+WHERE users.id = ?
+2026-06-28 22:01:25,789 INFO sqlalchemy.engine.Engine [cached since 503s ago] ('bd2b8c66bd304ffda498330560a3eab2',)
+2026-06-28 22:01:25,791 INFO sqlalchemy.engine.Engine COMMIT
+2026-06-28 22:01:25,797 INFO sqlalchemy.engine.Engine COMMIT
+INFO:     127.0.0.1:50134 - "GET /api/v1/appointments?client_id=bd2b8c66-bd30-4ffd-a498-330560a3eab2&page_size=5 HTTP/1.1" 200 OK
+2026-06-28 22:01:25,801 INFO sqlalchemy.engine.Engine SELECT count(payments.id) AS count_1 
+FROM payments JOIN service_orders ON payments.order_id = service_orders.id 
+WHERE service_orders.client_id = ?
+2026-06-28 22:01:25,801 INFO sqlalchemy.engine.Engine [cached since 0.1226s ago] ('bd2b8c66bd304ffda498330560a3eab2',)
+2026-06-28 22:01:25,808 INFO sqlalchemy.engine.Engine SELECT payments.id, payments.order_id, payments.amount, payments.method, payments.status, payments.due_date, payments.paid_at, payments.notes, payments.created_at, payments.updated_at 
+FROM payments JOIN service_orders ON payments.order_id = service_orders.id 
+WHERE service_orders.client_id = ? ORDER BY payments.created_at DESC
+ LIMIT ? OFFSET ?
+2026-06-28 22:01:25,809 INFO sqlalchemy.engine.Engine [cached since 0.0995s ago] ('bd2b8c66bd304ffda498330560a3eab2', 20, 0)
+INFO:     127.0.0.1:50141 - "GET /api/v1/orders?client_id=bd2b8c66-bd30-4ffd-a498-330560a3eab2&page_size=5 HTTP/1.1" 200 OK
+2026-06-28 22:01:25,819 INFO sqlalchemy.engine.Engine COMMIT
+2026-06-28 22:01:25,823 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-06-28 22:01:25,824 INFO sqlalchemy.engine.Engine SELECT users.id, users.name, users.email, users.cpf, users.phone, users.password_hash, users.role, users.google_id, users.avatar_url, users.is_active, users.created_at, users.updated_at 
+FROM users 
+WHERE users.id = ?
+2026-06-28 22:01:25,824 INFO sqlalchemy.engine.Engine [cached since 503.1s ago] ('bd2b8c66bd304ffda498330560a3eab2',)
+INFO:     127.0.0.1:50144 - "GET /api/v1/financial/payments?client_id=bd2b8c66-bd30-4ffd-a498-330560a3eab2 HTTP/1.1" 200 OK
+2026-06-28 22:01:25,838 INFO sqlalchemy.engine.Engine SELECT count(vehicles.id) AS count_1 
+FROM vehicles 
+WHERE vehicles.owner_id = ?
+2026-06-28 22:01:25,839 INFO sqlalchemy.engine.Engine [cached since 0.1811s ago] ('bd2b8c66bd304ffda498330560a3eab2',)
+2026-06-28 22:01:25,848 INFO sqlalchemy.engine.Engine SELECT count(appointments.id) AS count_1 
+FROM appointments 
+WHERE appointments.client_id = ? AND appointments.scheduled_at >= ? AND appointments.status != ?
+2026-06-28 22:01:25,848 INFO sqlalchemy.engine.Engine [cached since 0.1542s ago] ('bd2b8c66bd304ffda498330560a3eab2', '2026-06-29 01:01:25.846729', 'cancelled')
+2026-06-28 22:01:25,859 INFO sqlalchemy.engine.Engine SELECT count(service_orders.id) AS count_1 
+FROM service_orders 
+WHERE service_orders.client_id = ? AND service_orders.status IN (?, ?)
+2026-06-28 22:01:25,860 INFO sqlalchemy.engine.Engine [cached since 0.125s ago] ('bd2b8c66bd304ffda498330560a3eab2', 'open', 'in_progress')
+2026-06-28 22:01:25,861 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-06-28 22:01:25,862 INFO sqlalchemy.engine.Engine SELECT users.id, users.name, users.email, users.cpf, users.phone, users.password_hash, users.role, users.google_id, users.avatar_url, users.is_active, users.created_at, users.updated_at 
+FROM users 
+WHERE users.id = ?
+2026-06-28 22:01:25,863 INFO sqlalchemy.engine.Engine [cached since 503.1s ago] ('bd2b8c66bd304ffda498330560a3eab2',)
+2026-06-28 22:01:25,878 INFO sqlalchemy.engine.Engine SELECT coalesce(sum(payments.amount), ?) AS coalesce_1 
+FROM payments JOIN service_orders ON payments.order_id = service_orders.id 
+WHERE service_orders.client_id = ? AND payments.status = ?
+2026-06-28 22:01:25,878 INFO sqlalchemy.engine.Engine [cached since 0.133s ago] (0, 'bd2b8c66bd304ffda498330560a3eab2', 'paid')
+2026-06-28 22:01:25,886 INFO sqlalchemy.engine.Engine SELECT count(appointments.id) AS count_1 
+FROM appointments 
+WHERE appointments.client_id = ?
+2026-06-28 22:01:25,887 INFO sqlalchemy.engine.Engine [cached since 0.2024s ago] ('bd2b8c66bd304ffda498330560a3eab2',)
+2026-06-28 22:01:25,891 INFO sqlalchemy.engine.Engine COMMIT
+2026-06-28 22:01:25,910 INFO sqlalchemy.engine.Engine SELECT appointments.id, appointments.client_id, appointments.vehicle_id, appointments.scheduled_at, appointments.duration_minutes, appointments.status, appointments.notes, appointments.created_by, appointments.created_at, appointments.updated_at 
+FROM appointments 
+WHERE appointments.client_id = ? ORDER BY appointments.scheduled_at DESC
+ LIMIT ? OFFSET ?
+2026-06-28 22:01:25,911 INFO sqlalchemy.engine.Engine [cached since 0.1934s ago] ('bd2b8c66bd304ffda498330560a3eab2', 5, 0)
+2026-06-28 22:01:25,921 INFO sqlalchemy.engine.Engine SELECT vehicles.id AS vehicles_id, vehicles.owner_id AS vehicles_owner_id, vehicles.brand AS vehicles_brand, vehicles.model AS vehicles_model, vehicles.year AS vehicles_year, vehicles.color AS vehicles_color, vehicles.plate AS vehicles_plate, vehicles.mileage AS vehicles_mileage, vehicles.notes AS vehicles_notes, vehicles.created_at AS vehicles_created_at, vehicles.updated_at AS vehicles_updated_at 
+FROM vehicles 
+WHERE vehicles.id IN (?, ?, ?, ?)
+2026-06-28 22:01:25,921 INFO sqlalchemy.engine.Engine [cached since 0.1645s ago] ('2e52c36f4f9e4d8491808b818f730eeb', '447e521b43ac4d6e8026bc60dc95aedf', 'b5b8eef656e74f0b936cece4c16a2740', 'f83bc409d25b4db9a11adcb54b499c9a')
+INFO:     127.0.0.1:50147 - "GET /api/v1/dashboard/client HTTP/1.1" 200 OK
+2026-06-28 22:01:25,928 INFO sqlalchemy.engine.Engine SELECT users.id AS users_id, users.name AS users_name, users.email AS users_email, users.cpf AS users_cpf, users.phone AS users_phone, users.password_hash AS users_password_hash, users.role AS users_role, users.google_id AS users_google_id, users.avatar_url AS users_avatar_url, users.is_active AS users_is_active, users.created_at AS users_created_at, users.updated_at AS users_updated_at 
+FROM users 
+WHERE users.id IN (?)
+2026-06-28 22:01:25,928 INFO sqlalchemy.engine.Engine [cached since 0.1558s ago] ('bd2b8c66bd304ffda498330560a3eab2',)
+2026-06-28 22:01:25,936 INFO sqlalchemy.engine.Engine COMMIT
+INFO:     127.0.0.1:50150 - "GET /api/v1/appointments?client_id=bd2b8c66-bd30-4ffd-a498-330560a3eab2&page_size=5 HTTP/1.1" 200 OK
+2026-06-28 22:01:32,488 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-06-28 22:01:32,489 INFO sqlalchemy.engine.Engine SELECT users.id, users.name, users.email, users.cpf, users.phone, users.password_hash, users.role, users.google_id, users.avatar_url, users.is_active, users.created_at, users.updated_at 
+FROM users 
+WHERE users.id = ?
+2026-06-28 22:01:32,490 INFO sqlalchemy.engine.Engine [cached since 509.7s ago] ('bd2b8c66bd304ffda498330560a3eab2',)
+2026-06-28 22:01:32,494 INFO sqlalchemy.engine.Engine SELECT count(appointments.id) AS count_1 
+FROM appointments 
+WHERE appointments.client_id = ?
+2026-06-28 22:01:32,494 INFO sqlalchemy.engine.Engine [cached since 6.809s ago] ('bd2b8c66bd304ffda498330560a3eab2',)
+2026-06-28 22:01:32,496 INFO sqlalchemy.engine.Engine SELECT appointments.id, appointments.client_id, appointments.vehicle_id, appointments.scheduled_at, appointments.duration_minutes, appointments.status, appointments.notes, appointments.created_by, appointments.created_at, appointments.updated_at 
+FROM appointments 
+WHERE appointments.client_id = ? ORDER BY appointments.scheduled_at DESC
+ LIMIT ? OFFSET ?
+2026-06-28 22:01:32,497 INFO sqlalchemy.engine.Engine [cached since 6.779s ago] ('bd2b8c66bd304ffda498330560a3eab2', 20, 0)
+2026-06-28 22:01:32,505 INFO sqlalchemy.engine.Engine SELECT vehicles.id AS vehicles_id, vehicles.owner_id AS vehicles_owner_id, vehicles.brand AS vehicles_brand, vehicles.model AS vehicles_model, vehicles.year AS vehicles_year, vehicles.color AS vehicles_color, vehicles.plate AS vehicles_plate, vehicles.mileage AS vehicles_mileage, vehicles.notes AS vehicles_notes, vehicles.created_at AS vehicles_created_at, vehicles.updated_at AS vehicles_updated_at 
+FROM vehicles 
+WHERE vehicles.id IN (?, ?, ?, ?, ?)
+2026-06-28 22:01:32,505 INFO sqlalchemy.engine.Engine [cached since 6.749s ago] ('2e52c36f4f9e4d8491808b818f730eeb', '447e521b43ac4d6e8026bc60dc95aedf', 'b5b8eef656e74f0b936cece4c16a2740', 'b73449a81fdd481b8d3bcfabbb2da6a0', 'f83bc409d25b4db9a11adcb54b499c9a')
+2026-06-28 22:01:32,508 INFO sqlalchemy.engine.Engine SELECT users.id AS users_id, users.name AS users_name, users.email AS users_email, users.cpf AS users_cpf, users.phone AS users_phone, users.password_hash AS users_password_hash, users.role AS users_role, users.google_id AS users_google_id, users.avatar_url AS users_avatar_url, users.is_active AS users_is_active, users.created_at AS users_created_at, users.updated_at AS users_updated_at 
+FROM users 
+WHERE users.id IN (?)
+2026-06-28 22:01:32,508 INFO sqlalchemy.engine.Engine [cached since 6.736s ago] ('bd2b8c66bd304ffda498330560a3eab2',)
+2026-06-28 22:01:32,510 INFO sqlalchemy.engine.Engine COMMIT
+INFO:     127.0.0.1:50156 - "GET /api/v1/appointments?client_id=bd2b8c66-bd30-4ffd-a498-330560a3eab2 HTTP/1.1" 200 OK
+2026-06-28 22:01:32,539 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-06-28 22:01:32,540 INFO sqlalchemy.engine.Engine SELECT users.id, users.name, users.email, users.cpf, users.phone, users.password_hash, users.role, users.google_id, users.avatar_url, users.is_active, users.created_at, users.updated_at 
+FROM users 
+WHERE users.id = ?
+2026-06-28 22:01:32,540 INFO sqlalchemy.engine.Engine [cached since 509.8s ago] ('bd2b8c66bd304ffda498330560a3eab2',)
+2026-06-28 22:01:32,544 INFO sqlalchemy.engine.Engine SELECT count(appointments.id) AS count_1 
+FROM appointments 
+WHERE appointments.client_id = ?
+2026-06-28 22:01:32,545 INFO sqlalchemy.engine.Engine [cached since 6.86s ago] ('bd2b8c66bd304ffda498330560a3eab2',)
+2026-06-28 22:01:32,548 INFO sqlalchemy.engine.Engine SELECT appointments.id, appointments.client_id, appointments.vehicle_id, appointments.scheduled_at, appointments.duration_minutes, appointments.status, appointments.notes, appointments.created_by, appointments.created_at, appointments.updated_at 
+FROM appointments 
+WHERE appointments.client_id = ? ORDER BY appointments.scheduled_at DESC
+ LIMIT ? OFFSET ?
+2026-06-28 22:01:32,549 INFO sqlalchemy.engine.Engine [cached since 6.832s ago] ('bd2b8c66bd304ffda498330560a3eab2', 20, 0)
+2026-06-28 22:01:32,554 INFO sqlalchemy.engine.Engine SELECT vehicles.id AS vehicles_id, vehicles.owner_id AS vehicles_owner_id, vehicles.brand AS vehicles_brand, vehicles.model AS vehicles_model, vehicles.year AS vehicles_year, vehicles.color AS vehicles_color, vehicles.plate AS vehicles_plate, vehicles.mileage AS vehicles_mileage, vehicles.notes AS vehicles_notes, vehicles.created_at AS vehicles_created_at, vehicles.updated_at AS vehicles_updated_at 
+FROM vehicles 
+WHERE vehicles.id IN (?, ?, ?, ?, ?)
+2026-06-28 22:01:32,554 INFO sqlalchemy.engine.Engine [cached since 6.798s ago] ('2e52c36f4f9e4d8491808b818f730eeb', '447e521b43ac4d6e8026bc60dc95aedf', 'b5b8eef656e74f0b936cece4c16a2740', 'b73449a81fdd481b8d3bcfabbb2da6a0', 'f83bc409d25b4db9a11adcb54b499c9a')
+2026-06-28 22:01:32,558 INFO sqlalchemy.engine.Engine SELECT users.id AS users_id, users.name AS users_name, users.email AS users_email, users.cpf AS users_cpf, users.phone AS users_phone, users.password_hash AS users_password_hash, users.role AS users_role, users.google_id AS users_google_id, users.avatar_url AS users_avatar_url, users.is_active AS users_is_active, users.created_at AS users_created_at, users.updated_at AS users_updated_at 
+FROM users 
+WHERE users.id IN (?)
+2026-06-28 22:01:32,558 INFO sqlalchemy.engine.Engine [cached since 6.786s ago] ('bd2b8c66bd304ffda498330560a3eab2',)
+2026-06-28 22:01:32,562 INFO sqlalchemy.engine.Engine COMMIT
+INFO:     127.0.0.1:50159 - "GET /api/v1/appointments?client_id=bd2b8c66-bd30-4ffd-a498-330560a3eab2 HTTP/1.1" 200 OK
+2026-06-28 22:01:35,669 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-06-28 22:01:35,669 INFO sqlalchemy.engine.Engine SELECT users.id, users.name, users.email, users.cpf, users.phone, users.password_hash, users.role, users.google_id, users.avatar_url, users.is_active, users.created_at, users.updated_at 
+FROM users 
+WHERE users.id = ?
+2026-06-28 22:01:35,670 INFO sqlalchemy.engine.Engine [cached since 512.9s ago] ('bd2b8c66bd304ffda498330560a3eab2',)
+2026-06-28 22:01:35,674 INFO sqlalchemy.engine.Engine SELECT appointments.id, appointments.client_id, appointments.vehicle_id, appointments.scheduled_at, appointments.duration_minutes, appointments.status, appointments.notes, appointments.created_by, appointments.created_at, appointments.updated_at 
+FROM appointments 
+WHERE appointments.id = ?
+2026-06-28 22:01:35,675 INFO sqlalchemy.engine.Engine [generated in 0.00035s] ('d005d07b56bb4d77b6d986e73f5deec5',)
+2026-06-28 22:01:35,680 INFO sqlalchemy.engine.Engine SELECT appointment_services.appointment_id AS appointment_services_appointment_id, appointment_services.service_id AS appointment_services_service_id, appointment_services.price_at_time AS appointment_services_price_at_time 
+FROM appointment_services 
+WHERE appointment_services.appointment_id IN (?)
+2026-06-28 22:01:35,680 INFO sqlalchemy.engine.Engine [generated in 0.00041s] ('d005d07b56bb4d77b6d986e73f5deec5',)
+2026-06-28 22:01:35,684 INFO sqlalchemy.engine.Engine SELECT vehicles.id AS vehicles_id, vehicles.owner_id AS vehicles_owner_id, vehicles.brand AS vehicles_brand, vehicles.model AS vehicles_model, vehicles.year AS vehicles_year, vehicles.color AS vehicles_color, vehicles.plate AS vehicles_plate, vehicles.mileage AS vehicles_mileage, vehicles.notes AS vehicles_notes, vehicles.created_at AS vehicles_created_at, vehicles.updated_at AS vehicles_updated_at 
+FROM vehicles 
+WHERE vehicles.id IN (?)
+2026-06-28 22:01:35,684 INFO sqlalchemy.engine.Engine [generated in 0.00039s] ('2e52c36f4f9e4d8491808b818f730eeb',)
+2026-06-28 22:01:35,688 INFO sqlalchemy.engine.Engine SELECT users.id AS users_id, users.name AS users_name, users.email AS users_email, users.cpf AS users_cpf, users.phone AS users_phone, users.password_hash AS users_password_hash, users.role AS users_role, users.google_id AS users_google_id, users.avatar_url AS users_avatar_url, users.is_active AS users_is_active, users.created_at AS users_created_at, users.updated_at AS users_updated_at 
+FROM users 
+WHERE users.id IN (?)
+2026-06-28 22:01:35,688 INFO sqlalchemy.engine.Engine [generated in 0.00046s] ('bd2b8c66bd304ffda498330560a3eab2',)
+2026-06-28 22:01:35,692 INFO sqlalchemy.engine.Engine SELECT services.id AS services_id, services.name AS services_name, services.category AS services_category, services.description AS services_description, services.estimated_time AS services_estimated_time, services.price AS services_price, services.is_active AS services_is_active, services.created_at AS services_created_at, services.updated_at AS services_updated_at 
+FROM services 
+WHERE services.id IN (?)
+2026-06-28 22:01:35,692 INFO sqlalchemy.engine.Engine [generated in 0.00039s] ('bd253f58c26a47d5a8fb50d337f15f13',)
+2026-06-28 22:01:35,694 INFO sqlalchemy.engine.Engine COMMIT
+INFO:     127.0.0.1:50163 - "GET /api/v1/appointments/d005d07b-56bb-4d77-b6d9-86e73f5deec5 HTTP/1.1" 200 OK
+2026-06-28 22:01:40,235 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-06-28 22:01:40,236 INFO sqlalchemy.engine.Engine SELECT users.id, users.name, users.email, users.cpf, users.phone, users.password_hash, users.role, users.google_id, users.avatar_url, users.is_active, users.created_at, users.updated_at 
+FROM users 
+WHERE users.id = ?
+2026-06-28 22:01:40,236 INFO sqlalchemy.engine.Engine [cached since 517.5s ago] ('bd2b8c66bd304ffda498330560a3eab2',)
+2026-06-28 22:01:40,240 INFO sqlalchemy.engine.Engine SELECT appointments.id, appointments.client_id, appointments.vehicle_id, appointments.scheduled_at, appointments.duration_minutes, appointments.status, appointments.notes, appointments.created_by, appointments.created_at, appointments.updated_at 
+FROM appointments 
+WHERE appointments.id = ?
+2026-06-28 22:01:40,241 INFO sqlalchemy.engine.Engine [cached since 4.566s ago] ('068d032d712d442aa313ee87623e1c71',)
+2026-06-28 22:01:40,244 INFO sqlalchemy.engine.Engine SELECT appointment_services.appointment_id AS appointment_services_appointment_id, appointment_services.service_id AS appointment_services_service_id, appointment_services.price_at_time AS appointment_services_price_at_time 
+FROM appointment_services 
+WHERE appointment_services.appointment_id IN (?)
+2026-06-28 22:01:40,244 INFO sqlalchemy.engine.Engine [cached since 4.564s ago] ('068d032d712d442aa313ee87623e1c71',)
+2026-06-28 22:01:40,249 INFO sqlalchemy.engine.Engine SELECT vehicles.id AS vehicles_id, vehicles.owner_id AS vehicles_owner_id, vehicles.brand AS vehicles_brand, vehicles.model AS vehicles_model, vehicles.year AS vehicles_year, vehicles.color AS vehicles_color, vehicles.plate AS vehicles_plate, vehicles.mileage AS vehicles_mileage, vehicles.notes AS vehicles_notes, vehicles.created_at AS vehicles_created_at, vehicles.updated_at AS vehicles_updated_at 
+FROM vehicles 
+WHERE vehicles.id IN (?)
+2026-06-28 22:01:40,250 INFO sqlalchemy.engine.Engine [cached since 4.565s ago] ('b5b8eef656e74f0b936cece4c16a2740',)
+2026-06-28 22:01:40,252 INFO sqlalchemy.engine.Engine SELECT users.id AS users_id, users.name AS users_name, users.email AS users_email, users.cpf AS users_cpf, users.phone AS users_phone, users.password_hash AS users_password_hash, users.role AS users_role, users.google_id AS users_google_id, users.avatar_url AS users_avatar_url, users.is_active AS users_is_active, users.created_at AS users_created_at, users.updated_at AS users_updated_at 
+FROM users 
+WHERE users.id IN (?)
+2026-06-28 22:01:40,252 INFO sqlalchemy.engine.Engine [cached since 4.565s ago] ('bd2b8c66bd304ffda498330560a3eab2',)
+2026-06-28 22:01:40,255 INFO sqlalchemy.engine.Engine SELECT services.id AS services_id, services.name AS services_name, services.category AS services_category, services.description AS services_description, services.estimated_time AS services_estimated_time, services.price AS services_price, services.is_active AS services_is_active, services.created_at AS services_created_at, services.updated_at AS services_updated_at 
+FROM services 
+WHERE services.id IN (?)
+2026-06-28 22:01:40,255 INFO sqlalchemy.engine.Engine [cached since 4.563s ago] ('bd253f58c26a47d5a8fb50d337f15f13',)
+2026-06-28 22:01:40,258 INFO sqlalchemy.engine.Engine COMMIT
+INFO:     127.0.0.1:50166 - "GET /api/v1/appointments/068d032d-712d-442a-a313-ee87623e1c71 HTTP/1.1" 200 OK
+2026-06-28 22:01:45,704 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-06-28 22:01:45,705 INFO sqlalchemy.engine.Engine SELECT users.id, users.name, users.email, users.cpf, users.phone, users.password_hash, users.role, users.google_id, users.avatar_url, users.is_active, users.created_at, users.updated_at 
+FROM users 
+WHERE users.id = ?
+2026-06-28 22:01:45,705 INFO sqlalchemy.engine.Engine [cached since 522.9s ago] ('bd2b8c66bd304ffda498330560a3eab2',)
+2026-06-28 22:01:45,709 INFO sqlalchemy.engine.Engine SELECT count(service_orders.id) AS count_1 
+FROM service_orders 
+WHERE service_orders.client_id = ?
+2026-06-28 22:01:45,710 INFO sqlalchemy.engine.Engine [cached since 20.08s ago] ('bd2b8c66bd304ffda498330560a3eab2',)
+2026-06-28 22:01:45,713 INFO sqlalchemy.engine.Engine SELECT service_orders.id, service_orders.order_number, service_orders.appointment_id, service_orders.client_id, service_orders.vehicle_id, service_orders.responsible_id, service_orders.total_value, service_orders.status, service_orders.notes, service_orders.client_signature, service_orders.client_approved_at, service_orders.client_observations, service_orders.created_at, service_orders.updated_at 
+FROM service_orders 
+WHERE service_orders.client_id = ? ORDER BY service_orders.created_at DESC
+ LIMIT ? OFFSET ?
+2026-06-28 22:01:45,713 INFO sqlalchemy.engine.Engine [cached since 20.07s ago] ('bd2b8c66bd304ffda498330560a3eab2', 20, 0)
+2026-06-28 22:01:45,719 INFO sqlalchemy.engine.Engine COMMIT
+INFO:     127.0.0.1:50169 - "GET /api/v1/orders?client_id=bd2b8c66-bd30-4ffd-a498-330560a3eab2 HTTP/1.1" 200 OK
+2026-06-28 22:01:45,740 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-06-28 22:01:45,741 INFO sqlalchemy.engine.Engine SELECT users.id, users.name, users.email, users.cpf, users.phone, users.password_hash, users.role, users.google_id, users.avatar_url, users.is_active, users.created_at, users.updated_at 
+FROM users 
+WHERE users.id = ?
+2026-06-28 22:01:45,741 INFO sqlalchemy.engine.Engine [cached since 523s ago] ('bd2b8c66bd304ffda498330560a3eab2',)
+2026-06-28 22:01:45,745 INFO sqlalchemy.engine.Engine SELECT count(service_orders.id) AS count_1 
+FROM service_orders 
+WHERE service_orders.client_id = ?
+2026-06-28 22:01:45,745 INFO sqlalchemy.engine.Engine [cached since 20.11s ago] ('bd2b8c66bd304ffda498330560a3eab2',)
+2026-06-28 22:01:45,747 INFO sqlalchemy.engine.Engine SELECT service_orders.id, service_orders.order_number, service_orders.appointment_id, service_orders.client_id, service_orders.vehicle_id, service_orders.responsible_id, service_orders.total_value, service_orders.status, service_orders.notes, service_orders.client_signature, service_orders.client_approved_at, service_orders.client_observations, service_orders.created_at, service_orders.updated_at 
+FROM service_orders 
+WHERE service_orders.client_id = ? ORDER BY service_orders.created_at DESC
+ LIMIT ? OFFSET ?
+2026-06-28 22:01:45,747 INFO sqlalchemy.engine.Engine [cached since 20.11s ago] ('bd2b8c66bd304ffda498330560a3eab2', 20, 0)
+2026-06-28 22:01:45,752 INFO sqlalchemy.engine.Engine COMMIT
+INFO:     127.0.0.1:50172 - "GET /api/v1/orders?client_id=bd2b8c66-bd30-4ffd-a498-330560a3eab2 HTTP/1.1" 200 OK
+2026-06-28 22:01:46,756 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-06-28 22:01:46,757 INFO sqlalchemy.engine.Engine SELECT users.id, users.name, users.email, users.cpf, users.phone, users.password_hash, users.role, users.google_id, users.avatar_url, users.is_active, users.created_at, users.updated_at 
+FROM users 
+WHERE users.id = ?
+2026-06-28 22:01:46,757 INFO sqlalchemy.engine.Engine [cached since 524s ago] ('bd2b8c66bd304ffda498330560a3eab2',)
+2026-06-28 22:01:46,761 INFO sqlalchemy.engine.Engine SELECT count(vehicles.id) AS count_1 
+FROM vehicles 
+WHERE vehicles.owner_id = ?
+2026-06-28 22:01:46,762 INFO sqlalchemy.engine.Engine [cached since 21.1s ago] ('bd2b8c66bd304ffda498330560a3eab2',)
+2026-06-28 22:01:46,769 INFO sqlalchemy.engine.Engine SELECT vehicles.id, vehicles.owner_id, vehicles.brand, vehicles.model, vehicles.year, vehicles.color, vehicles.plate, vehicles.mileage, vehicles.notes, vehicles.created_at, vehicles.updated_at 
+FROM vehicles 
+WHERE vehicles.owner_id = ? ORDER BY vehicles.brand, vehicles.model
+ LIMIT ? OFFSET ?
+2026-06-28 22:01:46,769 INFO sqlalchemy.engine.Engine [generated in 0.00056s] ('bd2b8c66bd304ffda498330560a3eab2', 20, 0)
+2026-06-28 22:01:46,773 INFO sqlalchemy.engine.Engine COMMIT
+INFO:     127.0.0.1:50175 - "GET /api/v1/vehicles?owner_id=bd2b8c66-bd30-4ffd-a498-330560a3eab2 HTTP/1.1" 200 OK
+2026-06-28 22:01:46,796 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-06-28 22:01:46,798 INFO sqlalchemy.engine.Engine SELECT users.id, users.name, users.email, users.cpf, users.phone, users.password_hash, users.role, users.google_id, users.avatar_url, users.is_active, users.created_at, users.updated_at 
+FROM users 
+WHERE users.id = ?
+2026-06-28 22:01:46,799 INFO sqlalchemy.engine.Engine [cached since 524s ago] ('bd2b8c66bd304ffda498330560a3eab2',)
+2026-06-28 22:01:46,803 INFO sqlalchemy.engine.Engine SELECT count(vehicles.id) AS count_1 
+FROM vehicles 
+WHERE vehicles.owner_id = ?
+2026-06-28 22:01:46,803 INFO sqlalchemy.engine.Engine [cached since 21.15s ago] ('bd2b8c66bd304ffda498330560a3eab2',)
+2026-06-28 22:01:46,806 INFO sqlalchemy.engine.Engine SELECT vehicles.id, vehicles.owner_id, vehicles.brand, vehicles.model, vehicles.year, vehicles.color, vehicles.plate, vehicles.mileage, vehicles.notes, vehicles.created_at, vehicles.updated_at 
+FROM vehicles 
+WHERE vehicles.owner_id = ? ORDER BY vehicles.brand, vehicles.model
+ LIMIT ? OFFSET ?
+2026-06-28 22:01:46,806 INFO sqlalchemy.engine.Engine [cached since 0.03737s ago] ('bd2b8c66bd304ffda498330560a3eab2', 20, 0)
+2026-06-28 22:01:46,809 INFO sqlalchemy.engine.Engine COMMIT
+INFO:     127.0.0.1:50178 - "GET /api/v1/vehicles?owner_id=bd2b8c66-bd30-4ffd-a498-330560a3eab2 HTTP/1.1" 200 OK
+2026-06-28 22:01:47,912 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-06-28 22:01:47,913 INFO sqlalchemy.engine.Engine SELECT users.id, users.name, users.email, users.cpf, users.phone, users.password_hash, users.role, users.google_id, users.avatar_url, users.is_active, users.created_at, users.updated_at 
+FROM users 
+WHERE users.id = ?
+2026-06-28 22:01:47,913 INFO sqlalchemy.engine.Engine [cached since 525.1s ago] ('bd2b8c66bd304ffda498330560a3eab2',)
+2026-06-28 22:01:47,919 INFO sqlalchemy.engine.Engine SELECT count(service_orders.id) AS count_1 
+FROM service_orders 
+WHERE service_orders.client_id = ?
+2026-06-28 22:01:47,919 INFO sqlalchemy.engine.Engine [cached since 22.29s ago] ('bd2b8c66bd304ffda498330560a3eab2',)
+2026-06-28 22:01:47,922 INFO sqlalchemy.engine.Engine SELECT service_orders.id, service_orders.order_number, service_orders.appointment_id, service_orders.client_id, service_orders.vehicle_id, service_orders.responsible_id, service_orders.total_value, service_orders.status, service_orders.notes, service_orders.client_signature, service_orders.client_approved_at, service_orders.client_observations, service_orders.created_at, service_orders.updated_at 
+FROM service_orders 
+WHERE service_orders.client_id = ? ORDER BY service_orders.created_at DESC
+ LIMIT ? OFFSET ?
+2026-06-28 22:01:47,922 INFO sqlalchemy.engine.Engine [cached since 22.28s ago] ('bd2b8c66bd304ffda498330560a3eab2', 20, 0)
+2026-06-28 22:01:47,924 INFO sqlalchemy.engine.Engine COMMIT
+INFO:     127.0.0.1:50182 - "GET /api/v1/orders?client_id=bd2b8c66-bd30-4ffd-a498-330560a3eab2 HTTP/1.1" 200 OK
+2026-06-28 22:01:47,946 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-06-28 22:01:47,947 INFO sqlalchemy.engine.Engine SELECT users.id, users.name, users.email, users.cpf, users.phone, users.password_hash, users.role, users.google_id, users.avatar_url, users.is_active, users.created_at, users.updated_at 
+FROM users 
+WHERE users.id = ?
+2026-06-28 22:01:47,947 INFO sqlalchemy.engine.Engine [cached since 525.2s ago] ('bd2b8c66bd304ffda498330560a3eab2',)
+2026-06-28 22:01:47,953 INFO sqlalchemy.engine.Engine SELECT count(service_orders.id) AS count_1 
+FROM service_orders 
+WHERE service_orders.client_id = ?
+2026-06-28 22:01:47,953 INFO sqlalchemy.engine.Engine [cached since 22.32s ago] ('bd2b8c66bd304ffda498330560a3eab2',)
+2026-06-28 22:01:47,956 INFO sqlalchemy.engine.Engine SELECT service_orders.id, service_orders.order_number, service_orders.appointment_id, service_orders.client_id, service_orders.vehicle_id, service_orders.responsible_id, service_orders.total_value, service_orders.status, service_orders.notes, service_orders.client_signature, service_orders.client_approved_at, service_orders.client_observations, service_orders.created_at, service_orders.updated_at 
+FROM service_orders 
+WHERE service_orders.client_id = ? ORDER BY service_orders.created_at DESC
+ LIMIT ? OFFSET ?
+2026-06-28 22:01:47,956 INFO sqlalchemy.engine.Engine [cached since 22.32s ago] ('bd2b8c66bd304ffda498330560a3eab2', 20, 0)
+2026-06-28 22:01:47,958 INFO sqlalchemy.engine.Engine COMMIT
+INFO:     127.0.0.1:50184 - "GET /api/v1/orders?client_id=bd2b8c66-bd30-4ffd-a498-330560a3eab2 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50273 - "GET /api/v1/auth/me HTTP/1.1" 401 Unauthorized
+INFO:     127.0.0.1:50275 - "GET /api/v1/auth/me HTTP/1.1" 401 Unauthorized
+2026-06-29 13:46:55,582 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-06-29 13:46:55,583 INFO sqlalchemy.engine.Engine SELECT users.id, users.name, users.email, users.cpf, users.phone, users.password_hash, users.role, users.google_id, users.avatar_url, users.is_active, users.created_at, users.updated_at 
+FROM users 
+WHERE users.email = ?
+2026-06-29 13:46:55,583 INFO sqlalchemy.engine.Engine [cached since 5.723e+04s ago] ('admin@detailapp.com',)
+2026-06-29 13:46:56,242 INFO sqlalchemy.engine.Engine INSERT INTO audit_logs (id, user_id, action, entity, entity_id, ip_address) VALUES (?, ?, ?, ?, ?, ?) RETURNING created_at
+2026-06-29 13:46:56,242 INFO sqlalchemy.engine.Engine [cached since 5.723e+04s ago] ('64b7791ebe74401b940f4e9e2961423f', 'dcf1720758d54cc0aa8a22e3fffe2687', 'login', 'user', 'dcf1720758d54cc0aa8a22e3fffe2687', '127.0.0.1')
+2026-06-29 13:46:56,251 INFO sqlalchemy.engine.Engine COMMIT
+INFO:     127.0.0.1:50287 - "POST /api/v1/auth/login HTTP/1.1" 200 OK
+2026-06-29 13:46:56,495 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-06-29 13:46:56,495 INFO sqlalchemy.engine.Engine SELECT users.id, users.name, users.email, users.cpf, users.phone, users.password_hash, users.role, users.google_id, users.avatar_url, users.is_active, users.created_at, users.updated_at 
+FROM users 
+WHERE users.id = ?
+2026-06-29 13:46:56,495 INFO sqlalchemy.engine.Engine [cached since 5.723e+04s ago] ('dcf1720758d54cc0aa8a22e3fffe2687',)
+2026-06-29 13:46:56,504 INFO sqlalchemy.engine.Engine SELECT order_services.service_id, sum(order_services.quantity) AS total_quantity, sum(order_services.price_at_time * order_services.quantity) AS total_revenue 
+FROM order_services GROUP BY order_services.service_id ORDER BY sum(order_services.price_at_time * order_services.quantity) DESC
+ LIMIT ? OFFSET ?
+2026-06-29 13:46:56,504 INFO sqlalchemy.engine.Engine [cached since 5.692e+04s ago] (5, 0)
+2026-06-29 13:46:56,512 INFO sqlalchemy.engine.Engine COMMIT
+2026-06-29 13:46:56,512 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-06-29 13:46:56,512 INFO sqlalchemy.engine.Engine SELECT users.id, users.name, users.email, users.cpf, users.phone, users.password_hash, users.role, users.google_id, users.avatar_url, users.is_active, users.created_at, users.updated_at 
+FROM users 
+WHERE users.id = ?
+2026-06-29 13:46:56,512 INFO sqlalchemy.engine.Engine [cached since 5.723e+04s ago] ('dcf1720758d54cc0aa8a22e3fffe2687',)
+2026-06-29 13:46:56,512 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-06-29 13:46:56,512 INFO sqlalchemy.engine.Engine SELECT users.id, users.name, users.email, users.cpf, users.phone, users.password_hash, users.role, users.google_id, users.avatar_url, users.is_active, users.created_at, users.updated_at 
+FROM users 
+WHERE users.id = ?
+2026-06-29 13:46:56,512 INFO sqlalchemy.engine.Engine [cached since 5.723e+04s ago] ('dcf1720758d54cc0aa8a22e3fffe2687',)
+INFO:     127.0.0.1:50296 - "GET /api/v1/reports/top-services?limit=5 HTTP/1.1" 200 OK
+2026-06-29 13:46:56,520 INFO sqlalchemy.engine.Engine SELECT CAST(STRFTIME('%m', payments.paid_at) AS INTEGER) AS month, sum(payments.amount) AS total 
+FROM payments 
+WHERE CAST(STRFTIME('%Y', payments.paid_at) AS INTEGER) = ? AND payments.status = ? GROUP BY CAST(STRFTIME('%m', payments.paid_at) AS INTEGER) ORDER BY CAST(STRFTIME('%m', payments.paid_at) AS INTEGER)
+2026-06-29 13:46:56,520 INFO sqlalchemy.engine.Engine [cached since 5.692e+04s ago] (2026, 'paid')
+2026-06-29 13:46:56,528 INFO sqlalchemy.engine.Engine SELECT count(users.id) AS count_1 
+FROM users 
+WHERE users.role = ?
+2026-06-29 13:46:56,528 INFO sqlalchemy.engine.Engine [cached since 5.723e+04s ago] ('client',)
+2026-06-29 13:46:56,528 INFO sqlalchemy.engine.Engine SELECT CAST(STRFTIME('%m', expenses.date) AS INTEGER) AS month, sum(expenses.amount) AS total 
+FROM expenses 
+WHERE CAST(STRFTIME('%Y', expenses.date) AS INTEGER) = ? GROUP BY CAST(STRFTIME('%m', expenses.date) AS INTEGER) ORDER BY CAST(STRFTIME('%m', expenses.date) AS INTEGER)
+2026-06-29 13:46:56,528 INFO sqlalchemy.engine.Engine [cached since 5.692e+04s ago] (2026,)
+2026-06-29 13:46:56,536 INFO sqlalchemy.engine.Engine SELECT count(vehicles.id) AS count_1 
+FROM vehicles
+2026-06-29 13:46:56,536 INFO sqlalchemy.engine.Engine [cached since 5.692e+04s ago] ()
+2026-06-29 13:46:56,544 INFO sqlalchemy.engine.Engine COMMIT
+2026-06-29 13:46:56,544 INFO sqlalchemy.engine.Engine SELECT count(service_orders.id) AS count_1 
+FROM service_orders 
+WHERE service_orders.status IN (?, ?)
+2026-06-29 13:46:56,544 INFO sqlalchemy.engine.Engine [cached since 5.692e+04s ago] ('open', 'in_progress')
+INFO:     127.0.0.1:50295 - "GET /api/v1/reports/revenue?period=month HTTP/1.1" 200 OK
+2026-06-29 13:46:56,552 INFO sqlalchemy.engine.Engine SELECT count(appointments.id) AS count_1 
+FROM appointments 
+WHERE date(appointments.scheduled_at) = ? AND appointments.status != ?
+2026-06-29 13:46:56,552 INFO sqlalchemy.engine.Engine [cached since 5.692e+04s ago] ('2026-06-29', 'cancelled')
+2026-06-29 13:46:56,560 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-06-29 13:46:56,560 INFO sqlalchemy.engine.Engine SELECT users.id, users.name, users.email, users.cpf, users.phone, users.password_hash, users.role, users.google_id, users.avatar_url, users.is_active, users.created_at, users.updated_at 
+FROM users 
+WHERE users.id = ?
+2026-06-29 13:46:56,560 INFO sqlalchemy.engine.Engine [cached since 5.723e+04s ago] ('dcf1720758d54cc0aa8a22e3fffe2687',)
+2026-06-29 13:46:56,560 INFO sqlalchemy.engine.Engine SELECT coalesce(sum(payments.amount), ?) AS coalesce_1 
+FROM payments 
+WHERE CAST(STRFTIME('%m', payments.paid_at) AS INTEGER) = ? AND CAST(STRFTIME('%Y', payments.paid_at) AS INTEGER) = ? AND payments.status = ?
+2026-06-29 13:46:56,560 INFO sqlalchemy.engine.Engine [cached since 5.692e+04s ago] (0, 6, 2026, 'paid')
+2026-06-29 13:46:56,575 INFO sqlalchemy.engine.Engine SELECT order_services.service_id, sum(order_services.quantity) AS total_quantity, sum(order_services.price_at_time * order_services.quantity) AS total_revenue 
+FROM order_services GROUP BY order_services.service_id ORDER BY sum(order_services.price_at_time * order_services.quantity) DESC
+ LIMIT ? OFFSET ?
+2026-06-29 13:46:56,577 INFO sqlalchemy.engine.Engine [cached since 5.692e+04s ago] (5, 0)
+2026-06-29 13:46:56,580 INFO sqlalchemy.engine.Engine SELECT coalesce(sum(expenses.amount), ?) AS coalesce_1 
+FROM expenses 
+WHERE CAST(STRFTIME('%m', expenses.date) AS INTEGER) = ? AND CAST(STRFTIME('%Y', expenses.date) AS INTEGER) = ?
+2026-06-29 13:46:56,580 INFO sqlalchemy.engine.Engine [cached since 5.692e+04s ago] (0, 6, 2026)
+2026-06-29 13:46:56,580 INFO sqlalchemy.engine.Engine COMMIT
+2026-06-29 13:46:56,587 INFO sqlalchemy.engine.Engine SELECT count(service_orders.id) AS count_1 
+FROM service_orders 
+WHERE service_orders.client_signature IS NULL
+2026-06-29 13:46:56,587 INFO sqlalchemy.engine.Engine [cached since 5.692e+04s ago] ()
+INFO:     127.0.0.1:50300 - "GET /api/v1/reports/top-services?limit=5 HTTP/1.1" 200 OK
+2026-06-29 13:46:56,594 INFO sqlalchemy.engine.Engine COMMIT
+2026-06-29 13:46:56,596 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-06-29 13:46:56,597 INFO sqlalchemy.engine.Engine SELECT users.id, users.name, users.email, users.cpf, users.phone, users.password_hash, users.role, users.google_id, users.avatar_url, users.is_active, users.created_at, users.updated_at 
+FROM users 
+WHERE users.id = ?
+2026-06-29 13:46:56,597 INFO sqlalchemy.engine.Engine [cached since 5.723e+04s ago] ('dcf1720758d54cc0aa8a22e3fffe2687',)
+2026-06-29 13:46:56,598 INFO sqlalchemy.engine.Engine SELECT CAST(STRFTIME('%m', payments.paid_at) AS INTEGER) AS month, sum(payments.amount) AS total 
+FROM payments 
+WHERE CAST(STRFTIME('%Y', payments.paid_at) AS INTEGER) = ? AND payments.status = ? GROUP BY CAST(STRFTIME('%m', payments.paid_at) AS INTEGER) ORDER BY CAST(STRFTIME('%m', payments.paid_at) AS INTEGER)
+2026-06-29 13:46:56,598 INFO sqlalchemy.engine.Engine [cached since 5.692e+04s ago] (2026, 'paid')
+INFO:     127.0.0.1:50291 - "GET /api/v1/dashboard/admin HTTP/1.1" 200 OK
+2026-06-29 13:46:56,603 INFO sqlalchemy.engine.Engine SELECT CAST(STRFTIME('%m', expenses.date) AS INTEGER) AS month, sum(expenses.amount) AS total 
+FROM expenses 
+WHERE CAST(STRFTIME('%Y', expenses.date) AS INTEGER) = ? GROUP BY CAST(STRFTIME('%m', expenses.date) AS INTEGER) ORDER BY CAST(STRFTIME('%m', expenses.date) AS INTEGER)
+2026-06-29 13:46:56,603 INFO sqlalchemy.engine.Engine [cached since 5.692e+04s ago] (2026,)
+2026-06-29 13:46:56,611 INFO sqlalchemy.engine.Engine COMMIT
+INFO:     127.0.0.1:50303 - "GET /api/v1/reports/revenue?period=month HTTP/1.1" 200 OK
+2026-06-29 13:46:56,634 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-06-29 13:46:56,634 INFO sqlalchemy.engine.Engine SELECT users.id, users.name, users.email, users.cpf, users.phone, users.password_hash, users.role, users.google_id, users.avatar_url, users.is_active, users.created_at, users.updated_at 
+FROM users 
+WHERE users.id = ?
+2026-06-29 13:46:56,634 INFO sqlalchemy.engine.Engine [cached since 5.723e+04s ago] ('dcf1720758d54cc0aa8a22e3fffe2687',)
+2026-06-29 13:46:56,638 INFO sqlalchemy.engine.Engine SELECT count(users.id) AS count_1 
+FROM users 
+WHERE users.role = ?
+2026-06-29 13:46:56,638 INFO sqlalchemy.engine.Engine [cached since 5.723e+04s ago] ('client',)
+2026-06-29 13:46:56,638 INFO sqlalchemy.engine.Engine SELECT count(vehicles.id) AS count_1 
+FROM vehicles
+2026-06-29 13:46:56,638 INFO sqlalchemy.engine.Engine [cached since 5.692e+04s ago] ()
+2026-06-29 13:46:56,646 INFO sqlalchemy.engine.Engine SELECT count(service_orders.id) AS count_1 
+FROM service_orders 
+WHERE service_orders.status IN (?, ?)
+2026-06-29 13:46:56,646 INFO sqlalchemy.engine.Engine [cached since 5.692e+04s ago] ('open', 'in_progress')
+2026-06-29 13:46:56,646 INFO sqlalchemy.engine.Engine SELECT count(appointments.id) AS count_1 
+FROM appointments 
+WHERE date(appointments.scheduled_at) = ? AND appointments.status != ?
+2026-06-29 13:46:56,646 INFO sqlalchemy.engine.Engine [cached since 5.692e+04s ago] ('2026-06-29', 'cancelled')
+2026-06-29 13:46:56,654 INFO sqlalchemy.engine.Engine SELECT coalesce(sum(payments.amount), ?) AS coalesce_1 
+FROM payments 
+WHERE CAST(STRFTIME('%m', payments.paid_at) AS INTEGER) = ? AND CAST(STRFTIME('%Y', payments.paid_at) AS INTEGER) = ? AND payments.status = ?
+2026-06-29 13:46:56,654 INFO sqlalchemy.engine.Engine [cached since 5.692e+04s ago] (0, 6, 2026, 'paid')
+2026-06-29 13:46:56,654 INFO sqlalchemy.engine.Engine SELECT coalesce(sum(expenses.amount), ?) AS coalesce_1 
+FROM expenses 
+WHERE CAST(STRFTIME('%m', expenses.date) AS INTEGER) = ? AND CAST(STRFTIME('%Y', expenses.date) AS INTEGER) = ?
+2026-06-29 13:46:56,654 INFO sqlalchemy.engine.Engine [cached since 5.692e+04s ago] (0, 6, 2026)
+2026-06-29 13:46:56,663 INFO sqlalchemy.engine.Engine SELECT count(service_orders.id) AS count_1 
+FROM service_orders 
+WHERE service_orders.client_signature IS NULL
+2026-06-29 13:46:56,663 INFO sqlalchemy.engine.Engine [cached since 5.692e+04s ago] ()
+2026-06-29 13:46:56,663 INFO sqlalchemy.engine.Engine COMMIT
+INFO:     127.0.0.1:50306 - "GET /api/v1/dashboard/admin HTTP/1.1" 200 OK
+2026-06-29 13:48:18,736 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-06-29 13:48:18,736 INFO sqlalchemy.engine.Engine SELECT users.id, users.name, users.email, users.cpf, users.phone, users.password_hash, users.role, users.google_id, users.avatar_url, users.is_active, users.created_at, users.updated_at 
+FROM users 
+WHERE users.id = ?
+2026-06-29 13:48:18,736 INFO sqlalchemy.engine.Engine [cached since 5.732e+04s ago] ('dcf1720758d54cc0aa8a22e3fffe2687',)
+2026-06-29 13:48:18,752 INFO sqlalchemy.engine.Engine SELECT count(service_orders.id) AS count_1 
+FROM service_orders
+2026-06-29 13:48:18,752 INFO sqlalchemy.engine.Engine [cached since 5.699e+04s ago] ()
+2026-06-29 13:48:18,792 INFO sqlalchemy.engine.Engine SELECT service_orders.id, service_orders.order_number, service_orders.appointment_id, service_orders.client_id, service_orders.vehicle_id, service_orders.responsible_id, service_orders.total_value, service_orders.status, service_orders.notes, service_orders.client_signature, service_orders.client_approved_at, service_orders.client_observations, service_orders.created_at, service_orders.updated_at 
+FROM service_orders ORDER BY service_orders.created_at DESC
+ LIMIT ? OFFSET ?
+2026-06-29 13:48:18,792 INFO sqlalchemy.engine.Engine [cached since 5.699e+04s ago] (20, 0)
+2026-06-29 13:48:18,800 INFO sqlalchemy.engine.Engine COMMIT
+INFO:     127.0.0.1:50316 - "GET /api/v1/orders HTTP/1.1" 200 OK
+2026-06-29 13:48:18,837 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-06-29 13:48:18,837 INFO sqlalchemy.engine.Engine SELECT users.id, users.name, users.email, users.cpf, users.phone, users.password_hash, users.role, users.google_id, users.avatar_url, users.is_active, users.created_at, users.updated_at 
+FROM users 
+WHERE users.id = ?
+2026-06-29 13:48:18,845 INFO sqlalchemy.engine.Engine [cached since 5.732e+04s ago] ('dcf1720758d54cc0aa8a22e3fffe2687',)
+2026-06-29 13:48:18,847 INFO sqlalchemy.engine.Engine SELECT count(service_orders.id) AS count_1 
+FROM service_orders
+2026-06-29 13:48:18,847 INFO sqlalchemy.engine.Engine [cached since 5.699e+04s ago] ()
+2026-06-29 13:48:18,853 INFO sqlalchemy.engine.Engine SELECT service_orders.id, service_orders.order_number, service_orders.appointment_id, service_orders.client_id, service_orders.vehicle_id, service_orders.responsible_id, service_orders.total_value, service_orders.status, service_orders.notes, service_orders.client_signature, service_orders.client_approved_at, service_orders.client_observations, service_orders.created_at, service_orders.updated_at 
+FROM service_orders ORDER BY service_orders.created_at DESC
+ LIMIT ? OFFSET ?
+2026-06-29 13:48:18,853 INFO sqlalchemy.engine.Engine [cached since 5.699e+04s ago] (20, 0)
+2026-06-29 13:48:18,853 INFO sqlalchemy.engine.Engine COMMIT
+INFO:     127.0.0.1:50319 - "GET /api/v1/orders HTTP/1.1" 200 OK
+2026-06-29 13:48:22,990 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-06-29 13:48:22,990 INFO sqlalchemy.engine.Engine SELECT users.id, users.name, users.email, users.cpf, users.phone, users.password_hash, users.role, users.google_id, users.avatar_url, users.is_active, users.created_at, users.updated_at 
+FROM users 
+WHERE users.id = ?
+2026-06-29 13:48:22,997 INFO sqlalchemy.engine.Engine [cached since 5.732e+04s ago] ('dcf1720758d54cc0aa8a22e3fffe2687',)
+2026-06-29 13:48:23,003 INFO sqlalchemy.engine.Engine SELECT count(users.id) AS count_1 
+FROM users 
+WHERE users.role = ?
+2026-06-29 13:48:23,003 INFO sqlalchemy.engine.Engine [cached since 5.732e+04s ago] ('client',)
+2026-06-29 13:48:23,003 INFO sqlalchemy.engine.Engine SELECT users.id, users.name, users.email, users.cpf, users.phone, users.password_hash, users.role, users.google_id, users.avatar_url, users.is_active, users.created_at, users.updated_at 
+FROM users 
+WHERE users.role = ? ORDER BY users.name
+ LIMIT ? OFFSET ?
+2026-06-29 13:48:23,011 INFO sqlalchemy.engine.Engine [cached since 5.732e+04s ago] ('client', 10, 0)
+2026-06-29 13:48:23,012 INFO sqlalchemy.engine.Engine COMMIT
+INFO:     127.0.0.1:50322 - "GET /api/v1/users?page=1&page_size=10&search=&role=client HTTP/1.1" 200 OK
+2026-06-29 13:48:23,046 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-06-29 13:48:23,046 INFO sqlalchemy.engine.Engine SELECT users.id, users.name, users.email, users.cpf, users.phone, users.password_hash, users.role, users.google_id, users.avatar_url, users.is_active, users.created_at, users.updated_at 
+FROM users 
+WHERE users.id = ?
+2026-06-29 13:48:23,046 INFO sqlalchemy.engine.Engine [cached since 5.732e+04s ago] ('dcf1720758d54cc0aa8a22e3fffe2687',)
+2026-06-29 13:48:23,053 INFO sqlalchemy.engine.Engine SELECT count(users.id) AS count_1 
+FROM users 
+WHERE users.role = ?
+2026-06-29 13:48:23,054 INFO sqlalchemy.engine.Engine [cached since 5.732e+04s ago] ('client',)
+2026-06-29 13:48:23,054 INFO sqlalchemy.engine.Engine SELECT users.id, users.name, users.email, users.cpf, users.phone, users.password_hash, users.role, users.google_id, users.avatar_url, users.is_active, users.created_at, users.updated_at 
+FROM users 
+WHERE users.role = ? ORDER BY users.name
+ LIMIT ? OFFSET ?
+2026-06-29 13:48:23,054 INFO sqlalchemy.engine.Engine [cached since 5.732e+04s ago] ('client', 10, 0)
+2026-06-29 13:48:23,062 INFO sqlalchemy.engine.Engine COMMIT
+INFO:     127.0.0.1:50325 - "GET /api/v1/users?page=1&page_size=10&search=&role=client HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50386 - "GET /api/v1/auth/me HTTP/1.1" 401 Unauthorized
+INFO:     127.0.0.1:50388 - "GET /api/v1/auth/me HTTP/1.1" 401 Unauthorized
+2026-06-29 13:50:43,662 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-06-29 13:50:43,662 INFO sqlalchemy.engine.Engine SELECT users.id, users.name, users.email, users.cpf, users.phone, users.password_hash, users.role, users.google_id, users.avatar_url, users.is_active, users.created_at, users.updated_at 
+FROM users 
+WHERE users.email = ?
+2026-06-29 13:50:43,662 INFO sqlalchemy.engine.Engine [cached since 5.746e+04s ago] ('tadeu_madeira@hotmail.com',)
+2026-06-29 13:50:44,241 INFO sqlalchemy.engine.Engine INSERT INTO audit_logs (id, user_id, action, entity, entity_id, ip_address) VALUES (?, ?, ?, ?, ?, ?) RETURNING created_at
+2026-06-29 13:50:44,241 INFO sqlalchemy.engine.Engine [cached since 5.746e+04s ago] ('e75f3046d41e4a99872e89037d0978dd', 'bd2b8c66bd304ffda498330560a3eab2', 'login', 'user', 'bd2b8c66bd304ffda498330560a3eab2', '127.0.0.1')
+2026-06-29 13:50:44,249 INFO sqlalchemy.engine.Engine COMMIT
+INFO:     127.0.0.1:50395 - "POST /api/v1/auth/login HTTP/1.1" 200 OK
+2026-06-29 13:50:44,397 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-06-29 13:50:44,397 INFO sqlalchemy.engine.Engine SELECT users.id, users.name, users.email, users.cpf, users.phone, users.password_hash, users.role, users.google_id, users.avatar_url, users.is_active, users.created_at, users.updated_at 
+FROM users 
+WHERE users.id = ?
+2026-06-29 13:50:44,397 INFO sqlalchemy.engine.Engine [cached since 5.746e+04s ago] ('bd2b8c66bd304ffda498330560a3eab2',)
+2026-06-29 13:50:44,397 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-06-29 13:50:44,397 INFO sqlalchemy.engine.Engine SELECT users.id, users.name, users.email, users.cpf, users.phone, users.password_hash, users.role, users.google_id, users.avatar_url, users.is_active, users.created_at, users.updated_at 
+FROM users 
+WHERE users.id = ?
+2026-06-29 13:50:44,397 INFO sqlalchemy.engine.Engine [cached since 5.746e+04s ago] ('bd2b8c66bd304ffda498330560a3eab2',)
+2026-06-29 13:50:44,411 INFO sqlalchemy.engine.Engine SELECT count(vehicles.id) AS count_1 
+FROM vehicles 
+WHERE vehicles.owner_id = ?
+2026-06-29 13:50:44,411 INFO sqlalchemy.engine.Engine [cached since 5.696e+04s ago] ('bd2b8c66bd304ffda498330560a3eab2',)
+2026-06-29 13:50:44,414 INFO sqlalchemy.engine.Engine SELECT count(payments.id) AS count_1 
+FROM payments JOIN service_orders ON payments.order_id = service_orders.id 
+WHERE service_orders.client_id = ?
+2026-06-29 13:50:44,414 INFO sqlalchemy.engine.Engine [cached since 5.696e+04s ago] ('bd2b8c66bd304ffda498330560a3eab2',)
+2026-06-29 13:50:44,414 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-06-29 13:50:44,414 INFO sqlalchemy.engine.Engine SELECT users.id, users.name, users.email, users.cpf, users.phone, users.password_hash, users.role, users.google_id, users.avatar_url, users.is_active, users.created_at, users.updated_at 
+FROM users 
+WHERE users.id = ?
+2026-06-29 13:50:44,414 INFO sqlalchemy.engine.Engine [cached since 5.746e+04s ago] ('bd2b8c66bd304ffda498330560a3eab2',)
+2026-06-29 13:50:44,414 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-06-29 13:50:44,414 INFO sqlalchemy.engine.Engine SELECT users.id, users.name, users.email, users.cpf, users.phone, users.password_hash, users.role, users.google_id, users.avatar_url, users.is_active, users.created_at, users.updated_at 
+FROM users 
+WHERE users.id = ?
+2026-06-29 13:50:44,414 INFO sqlalchemy.engine.Engine [cached since 5.746e+04s ago] ('bd2b8c66bd304ffda498330560a3eab2',)
+2026-06-29 13:50:44,422 INFO sqlalchemy.engine.Engine SELECT payments.id, payments.order_id, payments.amount, payments.method, payments.status, payments.due_date, payments.paid_at, payments.notes, payments.created_at, payments.updated_at 
+FROM payments JOIN service_orders ON payments.order_id = service_orders.id 
+WHERE service_orders.client_id = ? ORDER BY payments.created_at DESC
+ LIMIT ? OFFSET ?
+2026-06-29 13:50:44,422 INFO sqlalchemy.engine.Engine [cached since 5.696e+04s ago] ('bd2b8c66bd304ffda498330560a3eab2', 20, 0)
+2026-06-29 13:50:44,422 INFO sqlalchemy.engine.Engine SELECT count(appointments.id) AS count_1 
+FROM appointments 
+WHERE appointments.client_id = ? AND appointments.scheduled_at >= ? AND appointments.status != ?
+2026-06-29 13:50:44,431 INFO sqlalchemy.engine.Engine [cached since 5.696e+04s ago] ('bd2b8c66bd304ffda498330560a3eab2', '2026-06-29 16:50:44.422710', 'cancelled')
+2026-06-29 13:50:44,442 INFO sqlalchemy.engine.Engine SELECT count(appointments.id) AS count_1 
+FROM appointments 
+WHERE appointments.client_id = ?
+2026-06-29 13:50:44,442 INFO sqlalchemy.engine.Engine [cached since 5.696e+04s ago] ('bd2b8c66bd304ffda498330560a3eab2',)
+2026-06-29 13:50:44,442 INFO sqlalchemy.engine.Engine SELECT count(service_orders.id) AS count_1 
+FROM service_orders 
+WHERE service_orders.client_id = ?
+2026-06-29 13:50:44,442 INFO sqlalchemy.engine.Engine [cached since 5.696e+04s ago] ('bd2b8c66bd304ffda498330560a3eab2',)
+2026-06-29 13:50:44,442 INFO sqlalchemy.engine.Engine COMMIT
+2026-06-29 13:50:44,451 INFO sqlalchemy.engine.Engine SELECT appointments.id, appointments.client_id, appointments.vehicle_id, appointments.scheduled_at, appointments.duration_minutes, appointments.status, appointments.notes, appointments.created_by, appointments.created_at, appointments.updated_at 
+FROM appointments 
+WHERE appointments.client_id = ? ORDER BY appointments.scheduled_at DESC
+ LIMIT ? OFFSET ?
+2026-06-29 13:50:44,451 INFO sqlalchemy.engine.Engine [cached since 5.696e+04s ago] ('bd2b8c66bd304ffda498330560a3eab2', 5, 0)
+2026-06-29 13:50:44,453 INFO sqlalchemy.engine.Engine SELECT count(service_orders.id) AS count_1 
+FROM service_orders 
+WHERE service_orders.client_id = ? AND service_orders.status IN (?, ?)
+2026-06-29 13:50:44,453 INFO sqlalchemy.engine.Engine [cached since 5.696e+04s ago] ('bd2b8c66bd304ffda498330560a3eab2', 'open', 'in_progress')
+2026-06-29 13:50:44,453 INFO sqlalchemy.engine.Engine SELECT service_orders.id, service_orders.order_number, service_orders.appointment_id, service_orders.client_id, service_orders.vehicle_id, service_orders.responsible_id, service_orders.total_value, service_orders.status, service_orders.notes, service_orders.client_signature, service_orders.client_approved_at, service_orders.client_observations, service_orders.created_at, service_orders.updated_at 
+FROM service_orders 
+WHERE service_orders.client_id = ? ORDER BY service_orders.created_at DESC
+ LIMIT ? OFFSET ?
+2026-06-29 13:50:44,453 INFO sqlalchemy.engine.Engine [cached since 5.696e+04s ago] ('bd2b8c66bd304ffda498330560a3eab2', 5, 0)
+2026-06-29 13:50:44,461 INFO sqlalchemy.engine.Engine COMMIT
+2026-06-29 13:50:44,462 INFO sqlalchemy.engine.Engine SELECT coalesce(sum(payments.amount), ?) AS coalesce_1 
+FROM payments JOIN service_orders ON payments.order_id = service_orders.id 
+WHERE service_orders.client_id = ? AND payments.status = ?
+2026-06-29 13:50:44,462 INFO sqlalchemy.engine.Engine [cached since 5.696e+04s ago] (0, 'bd2b8c66bd304ffda498330560a3eab2', 'paid')
+INFO:     127.0.0.1:50403 - "GET /api/v1/financial/payments?client_id=bd2b8c66-bd30-4ffd-a498-330560a3eab2 HTTP/1.1" 200 OK
+2026-06-29 13:50:44,462 INFO sqlalchemy.engine.Engine SELECT vehicles.id AS vehicles_id, vehicles.owner_id AS vehicles_owner_id, vehicles.brand AS vehicles_brand, vehicles.model AS vehicles_model, vehicles.year AS vehicles_year, vehicles.color AS vehicles_color, vehicles.plate AS vehicles_plate, vehicles.mileage AS vehicles_mileage, vehicles.notes AS vehicles_notes, vehicles.created_at AS vehicles_created_at, vehicles.updated_at AS vehicles_updated_at 
+FROM vehicles 
+WHERE vehicles.id IN (?, ?, ?, ?)
+2026-06-29 13:50:44,470 INFO sqlalchemy.engine.Engine [cached since 5.696e+04s ago] ('2e52c36f4f9e4d8491808b818f730eeb', '447e521b43ac4d6e8026bc60dc95aedf', 'b5b8eef656e74f0b936cece4c16a2740', 'f83bc409d25b4db9a11adcb54b499c9a')
+2026-06-29 13:50:44,476 INFO sqlalchemy.engine.Engine COMMIT
+INFO:     127.0.0.1:50401 - "GET /api/v1/orders?client_id=bd2b8c66-bd30-4ffd-a498-330560a3eab2&page_size=5 HTTP/1.1" 200 OK
+2026-06-29 13:50:44,481 INFO sqlalchemy.engine.Engine SELECT users.id AS users_id, users.name AS users_name, users.email AS users_email, users.cpf AS users_cpf, users.phone AS users_phone, users.password_hash AS users_password_hash, users.role AS users_role, users.google_id AS users_google_id, users.avatar_url AS users_avatar_url, users.is_active AS users_is_active, users.created_at AS users_created_at, users.updated_at AS users_updated_at 
+FROM users 
+WHERE users.id IN (?)
+2026-06-29 13:50:44,481 INFO sqlalchemy.engine.Engine [cached since 5.696e+04s ago] ('bd2b8c66bd304ffda498330560a3eab2',)
+INFO:     127.0.0.1:50397 - "GET /api/v1/dashboard/client HTTP/1.1" 200 OK
+2026-06-29 13:50:44,493 INFO sqlalchemy.engine.Engine COMMIT
+2026-06-29 13:50:44,493 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-06-29 13:50:44,493 INFO sqlalchemy.engine.Engine SELECT users.id, users.name, users.email, users.cpf, users.phone, users.password_hash, users.role, users.google_id, users.avatar_url, users.is_active, users.created_at, users.updated_at 
+FROM users 
+WHERE users.id = ?
+2026-06-29 13:50:44,493 INFO sqlalchemy.engine.Engine [cached since 5.746e+04s ago] ('bd2b8c66bd304ffda498330560a3eab2',)
+2026-06-29 13:50:44,501 INFO sqlalchemy.engine.Engine SELECT count(payments.id) AS count_1 
+FROM payments JOIN service_orders ON payments.order_id = service_orders.id 
+WHERE service_orders.client_id = ?
+2026-06-29 13:50:44,501 INFO sqlalchemy.engine.Engine [cached since 5.696e+04s ago] ('bd2b8c66bd304ffda498330560a3eab2',)
+INFO:     127.0.0.1:50399 - "GET /api/v1/appointments?client_id=bd2b8c66-bd30-4ffd-a498-330560a3eab2&page_size=5 HTTP/1.1" 200 OK
+2026-06-29 13:50:44,509 INFO sqlalchemy.engine.Engine SELECT payments.id, payments.order_id, payments.amount, payments.method, payments.status, payments.due_date, payments.paid_at, payments.notes, payments.created_at, payments.updated_at 
+FROM payments JOIN service_orders ON payments.order_id = service_orders.id 
+WHERE service_orders.client_id = ? ORDER BY payments.created_at DESC
+ LIMIT ? OFFSET ?
+2026-06-29 13:50:44,509 INFO sqlalchemy.engine.Engine [cached since 5.696e+04s ago] ('bd2b8c66bd304ffda498330560a3eab2', 20, 0)
+2026-06-29 13:50:44,509 INFO sqlalchemy.engine.Engine COMMIT
+2026-06-29 13:50:44,509 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-06-29 13:50:44,509 INFO sqlalchemy.engine.Engine SELECT users.id, users.name, users.email, users.cpf, users.phone, users.password_hash, users.role, users.google_id, users.avatar_url, users.is_active, users.created_at, users.updated_at 
+FROM users 
+WHERE users.id = ?
+2026-06-29 13:50:44,509 INFO sqlalchemy.engine.Engine [cached since 5.746e+04s ago] ('bd2b8c66bd304ffda498330560a3eab2',)
+2026-06-29 13:50:44,519 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-06-29 13:50:44,519 INFO sqlalchemy.engine.Engine SELECT users.id, users.name, users.email, users.cpf, users.phone, users.password_hash, users.role, users.google_id, users.avatar_url, users.is_active, users.created_at, users.updated_at 
+FROM users 
+WHERE users.id = ?
+2026-06-29 13:50:44,519 INFO sqlalchemy.engine.Engine [cached since 5.746e+04s ago] ('bd2b8c66bd304ffda498330560a3eab2',)
+2026-06-29 13:50:44,526 INFO sqlalchemy.engine.Engine SELECT count(service_orders.id) AS count_1 
+FROM service_orders 
+WHERE service_orders.client_id = ?
+2026-06-29 13:50:44,527 INFO sqlalchemy.engine.Engine [cached since 5.696e+04s ago] ('bd2b8c66bd304ffda498330560a3eab2',)
+INFO:     127.0.0.1:50405 - "GET /api/v1/financial/payments?client_id=bd2b8c66-bd30-4ffd-a498-330560a3eab2 HTTP/1.1" 200 OK
+2026-06-29 13:50:44,530 INFO sqlalchemy.engine.Engine SELECT count(vehicles.id) AS count_1 
+FROM vehicles 
+WHERE vehicles.owner_id = ?
+2026-06-29 13:50:44,530 INFO sqlalchemy.engine.Engine [cached since 5.696e+04s ago] ('bd2b8c66bd304ffda498330560a3eab2',)
+2026-06-29 13:50:44,530 INFO sqlalchemy.engine.Engine SELECT service_orders.id, service_orders.order_number, service_orders.appointment_id, service_orders.client_id, service_orders.vehicle_id, service_orders.responsible_id, service_orders.total_value, service_orders.status, service_orders.notes, service_orders.client_signature, service_orders.client_approved_at, service_orders.client_observations, service_orders.created_at, service_orders.updated_at 
+FROM service_orders 
+WHERE service_orders.client_id = ? ORDER BY service_orders.created_at DESC
+ LIMIT ? OFFSET ?
+2026-06-29 13:50:44,530 INFO sqlalchemy.engine.Engine [cached since 5.696e+04s ago] ('bd2b8c66bd304ffda498330560a3eab2', 5, 0)
+2026-06-29 13:50:44,538 INFO sqlalchemy.engine.Engine SELECT count(appointments.id) AS count_1 
+FROM appointments 
+WHERE appointments.client_id = ? AND appointments.scheduled_at >= ? AND appointments.status != ?
+2026-06-29 13:50:44,539 INFO sqlalchemy.engine.Engine [cached since 5.696e+04s ago] ('bd2b8c66bd304ffda498330560a3eab2', '2026-06-29 16:50:44.536868', 'cancelled')
+2026-06-29 13:50:44,539 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-06-29 13:50:44,539 INFO sqlalchemy.engine.Engine SELECT users.id, users.name, users.email, users.cpf, users.phone, users.password_hash, users.role, users.google_id, users.avatar_url, users.is_active, users.created_at, users.updated_at 
+FROM users 
+WHERE users.id = ?
+2026-06-29 13:50:44,539 INFO sqlalchemy.engine.Engine [cached since 5.746e+04s ago] ('bd2b8c66bd304ffda498330560a3eab2',)
+2026-06-29 13:50:44,539 INFO sqlalchemy.engine.Engine COMMIT
+2026-06-29 13:50:44,539 INFO sqlalchemy.engine.Engine SELECT count(service_orders.id) AS count_1 
+FROM service_orders 
+WHERE service_orders.client_id = ? AND service_orders.status IN (?, ?)
+2026-06-29 13:50:44,547 INFO sqlalchemy.engine.Engine [cached since 5.696e+04s ago] ('bd2b8c66bd304ffda498330560a3eab2', 'open', 'in_progress')
+2026-06-29 13:50:44,549 INFO sqlalchemy.engine.Engine SELECT count(appointments.id) AS count_1 
+FROM appointments 
+WHERE appointments.client_id = ?
+2026-06-29 13:50:44,549 INFO sqlalchemy.engine.Engine [cached since 5.696e+04s ago] ('bd2b8c66bd304ffda498330560a3eab2',)
+INFO:     127.0.0.1:50408 - "GET /api/v1/orders?client_id=bd2b8c66-bd30-4ffd-a498-330560a3eab2&page_size=5 HTTP/1.1" 200 OK
+2026-06-29 13:50:44,554 INFO sqlalchemy.engine.Engine SELECT coalesce(sum(payments.amount), ?) AS coalesce_1 
+FROM payments JOIN service_orders ON payments.order_id = service_orders.id 
+WHERE service_orders.client_id = ? AND payments.status = ?
+2026-06-29 13:50:44,554 INFO sqlalchemy.engine.Engine [cached since 5.696e+04s ago] (0, 'bd2b8c66bd304ffda498330560a3eab2', 'paid')
+2026-06-29 13:50:44,554 INFO sqlalchemy.engine.Engine SELECT appointments.id, appointments.client_id, appointments.vehicle_id, appointments.scheduled_at, appointments.duration_minutes, appointments.status, appointments.notes, appointments.created_by, appointments.created_at, appointments.updated_at 
+FROM appointments 
+WHERE appointments.client_id = ? ORDER BY appointments.scheduled_at DESC
+ LIMIT ? OFFSET ?
+2026-06-29 13:50:44,554 INFO sqlalchemy.engine.Engine [cached since 5.696e+04s ago] ('bd2b8c66bd304ffda498330560a3eab2', 5, 0)
+2026-06-29 13:50:44,562 INFO sqlalchemy.engine.Engine COMMIT
+2026-06-29 13:50:44,564 INFO sqlalchemy.engine.Engine SELECT vehicles.id AS vehicles_id, vehicles.owner_id AS vehicles_owner_id, vehicles.brand AS vehicles_brand, vehicles.model AS vehicles_model, vehicles.year AS vehicles_year, vehicles.color AS vehicles_color, vehicles.plate AS vehicles_plate, vehicles.mileage AS vehicles_mileage, vehicles.notes AS vehicles_notes, vehicles.created_at AS vehicles_created_at, vehicles.updated_at AS vehicles_updated_at 
+FROM vehicles 
+WHERE vehicles.id IN (?, ?, ?, ?)
+2026-06-29 13:50:44,564 INFO sqlalchemy.engine.Engine [cached since 5.696e+04s ago] ('2e52c36f4f9e4d8491808b818f730eeb', '447e521b43ac4d6e8026bc60dc95aedf', 'b5b8eef656e74f0b936cece4c16a2740', 'f83bc409d25b4db9a11adcb54b499c9a')
+INFO:     127.0.0.1:50411 - "GET /api/v1/dashboard/client HTTP/1.1" 200 OK
+2026-06-29 13:50:44,572 INFO sqlalchemy.engine.Engine SELECT users.id AS users_id, users.name AS users_name, users.email AS users_email, users.cpf AS users_cpf, users.phone AS users_phone, users.password_hash AS users_password_hash, users.role AS users_role, users.google_id AS users_google_id, users.avatar_url AS users_avatar_url, users.is_active AS users_is_active, users.created_at AS users_created_at, users.updated_at AS users_updated_at 
+FROM users 
+WHERE users.id IN (?)
+2026-06-29 13:50:44,572 INFO sqlalchemy.engine.Engine [cached since 5.696e+04s ago] ('bd2b8c66bd304ffda498330560a3eab2',)
+2026-06-29 13:50:44,580 INFO sqlalchemy.engine.Engine COMMIT
+INFO:     127.0.0.1:50414 - "GET /api/v1/appointments?client_id=bd2b8c66-bd30-4ffd-a498-330560a3eab2&page_size=5 HTTP/1.1" 200 OK
+2026-06-29 13:51:15,595 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-06-29 13:51:15,595 INFO sqlalchemy.engine.Engine SELECT users.id, users.name, users.email, users.cpf, users.phone, users.password_hash, users.role, users.google_id, users.avatar_url, users.is_active, users.created_at, users.updated_at 
+FROM users 
+WHERE users.id = ?
+2026-06-29 13:51:15,595 INFO sqlalchemy.engine.Engine [cached since 5.749e+04s ago] ('bd2b8c66bd304ffda498330560a3eab2',)
+2026-06-29 13:51:15,603 INFO sqlalchemy.engine.Engine SELECT count(appointments.id) AS count_1 
+FROM appointments 
+WHERE appointments.client_id = ?
+2026-06-29 13:51:15,603 INFO sqlalchemy.engine.Engine [cached since 5.699e+04s ago] ('bd2b8c66bd304ffda498330560a3eab2',)
+2026-06-29 13:51:15,603 INFO sqlalchemy.engine.Engine SELECT appointments.id, appointments.client_id, appointments.vehicle_id, appointments.scheduled_at, appointments.duration_minutes, appointments.status, appointments.notes, appointments.created_by, appointments.created_at, appointments.updated_at 
+FROM appointments 
+WHERE appointments.client_id = ? ORDER BY appointments.scheduled_at DESC
+ LIMIT ? OFFSET ?
+2026-06-29 13:51:15,603 INFO sqlalchemy.engine.Engine [cached since 5.699e+04s ago] ('bd2b8c66bd304ffda498330560a3eab2', 20, 0)
+2026-06-29 13:51:15,611 INFO sqlalchemy.engine.Engine SELECT vehicles.id AS vehicles_id, vehicles.owner_id AS vehicles_owner_id, vehicles.brand AS vehicles_brand, vehicles.model AS vehicles_model, vehicles.year AS vehicles_year, vehicles.color AS vehicles_color, vehicles.plate AS vehicles_plate, vehicles.mileage AS vehicles_mileage, vehicles.notes AS vehicles_notes, vehicles.created_at AS vehicles_created_at, vehicles.updated_at AS vehicles_updated_at 
+FROM vehicles 
+WHERE vehicles.id IN (?, ?, ?, ?, ?)
+2026-06-29 13:51:15,611 INFO sqlalchemy.engine.Engine [cached since 5.699e+04s ago] ('2e52c36f4f9e4d8491808b818f730eeb', '447e521b43ac4d6e8026bc60dc95aedf', 'b5b8eef656e74f0b936cece4c16a2740', 'b73449a81fdd481b8d3bcfabbb2da6a0', 'f83bc409d25b4db9a11adcb54b499c9a')
+2026-06-29 13:51:15,611 INFO sqlalchemy.engine.Engine SELECT users.id AS users_id, users.name AS users_name, users.email AS users_email, users.cpf AS users_cpf, users.phone AS users_phone, users.password_hash AS users_password_hash, users.role AS users_role, users.google_id AS users_google_id, users.avatar_url AS users_avatar_url, users.is_active AS users_is_active, users.created_at AS users_created_at, users.updated_at AS users_updated_at 
+FROM users 
+WHERE users.id IN (?)
+2026-06-29 13:51:15,611 INFO sqlalchemy.engine.Engine [cached since 5.699e+04s ago] ('bd2b8c66bd304ffda498330560a3eab2',)
+2026-06-29 13:51:15,619 INFO sqlalchemy.engine.Engine COMMIT
+INFO:     127.0.0.1:50419 - "GET /api/v1/appointments?client_id=bd2b8c66-bd30-4ffd-a498-330560a3eab2 HTTP/1.1" 200 OK
+2026-06-29 13:51:15,643 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-06-29 13:51:15,651 INFO sqlalchemy.engine.Engine SELECT users.id, users.name, users.email, users.cpf, users.phone, users.password_hash, users.role, users.google_id, users.avatar_url, users.is_active, users.created_at, users.updated_at 
+FROM users 
+WHERE users.id = ?
+2026-06-29 13:51:15,651 INFO sqlalchemy.engine.Engine [cached since 5.749e+04s ago] ('bd2b8c66bd304ffda498330560a3eab2',)
+2026-06-29 13:51:15,651 INFO sqlalchemy.engine.Engine SELECT count(appointments.id) AS count_1 
+FROM appointments 
+WHERE appointments.client_id = ?
+2026-06-29 13:51:15,651 INFO sqlalchemy.engine.Engine [cached since 5.699e+04s ago] ('bd2b8c66bd304ffda498330560a3eab2',)
+2026-06-29 13:51:15,659 INFO sqlalchemy.engine.Engine SELECT appointments.id, appointments.client_id, appointments.vehicle_id, appointments.scheduled_at, appointments.duration_minutes, appointments.status, appointments.notes, appointments.created_by, appointments.created_at, appointments.updated_at 
+FROM appointments 
+WHERE appointments.client_id = ? ORDER BY appointments.scheduled_at DESC
+ LIMIT ? OFFSET ?
+2026-06-29 13:51:15,659 INFO sqlalchemy.engine.Engine [cached since 5.699e+04s ago] ('bd2b8c66bd304ffda498330560a3eab2', 20, 0)
+2026-06-29 13:51:15,659 INFO sqlalchemy.engine.Engine SELECT vehicles.id AS vehicles_id, vehicles.owner_id AS vehicles_owner_id, vehicles.brand AS vehicles_brand, vehicles.model AS vehicles_model, vehicles.year AS vehicles_year, vehicles.color AS vehicles_color, vehicles.plate AS vehicles_plate, vehicles.mileage AS vehicles_mileage, vehicles.notes AS vehicles_notes, vehicles.created_at AS vehicles_created_at, vehicles.updated_at AS vehicles_updated_at 
+FROM vehicles 
+WHERE vehicles.id IN (?, ?, ?, ?, ?)
+2026-06-29 13:51:15,659 INFO sqlalchemy.engine.Engine [cached since 5.699e+04s ago] ('2e52c36f4f9e4d8491808b818f730eeb', '447e521b43ac4d6e8026bc60dc95aedf', 'b5b8eef656e74f0b936cece4c16a2740', 'b73449a81fdd481b8d3bcfabbb2da6a0', 'f83bc409d25b4db9a11adcb54b499c9a')
+2026-06-29 13:51:15,667 INFO sqlalchemy.engine.Engine SELECT users.id AS users_id, users.name AS users_name, users.email AS users_email, users.cpf AS users_cpf, users.phone AS users_phone, users.password_hash AS users_password_hash, users.role AS users_role, users.google_id AS users_google_id, users.avatar_url AS users_avatar_url, users.is_active AS users_is_active, users.created_at AS users_created_at, users.updated_at AS users_updated_at 
+FROM users 
+WHERE users.id IN (?)
+2026-06-29 13:51:15,667 INFO sqlalchemy.engine.Engine [cached since 5.699e+04s ago] ('bd2b8c66bd304ffda498330560a3eab2',)
+2026-06-29 13:51:15,667 INFO sqlalchemy.engine.Engine COMMIT
+INFO:     127.0.0.1:50422 - "GET /api/v1/appointments?client_id=bd2b8c66-bd30-4ffd-a498-330560a3eab2 HTTP/1.1" 200 OK
+2026-06-29 14:05:20,316 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-06-29 14:05:20,317 INFO sqlalchemy.engine.Engine SELECT users.id, users.name, users.email, users.cpf, users.phone, users.password_hash, users.role, users.google_id, users.avatar_url, users.is_active, users.created_at, users.updated_at 
+FROM users 
+WHERE users.id = ?
+2026-06-29 14:05:20,317 INFO sqlalchemy.engine.Engine [cached since 5.834e+04s ago] ('dcf1720758d54cc0aa8a22e3fffe2687',)
+2026-06-29 14:05:20,322 INFO sqlalchemy.engine.Engine SELECT count(users.id) AS count_1 
+FROM users 
+WHERE users.role = ?
+2026-06-29 14:05:20,323 INFO sqlalchemy.engine.Engine [cached since 5.834e+04s ago] ('client',)
+2026-06-29 14:05:20,328 INFO sqlalchemy.engine.Engine SELECT users.id, users.name, users.email, users.cpf, users.phone, users.password_hash, users.role, users.google_id, users.avatar_url, users.is_active, users.created_at, users.updated_at 
+FROM users 
+WHERE users.role = ? ORDER BY users.name
+ LIMIT ? OFFSET ?
+2026-06-29 14:05:20,328 INFO sqlalchemy.engine.Engine [cached since 5.834e+04s ago] ('client', 10, 0)
+2026-06-29 14:05:20,332 INFO sqlalchemy.engine.Engine COMMIT
+INFO:     127.0.0.1:51073 - "GET /api/v1/users?page=1&page_size=10&search=&role=client HTTP/1.1" 200 OK
+2026-06-29 14:05:20,411 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-06-29 14:05:20,412 INFO sqlalchemy.engine.Engine SELECT users.id, users.name, users.email, users.cpf, users.phone, users.password_hash, users.role, users.google_id, users.avatar_url, users.is_active, users.created_at, users.updated_at 
+FROM users 
+WHERE users.id = ?
+2026-06-29 14:05:20,412 INFO sqlalchemy.engine.Engine [cached since 5.834e+04s ago] ('bd2b8c66bd304ffda498330560a3eab2',)
+2026-06-29 14:05:20,417 INFO sqlalchemy.engine.Engine SELECT count(appointments.id) AS count_1 
+FROM appointments 
+WHERE appointments.client_id = ?
+2026-06-29 14:05:20,417 INFO sqlalchemy.engine.Engine [cached since 5.783e+04s ago] ('bd2b8c66bd304ffda498330560a3eab2',)
+2026-06-29 14:05:20,421 INFO sqlalchemy.engine.Engine SELECT appointments.id, appointments.client_id, appointments.vehicle_id, appointments.scheduled_at, appointments.duration_minutes, appointments.status, appointments.notes, appointments.created_by, appointments.created_at, appointments.updated_at 
+FROM appointments 
+WHERE appointments.client_id = ? ORDER BY appointments.scheduled_at DESC
+ LIMIT ? OFFSET ?
+2026-06-29 14:05:20,422 INFO sqlalchemy.engine.Engine [cached since 5.783e+04s ago] ('bd2b8c66bd304ffda498330560a3eab2', 20, 0)
+2026-06-29 14:05:20,429 INFO sqlalchemy.engine.Engine SELECT vehicles.id AS vehicles_id, vehicles.owner_id AS vehicles_owner_id, vehicles.brand AS vehicles_brand, vehicles.model AS vehicles_model, vehicles.year AS vehicles_year, vehicles.color AS vehicles_color, vehicles.plate AS vehicles_plate, vehicles.mileage AS vehicles_mileage, vehicles.notes AS vehicles_notes, vehicles.created_at AS vehicles_created_at, vehicles.updated_at AS vehicles_updated_at 
+FROM vehicles 
+WHERE vehicles.id IN (?, ?, ?, ?, ?)
+2026-06-29 14:05:20,429 INFO sqlalchemy.engine.Engine [cached since 5.783e+04s ago] ('2e52c36f4f9e4d8491808b818f730eeb', '447e521b43ac4d6e8026bc60dc95aedf', 'b5b8eef656e74f0b936cece4c16a2740', 'b73449a81fdd481b8d3bcfabbb2da6a0', 'f83bc409d25b4db9a11adcb54b499c9a')
+2026-06-29 14:05:20,434 INFO sqlalchemy.engine.Engine SELECT users.id AS users_id, users.name AS users_name, users.email AS users_email, users.cpf AS users_cpf, users.phone AS users_phone, users.password_hash AS users_password_hash, users.role AS users_role, users.google_id AS users_google_id, users.avatar_url AS users_avatar_url, users.is_active AS users_is_active, users.created_at AS users_created_at, users.updated_at AS users_updated_at 
+FROM users 
+WHERE users.id IN (?)
+2026-06-29 14:05:20,434 INFO sqlalchemy.engine.Engine [cached since 5.783e+04s ago] ('bd2b8c66bd304ffda498330560a3eab2',)
+2026-06-29 14:05:20,436 INFO sqlalchemy.engine.Engine COMMIT
+INFO:     127.0.0.1:51075 - "GET /api/v1/appointments?client_id=bd2b8c66-bd30-4ffd-a498-330560a3eab2 HTTP/1.1" 200 OK
+2026-06-29 14:05:22,277 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-06-29 14:05:22,278 INFO sqlalchemy.engine.Engine SELECT users.id, users.name, users.email, users.cpf, users.phone, users.password_hash, users.role, users.google_id, users.avatar_url, users.is_active, users.created_at, users.updated_at 
+FROM users 
+WHERE users.id = ?
+2026-06-29 14:05:22,278 INFO sqlalchemy.engine.Engine [cached since 5.834e+04s ago] ('bd2b8c66bd304ffda498330560a3eab2',)
+2026-06-29 14:05:22,284 INFO sqlalchemy.engine.Engine SELECT count(appointments.id) AS count_1 
+FROM appointments 
+WHERE appointments.client_id = ?
+2026-06-29 14:05:22,284 INFO sqlalchemy.engine.Engine [cached since 5.784e+04s ago] ('bd2b8c66bd304ffda498330560a3eab2',)
+2026-06-29 14:05:22,287 INFO sqlalchemy.engine.Engine SELECT appointments.id, appointments.client_id, appointments.vehicle_id, appointments.scheduled_at, appointments.duration_minutes, appointments.status, appointments.notes, appointments.created_by, appointments.created_at, appointments.updated_at 
+FROM appointments 
+WHERE appointments.client_id = ? ORDER BY appointments.scheduled_at DESC
+ LIMIT ? OFFSET ?
+2026-06-29 14:05:22,287 INFO sqlalchemy.engine.Engine [cached since 5.784e+04s ago] ('bd2b8c66bd304ffda498330560a3eab2', 20, 0)
+2026-06-29 14:05:22,293 INFO sqlalchemy.engine.Engine SELECT vehicles.id AS vehicles_id, vehicles.owner_id AS vehicles_owner_id, vehicles.brand AS vehicles_brand, vehicles.model AS vehicles_model, vehicles.year AS vehicles_year, vehicles.color AS vehicles_color, vehicles.plate AS vehicles_plate, vehicles.mileage AS vehicles_mileage, vehicles.notes AS vehicles_notes, vehicles.created_at AS vehicles_created_at, vehicles.updated_at AS vehicles_updated_at 
+FROM vehicles 
+WHERE vehicles.id IN (?, ?, ?, ?, ?)
+2026-06-29 14:05:22,293 INFO sqlalchemy.engine.Engine [cached since 5.784e+04s ago] ('2e52c36f4f9e4d8491808b818f730eeb', '447e521b43ac4d6e8026bc60dc95aedf', 'b5b8eef656e74f0b936cece4c16a2740', 'b73449a81fdd481b8d3bcfabbb2da6a0', 'f83bc409d25b4db9a11adcb54b499c9a')
+2026-06-29 14:05:22,298 INFO sqlalchemy.engine.Engine SELECT users.id AS users_id, users.name AS users_name, users.email AS users_email, users.cpf AS users_cpf, users.phone AS users_phone, users.password_hash AS users_password_hash, users.role AS users_role, users.google_id AS users_google_id, users.avatar_url AS users_avatar_url, users.is_active AS users_is_active, users.created_at AS users_created_at, users.updated_at AS users_updated_at 
+FROM users 
+WHERE users.id IN (?)
+2026-06-29 14:05:22,298 INFO sqlalchemy.engine.Engine [cached since 5.784e+04s ago] ('bd2b8c66bd304ffda498330560a3eab2',)
+2026-06-29 14:05:22,302 INFO sqlalchemy.engine.Engine COMMIT
+INFO:     127.0.0.1:51080 - "GET /api/v1/appointments?client_id=bd2b8c66-bd30-4ffd-a498-330560a3eab2 HTTP/1.1" 200 OK
+2026-06-29 14:05:25,284 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-06-29 14:05:25,284 INFO sqlalchemy.engine.Engine SELECT users.id, users.name, users.email, users.cpf, users.phone, users.password_hash, users.role, users.google_id, users.avatar_url, users.is_active, users.created_at, users.updated_at 
+FROM users 
+WHERE users.id = ?
+2026-06-29 14:05:25,285 INFO sqlalchemy.engine.Engine [cached since 5.834e+04s ago] ('bd2b8c66bd304ffda498330560a3eab2',)
+2026-06-29 14:05:25,289 INFO sqlalchemy.engine.Engine SELECT count(appointments.id) AS count_1 
+FROM appointments 
+WHERE appointments.client_id = ?
+2026-06-29 14:05:25,289 INFO sqlalchemy.engine.Engine [cached since 5.784e+04s ago] ('bd2b8c66bd304ffda498330560a3eab2',)
+2026-06-29 14:05:25,295 INFO sqlalchemy.engine.Engine SELECT appointments.id, appointments.client_id, appointments.vehicle_id, appointments.scheduled_at, appointments.duration_minutes, appointments.status, appointments.notes, appointments.created_by, appointments.created_at, appointments.updated_at 
+FROM appointments 
+WHERE appointments.client_id = ? ORDER BY appointments.scheduled_at DESC
+ LIMIT ? OFFSET ?
+2026-06-29 14:05:25,295 INFO sqlalchemy.engine.Engine [cached since 5.784e+04s ago] ('bd2b8c66bd304ffda498330560a3eab2', 20, 0)
+2026-06-29 14:05:25,299 INFO sqlalchemy.engine.Engine SELECT vehicles.id AS vehicles_id, vehicles.owner_id AS vehicles_owner_id, vehicles.brand AS vehicles_brand, vehicles.model AS vehicles_model, vehicles.year AS vehicles_year, vehicles.color AS vehicles_color, vehicles.plate AS vehicles_plate, vehicles.mileage AS vehicles_mileage, vehicles.notes AS vehicles_notes, vehicles.created_at AS vehicles_created_at, vehicles.updated_at AS vehicles_updated_at 
+FROM vehicles 
+WHERE vehicles.id IN (?, ?, ?, ?, ?)
+2026-06-29 14:05:25,300 INFO sqlalchemy.engine.Engine [cached since 5.784e+04s ago] ('2e52c36f4f9e4d8491808b818f730eeb', '447e521b43ac4d6e8026bc60dc95aedf', 'b5b8eef656e74f0b936cece4c16a2740', 'b73449a81fdd481b8d3bcfabbb2da6a0', 'f83bc409d25b4db9a11adcb54b499c9a')
+2026-06-29 14:05:25,305 INFO sqlalchemy.engine.Engine SELECT users.id AS users_id, users.name AS users_name, users.email AS users_email, users.cpf AS users_cpf, users.phone AS users_phone, users.password_hash AS users_password_hash, users.role AS users_role, users.google_id AS users_google_id, users.avatar_url AS users_avatar_url, users.is_active AS users_is_active, users.created_at AS users_created_at, users.updated_at AS users_updated_at 
+FROM users 
+WHERE users.id IN (?)
+2026-06-29 14:05:25,305 INFO sqlalchemy.engine.Engine [cached since 5.784e+04s ago] ('bd2b8c66bd304ffda498330560a3eab2',)
+2026-06-29 14:05:25,310 INFO sqlalchemy.engine.Engine COMMIT
+INFO:     127.0.0.1:51083 - "GET /api/v1/appointments?client_id=bd2b8c66-bd30-4ffd-a498-330560a3eab2 HTTP/1.1" 200 OK
+2026-06-29 14:05:56,264 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-06-29 14:05:56,265 INFO sqlalchemy.engine.Engine SELECT users.id, users.name, users.email, users.cpf, users.phone, users.password_hash, users.role, users.google_id, users.avatar_url, users.is_active, users.created_at, users.updated_at 
+FROM users 
+WHERE users.id = ?
+2026-06-29 14:05:56,265 INFO sqlalchemy.engine.Engine [cached since 5.837e+04s ago] ('bd2b8c66bd304ffda498330560a3eab2',)
+2026-06-29 14:05:56,269 INFO sqlalchemy.engine.Engine SELECT count(appointments.id) AS count_1 
+FROM appointments 
+WHERE appointments.client_id = ?
+2026-06-29 14:05:56,269 INFO sqlalchemy.engine.Engine [cached since 5.787e+04s ago] ('bd2b8c66bd304ffda498330560a3eab2',)
+2026-06-29 14:05:56,275 INFO sqlalchemy.engine.Engine SELECT appointments.id, appointments.client_id, appointments.vehicle_id, appointments.scheduled_at, appointments.duration_minutes, appointments.status, appointments.notes, appointments.created_by, appointments.created_at, appointments.updated_at 
+FROM appointments 
+WHERE appointments.client_id = ? ORDER BY appointments.scheduled_at DESC
+ LIMIT ? OFFSET ?
+2026-06-29 14:05:56,275 INFO sqlalchemy.engine.Engine [cached since 5.787e+04s ago] ('bd2b8c66bd304ffda498330560a3eab2', 20, 0)
+2026-06-29 14:05:56,279 INFO sqlalchemy.engine.Engine SELECT vehicles.id AS vehicles_id, vehicles.owner_id AS vehicles_owner_id, vehicles.brand AS vehicles_brand, vehicles.model AS vehicles_model, vehicles.year AS vehicles_year, vehicles.color AS vehicles_color, vehicles.plate AS vehicles_plate, vehicles.mileage AS vehicles_mileage, vehicles.notes AS vehicles_notes, vehicles.created_at AS vehicles_created_at, vehicles.updated_at AS vehicles_updated_at 
+FROM vehicles 
+WHERE vehicles.id IN (?, ?, ?, ?, ?)
+2026-06-29 14:05:56,279 INFO sqlalchemy.engine.Engine [cached since 5.787e+04s ago] ('2e52c36f4f9e4d8491808b818f730eeb', '447e521b43ac4d6e8026bc60dc95aedf', 'b5b8eef656e74f0b936cece4c16a2740', 'b73449a81fdd481b8d3bcfabbb2da6a0', 'f83bc409d25b4db9a11adcb54b499c9a')
+2026-06-29 14:05:56,282 INFO sqlalchemy.engine.Engine SELECT users.id AS users_id, users.name AS users_name, users.email AS users_email, users.cpf AS users_cpf, users.phone AS users_phone, users.password_hash AS users_password_hash, users.role AS users_role, users.google_id AS users_google_id, users.avatar_url AS users_avatar_url, users.is_active AS users_is_active, users.created_at AS users_created_at, users.updated_at AS users_updated_at 
+FROM users 
+WHERE users.id IN (?)
+2026-06-29 14:05:56,282 INFO sqlalchemy.engine.Engine [cached since 5.787e+04s ago] ('bd2b8c66bd304ffda498330560a3eab2',)
+2026-06-29 14:05:56,286 INFO sqlalchemy.engine.Engine COMMIT
+INFO:     127.0.0.1:51098 - "GET /api/v1/appointments?client_id=bd2b8c66-bd30-4ffd-a498-330560a3eab2 HTTP/1.1" 200 OK
+2026-06-29 14:06:00,289 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-06-29 14:06:00,290 INFO sqlalchemy.engine.Engine SELECT users.id, users.name, users.email, users.cpf, users.phone, users.password_hash, users.role, users.google_id, users.avatar_url, users.is_active, users.created_at, users.updated_at 
+FROM users 
+WHERE users.id = ?
+2026-06-29 14:06:00,290 INFO sqlalchemy.engine.Engine [cached since 5.838e+04s ago] ('bd2b8c66bd304ffda498330560a3eab2',)
+2026-06-29 14:06:00,296 INFO sqlalchemy.engine.Engine SELECT count(appointments.id) AS count_1 
+FROM appointments 
+WHERE appointments.client_id = ?
+2026-06-29 14:06:00,296 INFO sqlalchemy.engine.Engine [cached since 5.787e+04s ago] ('bd2b8c66bd304ffda498330560a3eab2',)
+2026-06-29 14:06:00,300 INFO sqlalchemy.engine.Engine SELECT appointments.id, appointments.client_id, appointments.vehicle_id, appointments.scheduled_at, appointments.duration_minutes, appointments.status, appointments.notes, appointments.created_by, appointments.created_at, appointments.updated_at 
+FROM appointments 
+WHERE appointments.client_id = ? ORDER BY appointments.scheduled_at DESC
+ LIMIT ? OFFSET ?
+2026-06-29 14:06:00,300 INFO sqlalchemy.engine.Engine [cached since 5.787e+04s ago] ('bd2b8c66bd304ffda498330560a3eab2', 20, 0)
+2026-06-29 14:06:00,304 INFO sqlalchemy.engine.Engine SELECT vehicles.id AS vehicles_id, vehicles.owner_id AS vehicles_owner_id, vehicles.brand AS vehicles_brand, vehicles.model AS vehicles_model, vehicles.year AS vehicles_year, vehicles.color AS vehicles_color, vehicles.plate AS vehicles_plate, vehicles.mileage AS vehicles_mileage, vehicles.notes AS vehicles_notes, vehicles.created_at AS vehicles_created_at, vehicles.updated_at AS vehicles_updated_at 
+FROM vehicles 
+WHERE vehicles.id IN (?, ?, ?, ?, ?)
+2026-06-29 14:06:00,306 INFO sqlalchemy.engine.Engine [cached since 5.787e+04s ago] ('2e52c36f4f9e4d8491808b818f730eeb', '447e521b43ac4d6e8026bc60dc95aedf', 'b5b8eef656e74f0b936cece4c16a2740', 'b73449a81fdd481b8d3bcfabbb2da6a0', 'f83bc409d25b4db9a11adcb54b499c9a')
+2026-06-29 14:06:00,312 INFO sqlalchemy.engine.Engine SELECT users.id AS users_id, users.name AS users_name, users.email AS users_email, users.cpf AS users_cpf, users.phone AS users_phone, users.password_hash AS users_password_hash, users.role AS users_role, users.google_id AS users_google_id, users.avatar_url AS users_avatar_url, users.is_active AS users_is_active, users.created_at AS users_created_at, users.updated_at AS users_updated_at 
+FROM users 
+WHERE users.id IN (?)
+2026-06-29 14:06:00,313 INFO sqlalchemy.engine.Engine [cached since 5.787e+04s ago] ('bd2b8c66bd304ffda498330560a3eab2',)
+2026-06-29 14:06:00,317 INFO sqlalchemy.engine.Engine COMMIT
+INFO:     127.0.0.1:51102 - "GET /api/v1/appointments?client_id=bd2b8c66-bd30-4ffd-a498-330560a3eab2 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51113 - "GET /health HTTP/1.1" 200 OK
+2026-06-29 14:06:53,881 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-06-29 14:06:53,882 INFO sqlalchemy.engine.Engine SELECT users.id, users.name, users.email, users.cpf, users.phone, users.password_hash, users.role, users.google_id, users.avatar_url, users.is_active, users.created_at, users.updated_at 
+FROM users 
+WHERE users.email = ?
+2026-06-29 14:06:53,882 INFO sqlalchemy.engine.Engine [cached since 5.843e+04s ago] ('admin@detailapp.com',)
+2026-06-29 14:06:54,528 INFO sqlalchemy.engine.Engine INSERT INTO audit_logs (id, user_id, action, entity, entity_id, ip_address) VALUES (?, ?, ?, ?, ?, ?) RETURNING created_at
+2026-06-29 14:06:54,528 INFO sqlalchemy.engine.Engine [cached since 5.843e+04s ago] ('3074a951dcb743148a9a454ee5e32652', 'dcf1720758d54cc0aa8a22e3fffe2687', 'login', 'user', 'dcf1720758d54cc0aa8a22e3fffe2687', '127.0.0.1')
+2026-06-29 14:06:54,537 INFO sqlalchemy.engine.Engine COMMIT
+INFO:     127.0.0.1:51116 - "POST /api/v1/auth/login HTTP/1.1" 200 OK
+2026-06-29 14:06:54,570 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-06-29 14:06:54,571 INFO sqlalchemy.engine.Engine SELECT users.id, users.name, users.email, users.cpf, users.phone, users.password_hash, users.role, users.google_id, users.avatar_url, users.is_active, users.created_at, users.updated_at 
+FROM users 
+WHERE users.id = ?
+2026-06-29 14:06:54,571 INFO sqlalchemy.engine.Engine [cached since 5.843e+04s ago] ('dcf1720758d54cc0aa8a22e3fffe2687',)
+2026-06-29 14:06:54,593 INFO sqlalchemy.engine.Engine SELECT count(appointments.id) AS count_1 
+FROM appointments
+2026-06-29 14:06:54,593 INFO sqlalchemy.engine.Engine [generated in 0.00065s] ()
+2026-06-29 14:06:54,605 INFO sqlalchemy.engine.Engine SELECT appointments.id, appointments.client_id, appointments.vehicle_id, appointments.scheduled_at, appointments.duration_minutes, appointments.status, appointments.notes, appointments.created_by, appointments.created_at, appointments.updated_at 
+FROM appointments ORDER BY appointments.scheduled_at DESC
+ LIMIT ? OFFSET ?
+2026-06-29 14:06:54,606 INFO sqlalchemy.engine.Engine [generated in 0.00063s] (5, 0)
+2026-06-29 14:06:54,610 INFO sqlalchemy.engine.Engine SELECT vehicles.id AS vehicles_id, vehicles.owner_id AS vehicles_owner_id, vehicles.brand AS vehicles_brand, vehicles.model AS vehicles_model, vehicles.year AS vehicles_year, vehicles.color AS vehicles_color, vehicles.plate AS vehicles_plate, vehicles.mileage AS vehicles_mileage, vehicles.notes AS vehicles_notes, vehicles.created_at AS vehicles_created_at, vehicles.updated_at AS vehicles_updated_at 
+FROM vehicles 
+WHERE vehicles.id IN (?, ?, ?, ?, ?)
+2026-06-29 14:06:54,610 INFO sqlalchemy.engine.Engine [cached since 5.793e+04s ago] ('2e52c36f4f9e4d8491808b818f730eeb', '447e521b43ac4d6e8026bc60dc95aedf', 'a4c8650a45b941dba043de61ae2064c5', 'b5b8eef656e74f0b936cece4c16a2740', 'f83bc409d25b4db9a11adcb54b499c9a')
+2026-06-29 14:06:54,613 INFO sqlalchemy.engine.Engine SELECT users.id AS users_id, users.name AS users_name, users.email AS users_email, users.cpf AS users_cpf, users.phone AS users_phone, users.password_hash AS users_password_hash, users.role AS users_role, users.google_id AS users_google_id, users.avatar_url AS users_avatar_url, users.is_active AS users_is_active, users.created_at AS users_created_at, users.updated_at AS users_updated_at 
+FROM users 
+WHERE users.id IN (?, ?)
+2026-06-29 14:06:54,613 INFO sqlalchemy.engine.Engine [cached since 5.793e+04s ago] ('163badfedcba4722a97b3d08ffdeb45a', 'bd2b8c66bd304ffda498330560a3eab2')
+2026-06-29 14:06:54,616 INFO sqlalchemy.engine.Engine COMMIT
+INFO:     127.0.0.1:51116 - "GET /api/v1/appointments?page=1&page_size=5 HTTP/1.1" 200 OK
+2026-06-29 14:06:54,637 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-06-29 14:06:54,638 INFO sqlalchemy.engine.Engine SELECT users.id, users.name, users.email, users.cpf, users.phone, users.password_hash, users.role, users.google_id, users.avatar_url, users.is_active, users.created_at, users.updated_at 
+FROM users 
+WHERE users.id = ?
+2026-06-29 14:06:54,639 INFO sqlalchemy.engine.Engine [cached since 5.843e+04s ago] ('dcf1720758d54cc0aa8a22e3fffe2687',)
+2026-06-29 14:06:54,644 INFO sqlalchemy.engine.Engine SELECT appointments.id, appointments.client_id, appointments.vehicle_id, appointments.scheduled_at, appointments.duration_minutes, appointments.status, appointments.notes, appointments.created_by, appointments.created_at, appointments.updated_at 
+FROM appointments 
+WHERE appointments.id = ?
+2026-06-29 14:06:54,644 INFO sqlalchemy.engine.Engine [cached since 5.792e+04s ago] ('d005d07b56bb4d77b6d986e73f5deec5',)
+2026-06-29 14:06:54,647 INFO sqlalchemy.engine.Engine SELECT appointment_services.appointment_id AS appointment_services_appointment_id, appointment_services.service_id AS appointment_services_service_id, appointment_services.price_at_time AS appointment_services_price_at_time 
+FROM appointment_services 
+WHERE appointment_services.appointment_id IN (?)
+2026-06-29 14:06:54,647 INFO sqlalchemy.engine.Engine [cached since 5.792e+04s ago] ('d005d07b56bb4d77b6d986e73f5deec5',)
+2026-06-29 14:06:54,653 INFO sqlalchemy.engine.Engine SELECT vehicles.id AS vehicles_id, vehicles.owner_id AS vehicles_owner_id, vehicles.brand AS vehicles_brand, vehicles.model AS vehicles_model, vehicles.year AS vehicles_year, vehicles.color AS vehicles_color, vehicles.plate AS vehicles_plate, vehicles.mileage AS vehicles_mileage, vehicles.notes AS vehicles_notes, vehicles.created_at AS vehicles_created_at, vehicles.updated_at AS vehicles_updated_at 
+FROM vehicles 
+WHERE vehicles.id IN (?)
+2026-06-29 14:06:54,654 INFO sqlalchemy.engine.Engine [cached since 5.792e+04s ago] ('2e52c36f4f9e4d8491808b818f730eeb',)
+2026-06-29 14:06:54,657 INFO sqlalchemy.engine.Engine SELECT users.id AS users_id, users.name AS users_name, users.email AS users_email, users.cpf AS users_cpf, users.phone AS users_phone, users.password_hash AS users_password_hash, users.role AS users_role, users.google_id AS users_google_id, users.avatar_url AS users_avatar_url, users.is_active AS users_is_active, users.created_at AS users_created_at, users.updated_at AS users_updated_at 
+FROM users 
+WHERE users.id IN (?)
+2026-06-29 14:06:54,657 INFO sqlalchemy.engine.Engine [cached since 5.792e+04s ago] ('bd2b8c66bd304ffda498330560a3eab2',)
+2026-06-29 14:06:54,662 INFO sqlalchemy.engine.Engine SELECT services.id AS services_id, services.name AS services_name, services.category AS services_category, services.description AS services_description, services.estimated_time AS services_estimated_time, services.price AS services_price, services.is_active AS services_is_active, services.created_at AS services_created_at, services.updated_at AS services_updated_at 
+FROM services 
+WHERE services.id IN (?)
+2026-06-29 14:06:54,662 INFO sqlalchemy.engine.Engine [cached since 5.792e+04s ago] ('bd253f58c26a47d5a8fb50d337f15f13',)
+2026-06-29 14:06:54,670 INFO sqlalchemy.engine.Engine COMMIT
+INFO:     127.0.0.1:51116 - "GET /api/v1/appointments/d005d07b-56bb-4d77-b6d9-86e73f5deec5 HTTP/1.1" 200 OK
+2026-06-29 14:07:06,926 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-06-29 14:07:06,927 INFO sqlalchemy.engine.Engine SELECT users.id, users.name, users.email, users.cpf, users.phone, users.password_hash, users.role, users.google_id, users.avatar_url, users.is_active, users.created_at, users.updated_at 
+FROM users 
+WHERE users.email = ?
+2026-06-29 14:07:06,927 INFO sqlalchemy.engine.Engine [cached since 5.844e+04s ago] ('admin@detailapp.com',)
+2026-06-29 14:07:07,594 INFO sqlalchemy.engine.Engine INSERT INTO audit_logs (id, user_id, action, entity, entity_id, ip_address) VALUES (?, ?, ?, ?, ?, ?) RETURNING created_at
+2026-06-29 14:07:07,594 INFO sqlalchemy.engine.Engine [cached since 5.844e+04s ago] ('05e7f5ad71994c0ea1ce27c80dfc66f0', 'dcf1720758d54cc0aa8a22e3fffe2687', 'login', 'user', 'dcf1720758d54cc0aa8a22e3fffe2687', '127.0.0.1')
+2026-06-29 14:07:07,596 INFO sqlalchemy.engine.Engine COMMIT
+INFO:     127.0.0.1:51119 - "POST /api/v1/auth/login HTTP/1.1" 200 OK
+2026-06-29 14:07:07,629 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-06-29 14:07:07,629 INFO sqlalchemy.engine.Engine SELECT users.id, users.name, users.email, users.cpf, users.phone, users.password_hash, users.role, users.google_id, users.avatar_url, users.is_active, users.created_at, users.updated_at 
+FROM users 
+WHERE users.id = ?
+2026-06-29 14:07:07,630 INFO sqlalchemy.engine.Engine [cached since 5.844e+04s ago] ('dcf1720758d54cc0aa8a22e3fffe2687',)
+2026-06-29 14:07:07,635 INFO sqlalchemy.engine.Engine SELECT count(appointments.id) AS count_1 
+FROM appointments
+2026-06-29 14:07:07,636 INFO sqlalchemy.engine.Engine [cached since 13.04s ago] ()
+2026-06-29 14:07:07,638 INFO sqlalchemy.engine.Engine SELECT appointments.id, appointments.client_id, appointments.vehicle_id, appointments.scheduled_at, appointments.duration_minutes, appointments.status, appointments.notes, appointments.created_by, appointments.created_at, appointments.updated_at 
+FROM appointments ORDER BY appointments.scheduled_at DESC
+ LIMIT ? OFFSET ?
+2026-06-29 14:07:07,638 INFO sqlalchemy.engine.Engine [cached since 13.03s ago] (3, 0)
+2026-06-29 14:07:07,642 INFO sqlalchemy.engine.Engine SELECT vehicles.id AS vehicles_id, vehicles.owner_id AS vehicles_owner_id, vehicles.brand AS vehicles_brand, vehicles.model AS vehicles_model, vehicles.year AS vehicles_year, vehicles.color AS vehicles_color, vehicles.plate AS vehicles_plate, vehicles.mileage AS vehicles_mileage, vehicles.notes AS vehicles_notes, vehicles.created_at AS vehicles_created_at, vehicles.updated_at AS vehicles_updated_at 
+FROM vehicles 
+WHERE vehicles.id IN (?, ?, ?)
+2026-06-29 14:07:07,642 INFO sqlalchemy.engine.Engine [cached since 5.794e+04s ago] ('2e52c36f4f9e4d8491808b818f730eeb', 'a4c8650a45b941dba043de61ae2064c5', 'b5b8eef656e74f0b936cece4c16a2740')
+2026-06-29 14:07:07,645 INFO sqlalchemy.engine.Engine SELECT users.id AS users_id, users.name AS users_name, users.email AS users_email, users.cpf AS users_cpf, users.phone AS users_phone, users.password_hash AS users_password_hash, users.role AS users_role, users.google_id AS users_google_id, users.avatar_url AS users_avatar_url, users.is_active AS users_is_active, users.created_at AS users_created_at, users.updated_at AS users_updated_at 
+FROM users 
+WHERE users.id IN (?, ?)
+2026-06-29 14:07:07,646 INFO sqlalchemy.engine.Engine [cached since 5.794e+04s ago] ('163badfedcba4722a97b3d08ffdeb45a', 'bd2b8c66bd304ffda498330560a3eab2')
+2026-06-29 14:07:07,648 INFO sqlalchemy.engine.Engine COMMIT
+INFO:     127.0.0.1:51119 - "GET /api/v1/appointments?page=1&page_size=3 HTTP/1.1" 200 OK
+2026-06-29 14:07:07,665 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2026-06-29 14:07:07,667 INFO sqlalchemy.engine.Engine SELECT users.id, users.name, users.email, users.cpf, users.phone, users.password_hash, users.role, users.google_id, users.avatar_url, users.is_active, users.created_at, users.updated_at 
+FROM users 
+WHERE users.id = ?
+2026-06-29 14:07:07,667 INFO sqlalchemy.engine.Engine [cached since 5.844e+04s ago] ('dcf1720758d54cc0aa8a22e3fffe2687',)
+2026-06-29 14:07:07,672 INFO sqlalchemy.engine.Engine SELECT appointments.id, appointments.client_id, appointments.vehicle_id, appointments.scheduled_at, appointments.duration_minutes, appointments.status, appointments.notes, appointments.created_by, appointments.created_at, appointments.updated_at 
+FROM appointments 
+WHERE appointments.id = ?
+2026-06-29 14:07:07,672 INFO sqlalchemy.engine.Engine [cached since 5.793e+04s ago] ('d005d07b56bb4d77b6d986e73f5deec5',)
+2026-06-29 14:07:07,675 INFO sqlalchemy.engine.Engine SELECT appointment_services.appointment_id AS appointment_services_appointment_id, appointment_services.service_id AS appointment_services_service_id, appointment_services.price_at_time AS appointment_services_price_at_time 
+FROM appointment_services 
+WHERE appointment_services.appointment_id IN (?)
+2026-06-29 14:07:07,675 INFO sqlalchemy.engine.Engine [cached since 5.793e+04s ago] ('d005d07b56bb4d77b6d986e73f5deec5',)
+2026-06-29 14:07:07,678 INFO sqlalchemy.engine.Engine SELECT vehicles.id AS vehicles_id, vehicles.owner_id AS vehicles_owner_id, vehicles.brand AS vehicles_brand, vehicles.model AS vehicles_model, vehicles.year AS vehicles_year, vehicles.color AS vehicles_color, vehicles.plate AS vehicles_plate, vehicles.mileage AS vehicles_mileage, vehicles.notes AS vehicles_notes, vehicles.created_at AS vehicles_created_at, vehicles.updated_at AS vehicles_updated_at 
+FROM vehicles 
+WHERE vehicles.id IN (?)
+2026-06-29 14:07:07,678 INFO sqlalchemy.engine.Engine [cached since 5.793e+04s ago] ('2e52c36f4f9e4d8491808b818f730eeb',)
+2026-06-29 14:07:07,681 INFO sqlalchemy.engine.Engine SELECT users.id AS users_id, users.name AS users_name, users.email AS users_email, users.cpf AS users_cpf, users.phone AS users_phone, users.password_hash AS users_password_hash, users.role AS users_role, users.google_id AS users_google_id, users.avatar_url AS users_avatar_url, users.is_active AS users_is_active, users.created_at AS users_created_at, users.updated_at AS users_updated_at 
+FROM users 
+WHERE users.id IN (?)
+2026-06-29 14:07:07,681 INFO sqlalchemy.engine.Engine [cached since 5.793e+04s ago] ('bd2b8c66bd304ffda498330560a3eab2',)
+2026-06-29 14:07:07,688 INFO sqlalchemy.engine.Engine SELECT services.id AS services_id, services.name AS services_name, services.category AS services_category, services.description AS services_description, services.estimated_time AS services_estimated_time, services.price AS services_price, services.is_active AS services_is_active, services.created_at AS services_created_at, services.updated_at AS services_updated_at 
+FROM services 
+WHERE services.id IN (?)
+2026-06-29 14:07:07,688 INFO sqlalchemy.engine.Engine [cached since 5.793e+04s ago] ('bd253f58c26a47d5a8fb50d337f15f13',)
+2026-06-29 14:07:07,692 INFO sqlalchemy.engine.Engine COMMIT
+INFO:     127.0.0.1:51119 - "GET /api/v1/appointments/d005d07b-56bb-4d77-b6d9-86e73f5deec5 HTTP/1.1" 200 OK
