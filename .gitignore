@@ -13,3 +13,8 @@ __pycache__/
 .vscode/
 .idea/
 *.log
+.vite/
+server_out*.txt
+server_v*.txt
+backend.err
+backend/init.sql
