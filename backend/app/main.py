@@ -52,6 +52,10 @@ async def lifespan(app: FastAPI):
             await conn.execute(text("DROP TABLE order_services"))
             await conn.execute(text("ALTER TABLE order_services_new RENAME TO order_services"))
     os.makedirs(settings.UPLOAD_DIR, exist_ok=True)
+
+    from app.seed import seed
+    await seed()
+
     yield
     await engine.dispose()
 
