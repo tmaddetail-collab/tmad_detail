@@ -41,10 +41,10 @@ async def get_current_user(
 async def get_current_admin(
     current_user: User = Depends(get_current_user),
 ) -> User:
-    if current_user.role != UserRole.admin:
+    if current_user.role not in (UserRole.admin, UserRole.lojista):
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
-            detail="Acesso restrito a administradores",
+            detail="Acesso restrito a administradores ou lojistas",
         )
     return current_user
 

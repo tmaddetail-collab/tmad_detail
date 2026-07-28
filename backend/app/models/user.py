@@ -17,6 +17,7 @@ from app.database import Base
 class UserRole(str, enum.Enum):
     client = "client"
     admin = "admin"
+    lojista = "lojista"
 
 class User(Base):
     __tablename__ = "users"
@@ -25,6 +26,7 @@ class User(Base):
         Uuid, primary_key=True, default=uuid.uuid4
     )
     name: Mapped[str] = mapped_column(String(255), nullable=False)
+    username: Mapped[str | None] = mapped_column(String(100), unique=True, nullable=True, index=True)
     email: Mapped[str] = mapped_column(String(255), unique=True, nullable=False, index=True)
     cpf: Mapped[str | None] = mapped_column(String(14), unique=True, nullable=True)
     phone: Mapped[str | None] = mapped_column(String(20), nullable=True)

@@ -18,6 +18,11 @@ async def lifespan(app: FastAPI):
     async with engine.begin() as conn:
         await conn.run_sync(Base.metadata.create_all)
         from sqlalchemy import text
+        # Add username column to users table if not exists
+        result = await conn.execute(text("PRAGMA table_info(users)"))
+        cols = {row[1] for row in result.fetchall()}
+        if "username" not in cols:
+            await conn.execute(text("ALTER TABLE users ADD COLUMN username VARCHAR(100)"))
         # Add order_vehicle_id column to order_services if not exists
         result = await conn.execute(
             text("PRAGMA table_info(order_services)")

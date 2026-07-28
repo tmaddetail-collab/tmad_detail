@@ -5,6 +5,7 @@ import {
   ClipboardList,
   Car,
   Users,
+  UserCog,
   BarChart3,
   Wallet,
   Package,
@@ -30,6 +31,7 @@ const adminNavItems = [
   { to: '/app/orders', icon: ClipboardList, label: 'Ordens de Serviço' },
   { to: '/app/vehicles', icon: Car, label: 'Veículos' },
   { to: '/app/clients', icon: Users, label: 'Clientes' },
+  { to: '/app/users', icon: UserCog, label: 'Usuários' },
   { to: '/app/services', icon: Package, label: 'Serviços' },
   { to: '/app/financial', icon: Wallet, label: 'Financeiro' },
   { to: '/app/reports', icon: BarChart3, label: 'Relatórios' },
@@ -46,7 +48,7 @@ const clientNavItems = [
 export function Sidebar({ isOpen, onClose, collapsed, onToggleCollapse }: SidebarProps) {
   const { user, logout } = useAuth()
   const location = useLocation()
-  const navItems = user?.role === UserRole.ADMIN ? adminNavItems : clientNavItems
+  const navItems = user?.role === UserRole.ADMIN || user?.role === UserRole.LOJISTA ? adminNavItems : clientNavItems
 
   return (
     <>

@@ -92,13 +92,19 @@ async def create_user(
     if existing.scalar_one_or_none():
         raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="Email já cadastrado")
 
+    if payload.username:
+        existing_username = await db.execute(select(User).where(User.username == payload.username))
+        if existing_username.scalar_one_or_none():
+            raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="Username já cadastrado")
+
     user = User(
         name=payload.name,
         email=payload.email,
+        username=payload.username,
         password_hash=hash_password(payload.password),
         cpf=payload.cpf,
         phone=payload.phone,
-        role=UserRole.client,
+        role=payload.role or UserRole.client,
     )
     db.add(user)
     await db.flush()
@@ -109,7 +115,7 @@ async def create_user(
         action="create",
         entity="user",
         entity_id=user.id,
-        details={"name": user.name, "email": user.email},
+        details={"name": user.name, "email": user.email, "username": user.username, "role": user.role.value},
         ip_address=request.client.host if request.client else None,
     ))
     return user
@@ -129,8 +135,12 @@ async def update_user(
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Usuário não encontrado")
 
     update_data = payload.model_dump(exclude_unset=True)
+    new_password = update_data.pop("password", None)
     for key, value in update_data.items():
         setattr(user, key, value)
+
+    if new_password:
+        user.password_hash = hash_password(new_password)
 
     await db.flush()
     await db.refresh(user)

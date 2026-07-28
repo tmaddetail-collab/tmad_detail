@@ -5,6 +5,7 @@ function mapUser(item: any): User {
   return {
     id: item.id,
     name: item.name,
+    username: item.username,
     email: item.email,
     phone: item.phone,
     cpf: item.cpf,

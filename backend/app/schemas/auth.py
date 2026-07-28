@@ -5,7 +5,7 @@ from app.schemas.user import UserResponse
 
 
 class LoginRequest(BaseModel):
-    email: EmailStr
+    username: str
     password: str
 
 

@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
-import { Eye, EyeOff, Mail, Lock, LogIn } from 'lucide-react'
+import { Eye, EyeOff, User, Lock, LogIn } from 'lucide-react'
 import { Button } from '@/components/ui/Button'
 import { Input } from '@/components/ui/Input'
 import { useAuth } from '@/contexts/AuthContext'
@@ -12,7 +12,7 @@ import { authApi } from '@/api/auth'
 import { cn } from '@/lib/utils'
 
 const loginSchema = z.object({
-  email: z.string().min(1, 'Email é obrigatório').email('Email inválido'),
+  username: z.string().min(1, 'Usuário é obrigatório'),
   password: z.string().min(1, 'Senha é obrigatória'),
 })
 
@@ -36,7 +36,7 @@ export function LoginPage() {
   const onSubmit = async (data: LoginData) => {
     setIsLoading(true)
     try {
-      await login(data.email, data.password)
+      await login(data.username, data.password)
       toast('success', 'Login realizado com sucesso!')
       navigate('/app')
     } catch (err: unknown) {
@@ -44,7 +44,7 @@ export function LoginPage() {
         err && typeof err === 'object' && 'response' in err
           ? (err as { response: { data: { message: string } } }).response?.data
               ?.message
-          : 'Email ou senha inválidos'
+          : 'Usuário ou senha inválidos'
       toast('error', 'Erro ao entrar', msg)
     } finally {
       setIsLoading(false)
@@ -67,12 +67,12 @@ export function LoginPage() {
 
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
             <Input
-              label="Email"
-              type="email"
-              placeholder="seu@email.com"
-              icon={<Mail className="h-4 w-4" />}
-              error={errors.email?.message}
-              {...register('email')}
+              label="Usuário"
+              type="text"
+              placeholder="Seu usuário"
+              icon={<User className="h-4 w-4" />}
+              error={errors.username?.message}
+              {...register('username')}
             />
             <Input
               label="Senha"

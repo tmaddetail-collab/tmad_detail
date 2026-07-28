@@ -12,6 +12,7 @@ from app.models.user import User, UserRole
 from app.models.vehicle import Vehicle
 from app.models.service import Service
 from app.models.appointment import Appointment, AppointmentService, AppointmentStatus
+from app.models.notification import Notification, NotificationType, NotificationChannel, NotificationStatus
 from app.models.audit import AuditLog
 from app.auth.deps import get_current_user, get_current_admin
 from app.schemas.common import PaginatedResponse, MessageResponse
@@ -44,7 +45,7 @@ async def list_appointments(
     query = select(Appointment)
     count_query = select(func.count(Appointment.id))
 
-    if current_user.role != UserRole.admin:
+    if current_user.role not in (UserRole.admin, UserRole.lojista):
         query = query.where(Appointment.client_id == current_user.id)
         count_query = count_query.where(Appointment.client_id == current_user.id)
     else:
@@ -155,7 +156,7 @@ async def get_appointment(
     apt = result.scalar_one_or_none()
     if not apt:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Agendamento não encontrado")
-    if current_user.role != UserRole.admin and apt.client_id != current_user.id:
+    if current_user.role not in (UserRole.admin, UserRole.lojista) and apt.client_id != current_user.id:
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Acesso negado")
 
     services = []
@@ -191,13 +192,13 @@ async def create_appointment(
     current_user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
 ):
-    client_id = payload.client_id if (current_user.role == UserRole.admin) else current_user.id
+    client_id = payload.client_id if (current_user.role in (UserRole.admin, UserRole.lojista)) else current_user.id
 
     vehicle = await db.execute(select(Vehicle).where(Vehicle.id == payload.vehicle_id))
     vehicle = vehicle.scalar_one_or_none()
     if not vehicle:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Veículo não encontrado")
-    if current_user.role != UserRole.admin and vehicle.owner_id != current_user.id:
+    if current_user.role not in (UserRole.admin, UserRole.lojista) and vehicle.owner_id != current_user.id:
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Veículo não pertence ao usuário")
 
     if payload.services:
@@ -234,6 +235,21 @@ async def create_appointment(
         details={"scheduled_at": str(apt.scheduled_at), "client_id": str(client_id)},
         ip_address=request.client.host if request.client else None,
     ))
+
+    # Notify all lojista users
+    lojistas = await db.execute(select(User).where(User.role == UserRole.lojista, User.is_active == True))
+    for loj in lojistas.scalars().all():
+        client_user = await db.get(User, client_id)
+        client_name = client_user.name if client_user else "Cliente"
+        db.add(Notification(
+            user_id=loj.id,
+            type=NotificationType.new_appointment,
+            channel=NotificationChannel.push,
+            status=NotificationStatus.sent,
+            title="Novo agendamento",
+            message=f"{client_name} agendou para {apt.scheduled_at.strftime('%d/%m/%Y %H:%M')}.",
+        ))
+
     return await get_appointment(apt.id, current_user, db)
 
 
@@ -253,7 +269,7 @@ async def update_appointment(
     apt = result.scalar_one_or_none()
     if not apt:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Agendamento não encontrado")
-    if current_user.role != UserRole.admin and apt.client_id != current_user.id:
+    if current_user.role not in (UserRole.admin, UserRole.lojista) and apt.client_id != current_user.id:
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Acesso negado")
 
     update_data = payload.model_dump(exclude_unset=True)
@@ -299,7 +315,7 @@ async def update_appointment_status(
     apt = result.scalar_one_or_none()
     if not apt:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Agendamento não encontrado")
-    if current_user.role != UserRole.admin and apt.client_id != current_user.id:
+    if current_user.role not in (UserRole.admin, UserRole.lojista) and apt.client_id != current_user.id:
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Acesso negado")
 
     apt.status = payload.status
@@ -324,8 +340,8 @@ async def update_appointment_service(
     current_user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
 ):
-    if current_user.role != UserRole.admin:
-        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Apenas administradores podem alterar serviços do agendamento")
+    if current_user.role not in (UserRole.admin, UserRole.lojista):
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Apenas administradores ou lojistas podem alterar serviços do agendamento")
 
     result = await db.execute(
         select(AppointmentService)
@@ -361,7 +377,7 @@ async def delete_appointment(
     apt = result.scalar_one_or_none()
     if not apt:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Agendamento não encontrado")
-    if current_user.role != UserRole.admin and apt.client_id != current_user.id:
+    if current_user.role not in (UserRole.admin, UserRole.lojista) and apt.client_id != current_user.id:
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Acesso negado")
 
     await db.delete(apt)

@@ -20,24 +20,39 @@ async def seed():
             admin_user = User(
                 name="Administrador",
                 email="admin@detailapp.com",
+                username="admin",
                 password_hash=hash_password("admin123"),
                 role=UserRole.admin,
                 is_active=True,
             )
             db.add(admin_user)
-            print("Admin user created: admin@detailapp.com / admin123")
+            print("Admin user created: admin / admin123")
 
         client = await db.execute(select(User).where(User.email == "cliente@teste.com"))
         if not client.scalar_one_or_none():
             client_user = User(
                 name="Cliente Teste",
                 email="cliente@teste.com",
+                username="cliente",
                 password_hash=hash_password("cliente123"),
                 role=UserRole.client,
                 is_active=True,
             )
             db.add(client_user)
-            print("Client user created: cliente@teste.com / cliente123")
+            print("Client user created: cliente / cliente123")
+
+        lojista = await db.execute(select(User).where(User.email == "lojista@detailapp.com"))
+        if not lojista.scalar_one_or_none():
+            lojista_user = User(
+                name="Lojista Teste",
+                email="lojista@detailapp.com",
+                username="lojista",
+                password_hash=hash_password("lojista123"),
+                role=UserRole.lojista,
+                is_active=True,
+            )
+            db.add(lojista_user)
+            print("Lojista user created: lojista / lojista123")
 
         services_data = [
             {"name": "Lavagem Simples", "category": "Lavagem", "description": "Lavagem externa completa com shampoo automotivo", "estimated_time": 30, "price": Decimal("50.00")},

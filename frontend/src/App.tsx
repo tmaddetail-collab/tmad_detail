@@ -21,6 +21,7 @@ import { ClientVehicles } from '@/pages/client/Vehicles'
 import { AdminDashboard } from '@/pages/admin/Dashboard'
 import { Agenda as AdminAgenda } from '@/pages/admin/Agenda'
 import { Clients as AdminClients } from '@/pages/admin/Clients'
+import { Users as AdminUsers } from '@/pages/admin/Users'
 import { Services as AdminServices } from '@/pages/admin/Services'
 import { Orders as AdminOrders } from '@/pages/admin/Orders'
 import { Financial as AdminFinancial } from '@/pages/admin/Financial'
@@ -43,7 +44,7 @@ function PublicRoute({ children }: { children: React.ReactNode }) {
 
 function AdminRoute({ children }: { children: React.ReactNode }) {
   const { user } = useAuth()
-  if (user?.role !== UserRole.ADMIN) return <Navigate to="/app" replace />
+  if (user?.role !== UserRole.ADMIN && user?.role !== UserRole.LOJISTA) return <Navigate to="/app" replace />
   return <>{children}</>
 }
 
@@ -107,6 +108,14 @@ function AppContent() {
             }
           />
           <Route
+            path="users"
+            element={
+              <AdminRoute>
+                <AdminUsers />
+              </AdminRoute>
+            }
+          />
+          <Route
             path="services"
             element={
               <AdminRoute>
@@ -155,25 +164,25 @@ function AppContent() {
 
 function DashboardRouter() {
   const { user } = useAuth()
-  if (user?.role === UserRole.ADMIN) return <AdminDashboard />
+  if (user?.role === UserRole.ADMIN || user?.role === UserRole.LOJISTA) return <AdminDashboard />
   return <ClientDashboard />
 }
 
 function AppointmentsRouter() {
   const { user } = useAuth()
-  if (user?.role === UserRole.ADMIN) return <AdminAgenda />
+  if (user?.role === UserRole.ADMIN || user?.role === UserRole.LOJISTA) return <AdminAgenda />
   return <ClientAppointments />
 }
 
 function OrdersRouter() {
   const { user } = useAuth()
-  if (user?.role === UserRole.ADMIN) return <AdminOrders />
+  if (user?.role === UserRole.ADMIN || user?.role === UserRole.LOJISTA) return <AdminOrders />
   return <ClientOrders />
 }
 
 function VehiclesRouter() {
   const { user } = useAuth()
-  if (user?.role === UserRole.ADMIN) return <AdminClients />
+  if (user?.role === UserRole.ADMIN || user?.role === UserRole.LOJISTA) return <AdminClients />
   return <ClientVehicles />
 }
 

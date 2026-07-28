@@ -10,7 +10,9 @@ from app.models.user import UserRole
 class UserCreate(BaseModel):
     name: str
     email: EmailStr
+    username: str
     password: str
+    role: Optional[UserRole] = None
     cpf: Optional[str] = None
     phone: Optional[str] = None
 
@@ -23,6 +25,7 @@ class UserCreate(BaseModel):
 
 class UserUpdate(BaseModel):
     name: Optional[str] = None
+    username: Optional[str] = None
     phone: Optional[str] = None
     cpf: Optional[str] = None
     avatar_url: Optional[str] = None
@@ -31,11 +34,13 @@ class UserUpdate(BaseModel):
 class UserAdminUpdate(UserUpdate):
     role: Optional[UserRole] = None
     is_active: Optional[bool] = None
+    password: Optional[str] = None
 
 
 class UserResponse(BaseModel):
     id: uuid.UUID
     name: str
+    username: Optional[str] = None
     email: str
     cpf: Optional[str] = None
     phone: Optional[str] = None
@@ -52,6 +57,7 @@ class UserSummary(BaseModel):
     """Minimal user info for embedding in other responses."""
     id: uuid.UUID
     name: str
+    username: Optional[str] = None
     email: str
     cpf: Optional[str] = None
     phone: Optional[str] = None

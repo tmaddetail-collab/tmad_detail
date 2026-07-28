@@ -3,6 +3,7 @@
 export enum UserRole {
   ADMIN = 'admin',
   CLIENT = 'client',
+  LOJISTA = 'lojista',
 }
 
 export enum AppointmentStatus {
@@ -76,6 +77,7 @@ export enum ExpenseCategory {
 export interface User {
   id: string
   name: string
+  username?: string
   email: string
   phone?: string
   cpf?: string
@@ -356,9 +358,11 @@ export interface ServiceForm {
 export interface ClientForm {
   name: string
   email: string
+  username?: string
   phone?: string
   cpf?: string
   password?: string
+  role?: UserRole
 }
 
 export interface ExpenseForm {

@@ -79,7 +79,7 @@ async def list_orders(
     query = select(ServiceOrder)
     count_query = select(func.count(ServiceOrder.id))
 
-    if current_user.role != UserRole.admin:
+    if current_user.role not in (UserRole.admin, UserRole.lojista):
         query = query.where(ServiceOrder.client_id == current_user.id)
         count_query = count_query.where(ServiceOrder.client_id == current_user.id)
     else:
@@ -173,7 +173,7 @@ async def get_order(
     order = result.scalar_one_or_none()
     if not order:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Ordem de serviço não encontrada")
-    if current_user.role != UserRole.admin and order.client_id != current_user.id:
+    if current_user.role not in (UserRole.admin, UserRole.lojista) and order.client_id != current_user.id:
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Acesso negado")
 
     services = []
@@ -237,8 +237,8 @@ async def create_order(
     current_user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
 ):
-    if current_user.role != UserRole.admin:
-        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Apenas administradores podem criar ordens")
+    if current_user.role not in (UserRole.admin, UserRole.lojista):
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Apenas administradores ou lojistas podem criar ordens")
 
     if not payload.vehicles:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Pelo menos um veículo é obrigatório")
@@ -342,8 +342,8 @@ async def update_order(
     current_user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
 ):
-    if current_user.role != UserRole.admin:
-        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Apenas administradores podem alterar ordens")
+    if current_user.role not in (UserRole.admin, UserRole.lojista):
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Apenas administradores ou lojistas podem alterar ordens")
 
     result = await db.execute(
         select(ServiceOrder)
@@ -429,8 +429,8 @@ async def update_order_status(
     order = result.scalar_one_or_none()
     if not order:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Ordem de serviço não encontrada")
-    if current_user.role != UserRole.admin:
-        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Apenas administradores podem alterar status")
+    if current_user.role not in (UserRole.admin, UserRole.lojista):
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Apenas administradores ou lojistas podem alterar status")
 
     order.status = payload.status
     await db.flush()
