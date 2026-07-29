@@ -49,6 +49,15 @@ import {
 } from '@/utils/formatters'
 import { printOrder } from '@/utils/printOrder'
 
+function getDistinctVehicleAppts(appts: Appointment[]): Appointment[] {
+  const seen = new Set<string>()
+  return appts.filter((a) => {
+    if (seen.has(a.vehicleId)) return false
+    seen.add(a.vehicleId)
+    return true
+  })
+}
+
 const statusOptions = [
   { value: '', label: 'Todos' },
   { value: OrderStatus.OPEN, label: 'Aberta' },
@@ -1008,7 +1017,7 @@ export function Orders() {
                       <Select
                         label={`Veículo ${index + 1}`}
                         placeholder={appointments.length > 0 ? 'Selecione um agendamento' : 'Nenhum agendamento disponível'}
-                        options={(index === 0 ? appointments : availableAppts).map((a) => ({
+                        options={getDistinctVehicleAppts(index === 0 ? appointments : availableAppts).map((a) => ({
                           value: a.vehicleId,
                           label: `${a.vehicle?.brand || ''} ${a.vehicle?.model || ''} - ${a.vehicle?.plate || ''} (${new Date(a.scheduledAt).toLocaleDateString('pt-BR')})`,
                         }))}
@@ -1157,7 +1166,7 @@ export function Orders() {
                         <Select
                           label="Carro"
                           placeholder={editAppointments.length > 0 ? 'Selecione um agendamento' : 'Nenhum agendamento disponível'}
-                          options={(i === 0 ? editAppointments : editAvailableAppts).map((a) => ({
+                          options={getDistinctVehicleAppts(i === 0 ? editAppointments : editAvailableAppts).map((a) => ({
                             value: a.vehicleId,
                             label: `${a.vehicle?.brand || ''} ${a.vehicle?.model || ''} - ${a.vehicle?.plate || ''} (${new Date(a.scheduledAt).toLocaleDateString('pt-BR')})`,
                           }))}
