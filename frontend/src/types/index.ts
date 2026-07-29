@@ -157,6 +157,7 @@ export interface OrderService {
 export interface OrderVehicleType {
   id: string
   vehicleId: string
+  scheduledAt?: string
   vehicle?: Vehicle
   notes?: string
 }

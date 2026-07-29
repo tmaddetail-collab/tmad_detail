@@ -106,13 +106,13 @@ export function Orders() {
   const [editOrder, setEditOrder] = useState<ServiceOrder | null>(null)
   const [editVehicleServices, setEditVehicleServices] = useState<Record<number, string[]>>({})
   const [editVehiclePrices, setEditVehiclePrices] = useState<Record<number, Record<string, number>>>({})
-  const [editVehicles, setEditVehicles] = useState<Array<{ vehicleId: string; notes: string; orderVehicleId?: string }>>([])
+  const [editVehicles, setEditVehicles] = useState<Array<{ vehicleId: string; notes: string; orderVehicleId?: string; appointmentId?: string }>>([])
   const [editAppointments, setEditAppointments] = useState<Appointment[]>([])
   const [clients, setClients] = useState<UserType[]>([])
   const [services, setServices] = useState<Service[]>([])
   const [createForm, setCreateForm] = useState({
     clientId: '',
-    vehicles: [] as Array<{ vehicleId: string; notes: string }>,
+    vehicles: [] as Array<{ vehicleId: string; notes: string; appointmentId?: string }>,
     serviceIds: [] as string[],
     appointmentId: '',
   })
@@ -275,26 +275,22 @@ export function Orders() {
     setCreateForm((prev) => {
       const updated = [...prev.vehicles]
       updated[index] = { ...updated[index], [field]: value }
-      return { ...prev, vehicles: updated }
-    })
-    if (field === 'vehicleId' && value) {
-      if (index === 0) {
+      if (field === 'vehicleId' && value) {
         const match = appointments.find((a) => a.vehicleId === value)
         if (match) {
-          setCreateForm((prev) => ({
-            ...prev,
-            appointmentId: match.id,
-            serviceIds: [],
-          }))
+          updated[index] = { ...updated[index], appointmentId: match.id }
+          if (index === 0) {
+            return { ...prev, vehicles: updated, appointmentId: match.id, serviceIds: [] }
+          }
+        }
+      } else if (field === 'vehicleId' && !value) {
+        updated[index] = { ...updated[index], appointmentId: '' }
+        if (index === 0) {
+          return { ...prev, vehicles: updated, appointmentId: '', serviceIds: [] }
         }
       }
-    } else if (field === 'vehicleId' && !value && index === 0) {
-      setCreateForm((prev) => ({
-        ...prev,
-        appointmentId: '',
-        serviceIds: [],
-      }))
-    }
+      return { ...prev, vehicles: updated }
+    })
   }
 
   const resetCreateForm = () => {
@@ -323,6 +319,7 @@ export function Orders() {
         client_id: createForm.clientId,
         vehicles: createForm.vehicles.map((v) => ({
           vehicle_id: v.vehicleId,
+          appointment_id: v.appointmentId || undefined,
           notes: v.notes || undefined,
         })),
         responsible_id: currentUser.id,
@@ -353,6 +350,7 @@ export function Orders() {
       vehicleId: v.vehicleId,
       notes: v.notes || '',
       orderVehicleId: v.id,
+      appointmentId: '',
     }))
     setEditVehicles(vehicles)
     const initialServices: Record<number, string[]> = {}
@@ -416,14 +414,10 @@ export function Orders() {
       const payload: any = {
       vehicles: editVehicles.map((v) => ({
         vehicle_id: v.vehicleId,
+        appointment_id: v.appointmentId || undefined,
         notes: v.notes || undefined,
       })),
       services: srvPayload,
-      }
-      const firstVeh = editVehicles[0]
-      if (firstVeh?.vehicleId) {
-        const appt = editAppointments.find((a) => a.vehicleId === firstVeh.vehicleId)
-        if (appt) payload.appointment_id = appt.id
       }
       const updated = await ordersApi.update(editOrder.id, payload)
       setSelectedOrder(updated)
@@ -455,7 +449,7 @@ export function Orders() {
 
   const addEditVehicle = () => {
     const newIndex = editVehicles.length
-    setEditVehicles((prev) => [...prev, { vehicleId: '', notes: '' }])
+    setEditVehicles((prev) => [...prev, { vehicleId: '', notes: '', appointmentId: '' }])
     setEditVehicleServices((prev) => ({ ...prev, [newIndex]: [] }))
     setEditVehiclePrices((prev) => ({ ...prev, [newIndex]: {} }))
   }
@@ -480,6 +474,10 @@ export function Orders() {
     setEditVehicles((prev) => {
       const updated = [...prev]
       updated[index] = { ...updated[index], [field]: value }
+      if (field === 'vehicleId' && value) {
+        const match = editAppointments.find((a) => a.vehicleId === value)
+        if (match) updated[index].appointmentId = match.id
+      }
       return updated
     })
     if (field === 'vehicleId' && value) {

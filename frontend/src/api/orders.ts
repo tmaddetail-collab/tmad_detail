@@ -82,6 +82,7 @@ function mapOrderDetail(item: any): ServiceOrder {
     vehicles: (item.vehicles ?? []).map((v: any) => ({
       id: v.id,
       vehicleId: v.vehicle_id,
+      scheduledAt: v.scheduled_at,
       notes: v.notes,
       vehicle: v.vehicle_info ? parseVehicleInfo(v.vehicle_info) : undefined,
     })),

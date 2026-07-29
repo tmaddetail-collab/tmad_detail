@@ -118,6 +118,9 @@ class OrderVehicle(Base):
         ForeignKey("vehicles.id", ondelete="RESTRICT"),
         nullable=False,
     )
+    scheduled_at: Mapped[datetime | None] = mapped_column(
+        DateTime(timezone=True), nullable=True
+    )
     notes: Mapped[str | None] = mapped_column(Text, nullable=True)
 
     # Relationships

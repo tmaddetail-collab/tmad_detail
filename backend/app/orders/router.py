@@ -201,6 +201,7 @@ async def get_order(
         vehicles.append(OrderVehicleResponse(
             id=ov.id,
             vehicle_id=ov.vehicle_id,
+            scheduled_at=ov.scheduled_at,
             notes=ov.notes,
             vehicle_info=f"{ov.vehicle.brand} {ov.vehicle.model} - {ov.vehicle.plate}" if ov.vehicle else None,
         ))
@@ -270,9 +271,16 @@ async def create_order(
     await db.flush()
 
     for v in payload.vehicles:
+        scheduled_at = None
+        if v.appointment_id:
+            apt = await db.execute(select(Appointment).where(Appointment.id == v.appointment_id))
+            apt = apt.scalar_one_or_none()
+            if apt:
+                scheduled_at = apt.scheduled_at
         db.add(OrderVehicle(
             order_id=order.id,
             vehicle_id=v.vehicle_id,
+            scheduled_at=scheduled_at,
             notes=v.notes,
         ))
 
@@ -367,9 +375,17 @@ async def update_order(
             vehicle_result = await db.execute(select(Vehicle).where(Vehicle.id == v_data["vehicle_id"]))
             if not vehicle_result.scalar_one_or_none():
                 raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"Veículo {v_data['vehicle_id']} não encontrado")
+            scheduled_at = None
+            apt_id = v_data.get("appointment_id")
+            if apt_id:
+                apt = await db.execute(select(Appointment).where(Appointment.id == apt_id))
+                apt = apt.scalar_one_or_none()
+                if apt:
+                    scheduled_at = apt.scheduled_at
             db.add(OrderVehicle(
                 order_id=order.id,
                 vehicle_id=v_data["vehicle_id"],
+                scheduled_at=scheduled_at,
                 notes=v_data.get("notes"),
             ))
         if vehicles_data:

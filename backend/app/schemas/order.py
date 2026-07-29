@@ -10,6 +10,7 @@ from app.models.order import OrderStatus, PhotoType
 
 class OrderVehicleCreate(BaseModel):
     vehicle_id: uuid.UUID
+    appointment_id: Optional[uuid.UUID] = None
     notes: Optional[str] = None
 
 
@@ -49,6 +50,7 @@ class OrderApprove(BaseModel):
 class OrderVehicleResponse(BaseModel):
     id: uuid.UUID
     vehicle_id: uuid.UUID
+    scheduled_at: Optional[datetime] = None
     notes: Optional[str] = None
     vehicle_info: Optional[str] = None
 

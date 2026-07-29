@@ -33,7 +33,7 @@ export function printOrder(order: ServiceOrder): void {
         <div class="vehicle-title">Veículo ${i + 1}</div>
         <div class="vehicle-subtitle">${v.vehicle ? `${v.vehicle.brand} ${v.vehicle.model} - ${v.vehicle.plate || 'sem placa'}` : '—'}</div>
       </div>
-      <div class="vehicle-date"><span class="label">Execução:</span> ${formatDateBR(order.appointmentScheduledAt || order.createdAt)}</div>
+      ${v.scheduledAt ? `<div class="vehicle-date"><span class="label">Execução:</span> ${formatDateBR(v.scheduledAt)}</div>` : ''}
       ${v.notes ? `<div class="obs">${v.notes}</div>` : ''}
       <table class="srv-table">
         <thead>

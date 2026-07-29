@@ -37,6 +37,16 @@ async def lifespan(app: FastAPI):
             text("PRAGMA table_info(order_services)")
         )
         pk_cols = {row[1] for row in result.fetchall() if row[5] == 1}  # pk=1
+        # Add scheduled_at column to order_vehicles if not exists
+        result = await conn.execute(
+            text("PRAGMA table_info(order_vehicles)")
+        )
+        cols = {row[1] for row in result.fetchall()}
+        if "scheduled_at" not in cols:
+            await conn.execute(
+                text("ALTER TABLE order_vehicles ADD COLUMN scheduled_at DATETIME")
+            )
+        # Recreate order_services table with composite PK
         if pk_cols != {"order_id", "service_id", "order_vehicle_id"}:
             await conn.execute(text("""
                 CREATE TABLE order_services_new (
