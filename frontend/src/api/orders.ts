@@ -98,7 +98,7 @@ function mapOrderDetail(item: any): ServiceOrder {
     photos: (item.photos ?? []).map((p: any) => ({
       id: p.id,
       orderId: item.id,
-      url: p.url.startsWith('http') ? p.url : `http://localhost:8000${p.url}`,
+      url: p.url.startsWith('http') ? p.url : p.url,
       type: p.type,
       filename: p.filename,
       createdAt: p.uploaded_at,
