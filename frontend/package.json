@@ -28,6 +28,9 @@
     "zod": "^3.22.4",
     "zustand": "^4.5.2"
   },
+  "engines": {
+    "node": "20.x"
+  },
   "devDependencies": {
     "@types/react": "^18.2.66",
     "@types/react-big-calendar": "^1.8.9",
