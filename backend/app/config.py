@@ -41,7 +41,7 @@ class Settings(BaseSettings):
     FRONTEND_URL: str = "http://localhost:3000"
 
     # CORS
-    CORS_ORIGINS: str = "http://localhost:3000,http://localhost:5173,https://tmad-detail.vercel.app"
+    CORS_ORIGINS: str = "https://tmad-detail.vercel.app:3000,https://tmad-detail.vercel.app:5173,https://tmad-detail.vercel.app"
 
     model_config = SettingsConfigDict(
         env_file=".env",
