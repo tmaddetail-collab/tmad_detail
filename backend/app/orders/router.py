@@ -129,6 +129,12 @@ async def list_orders(
             ) * os.quantity
             for os in order.order_services
         )
+        apt_ids = []
+        if order.appointment_id:
+            apt_ids.append(order.appointment_id)
+        for ov in order.order_vehicles:
+            if ov.appointment_id and ov.appointment_id not in apt_ids:
+                apt_ids.append(ov.appointment_id)
         items.append(OrderSummary(
             id=order.id,
             order_number=order.order_number,
@@ -137,7 +143,9 @@ async def list_orders(
             total_value=pts,
             status=order.status,
             created_at=order.created_at,
+            appointment_id=order.appointment_id,
             appointment_scheduled_at=order.appointment.scheduled_at if order.appointment else None,
+            appointment_ids=apt_ids,
             client_name=order.client.name if order.client else None,
             vehicle_info=f"{order.vehicle.brand} {order.vehicle.model} - {order.vehicle.plate}" if order.vehicle else None,
         ))
@@ -201,6 +209,7 @@ async def get_order(
         vehicles.append(OrderVehicleResponse(
             id=ov.id,
             vehicle_id=ov.vehicle_id,
+            appointment_id=ov.appointment_id,
             scheduled_at=ov.scheduled_at,
             notes=ov.notes,
             vehicle_info=f"{ov.vehicle.brand} {ov.vehicle.model} - {ov.vehicle.plate}" if ov.vehicle else None,
@@ -270,6 +279,7 @@ async def create_order(
     db.add(order)
     await db.flush()
 
+    ov_list = []
     for v in payload.vehicles:
         scheduled_at = None
         if v.appointment_id:
@@ -277,26 +287,19 @@ async def create_order(
             apt = apt.scalar_one_or_none()
             if apt:
                 scheduled_at = apt.scheduled_at
-        db.add(OrderVehicle(
+        ov = OrderVehicle(
             order_id=order.id,
             vehicle_id=v.vehicle_id,
+            appointment_id=v.appointment_id,
             scheduled_at=scheduled_at,
             notes=v.notes,
-        ))
+        )
+        db.add(ov)
+        ov_list.append(ov)
 
     await db.flush()
 
-    # Map service vehicle_idx to OrderVehicle id
-    ov_list = []
-    for idx, v in enumerate(payload.vehicles):
-        ov = await db.execute(
-            select(OrderVehicle).where(
-                OrderVehicle.order_id == order.id,
-                OrderVehicle.vehicle_id == v.vehicle_id,
-            )
-        )
-        ov = ov.scalar_one_or_none()
-        ov_list.append(ov.id if ov else None)
+    ov_list = [ov.id for ov in ov_list]
 
     for srv_data in payload.services:
         ov_id = srv_data.order_vehicle_id
@@ -325,8 +328,14 @@ async def create_order(
 
     await db.flush()
 
+    linked_appt_ids = set()
     if payload.appointment_id:
-        apt = await db.execute(select(Appointment).where(Appointment.id == payload.appointment_id))
+        linked_appt_ids.add(payload.appointment_id)
+    for v in payload.vehicles:
+        if v.appointment_id:
+            linked_appt_ids.add(v.appointment_id)
+    for apt_id in linked_appt_ids:
+        apt = await db.execute(select(Appointment).where(Appointment.id == apt_id))
         apt = apt.scalar_one_or_none()
         if apt:
             apt.status = "in_progress"
@@ -385,11 +394,13 @@ async def update_order(
             db.add(OrderVehicle(
                 order_id=order.id,
                 vehicle_id=v_data["vehicle_id"],
+                appointment_id=apt_id if apt_id else None,
                 scheduled_at=scheduled_at,
                 notes=v_data.get("notes"),
             ))
         if vehicles_data:
             order.vehicle_id = vehicles_data[0]["vehicle_id"]
+            order.appointment_id = vehicles_data[0].get("appointment_id")
         await db.flush()
 
     if services_data is not None:

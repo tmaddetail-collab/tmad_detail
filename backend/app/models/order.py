@@ -118,6 +118,12 @@ class OrderVehicle(Base):
         ForeignKey("vehicles.id", ondelete="RESTRICT"),
         nullable=False,
     )
+    appointment_id: Mapped[uuid.UUID | None] = mapped_column(
+        Uuid,
+        ForeignKey("appointments.id", ondelete="SET NULL"),
+        nullable=True,
+        index=True,
+    )
     scheduled_at: Mapped[datetime | None] = mapped_column(
         DateTime(timezone=True), nullable=True
     )

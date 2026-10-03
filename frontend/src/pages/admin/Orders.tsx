@@ -49,15 +49,6 @@ import {
 } from '@/utils/formatters'
 import { printOrder } from '@/utils/printOrder'
 
-function getDistinctVehicleAppts(appts: Appointment[]): Appointment[] {
-  const seen = new Set<string>()
-  return appts.filter((a) => {
-    if (seen.has(a.vehicleId)) return false
-    seen.add(a.vehicleId)
-    return true
-  })
-}
-
 const statusOptions = [
   { value: '', label: 'Todos' },
   { value: OrderStatus.OPEN, label: 'Aberta' },
@@ -137,10 +128,8 @@ export function Orders() {
   }, [fetchOrders])
 
   const [appointments, setAppointments] = useState<Appointment[]>([])
-  const [appointmentServiceIds, setAppointmentServiceIds] = useState<string[]>([])
-  const [aptServices, setAptServices] = useState<Service[]>([])
-  const [usedServiceIds, setUsedServiceIds] = useState<Set<string>>(new Set())
-  const [servicePrices, setServicePrices] = useState<Record<string, number>>({})
+  const [createVehicleServices, setCreateVehicleServices] = useState<Record<number, string[]>>({})
+  const [createVehiclePrices, setCreateVehiclePrices] = useState<Record<number, Record<string, number>>>({})
 
   useEffect(() => {
     if (!showCreateModal && !showEditModal) return
@@ -170,10 +159,15 @@ export function Orders() {
           appointmentsApi.getAll({
             clientId: createForm.clientId,
             status: AppointmentStatus.FINISHED,
+            pageSize: 100,
           }),
-          ordersApi.getAll({ clientId: createForm.clientId }),
+          ordersApi.getAll({ clientId: createForm.clientId, pageSize: 100 }),
         ])
-        const used = new Set(clientOrders.filter((o) => o.appointmentId).map((o) => o.appointmentId!))
+        const used = new Set<string>()
+        clientOrders.forEach((o) => {
+          if (o.appointmentId) used.add(o.appointmentId)
+          ;(o.appointmentIds ?? []).forEach((id) => used.add(id))
+        })
         setAppointments(appts.filter((a) => !used.has(a.id)))
       } catch {
         toast('error', 'Erro ao carregar agendamentos do cliente')
@@ -182,92 +176,79 @@ export function Orders() {
     loadData()
   }, [createForm.clientId, showCreateModal, toast])
 
-  useEffect(() => {
-    setCreateForm((prev) => {
-      if (prev.appointmentId) return prev
-      const first = prev.vehicles[0]
-      if (!first?.vehicleId) return prev
-      const match = appointments.find((a) => a.vehicleId === first.vehicleId)
-      if (!match) return prev
-      return { ...prev, appointmentId: match.id, serviceIds: [] }
-    })
-  }, [appointments])
+  const availableAppts = useMemo(() => {
+    const selected = new Set<string>()
+    createForm.vehicles.forEach((v) => { if (v.appointmentId) selected.add(v.appointmentId) })
+    return appointments.filter((a) => !selected.has(a.id))
+  }, [appointments, createForm.vehicles])
 
-  const availableAppts = useMemo(
-    () => appointments.filter((a) => a.id !== createForm.appointmentId),
-    [appointments, createForm.appointmentId],
-  )
-
-  useEffect(() => {
-    if (!createForm.appointmentId) {
-      setAppointmentServiceIds([])
-      setAptServices([])
-      setUsedServiceIds(new Set())
-      setServicePrices({})
-      return
+  const apptOptionsForRow = (source: Appointment[], list: Appointment[], ownId?: string) => {
+    const base = [...list]
+    if (ownId && !base.some((a) => a.id === ownId)) {
+      const own = source.find((a) => a.id === ownId)
+      if (own) base.unshift(own)
     }
-    const loadAppointmentServices = async () => {
-      try {
-        const [apt, existingOrders] = await Promise.all([
-          appointmentsApi.getById(createForm.appointmentId),
-          ordersApi.getAll({ appointmentId: createForm.appointmentId }),
-        ])
-        const used = new Set<string>()
-        for (const order of existingOrders) {
-          for (const os of order.services) {
-            used.add(os.serviceId || os.id)
-          }
-        }
-        setUsedServiceIds(used)
-        setAppointmentServiceIds(apt.services.map((s) => s.id))
-        setAptServices(apt.services)
-        const prices: Record<string, number> = {}
-        apt.services.forEach((s) => { prices[s.id] = s.price })
-        setServicePrices(prices)
-        setCreateForm((prev) => ({
-          ...prev,
-          serviceIds: apt.services.filter((s) => !used.has(s.id)).map((s) => s.id),
-        }))
-      } catch {
-        toast('error', 'Erro ao carregar serviços do agendamento')
-      }
-    }
-    loadAppointmentServices()
-  }, [createForm.appointmentId, toast])
-
-  const selectedServicesTotal = useMemo(
-    () => createForm.serviceIds.reduce((acc, id) => acc + (servicePrices[id] ?? 0), 0),
-    [createForm.serviceIds, servicePrices],
-  )
-
-  const toggleCreateService = (serviceId: string) => {
-    if (usedServiceIds.has(serviceId)) return
-    setCreateForm((prev) => ({
-      ...prev,
-      serviceIds: prev.serviceIds.includes(serviceId)
-        ? prev.serviceIds.filter((id) => id !== serviceId)
-        : [...prev.serviceIds, serviceId],
+    return base.map((a) => ({
+      value: a.id,
+      label: `${a.vehicle?.brand || ''} ${a.vehicle?.model || ''} - ${a.vehicle?.plate || ''} (${new Date(a.scheduledAt).toLocaleDateString('pt-BR')})`,
     }))
   }
 
-  const updateServicePrice = (serviceId: string, price: number) => {
-    setServicePrices((prev) => ({ ...prev, [serviceId]: price }))
+  const createTotal = useMemo(() => {
+    let total = 0
+    Object.entries(createVehicleServices).forEach(([idxStr, sids]) => {
+      const idx = Number(idxStr)
+      sids.forEach((sid) => { total += (createVehiclePrices[idx]?.[sid] ?? 0) })
+    })
+    return total
+  }, [createVehicleServices, createVehiclePrices])
+
+  const toggleCreateVehicleService = (index: number, serviceId: string) => {
+    setCreateVehicleServices((prev) => {
+      const current = prev[index] || []
+      return {
+        ...prev,
+        [index]: current.includes(serviceId)
+          ? current.filter((id) => id !== serviceId)
+          : [...current, serviceId],
+      }
+    })
+  }
+
+  const updateCreateVehiclePrice = (index: number, serviceId: string, price: number) => {
+    setCreateVehiclePrices((prev) => ({
+      ...prev,
+      [index]: { ...(prev[index] || {}), [serviceId]: price },
+    }))
   }
 
   const addVehicle = () => {
+    const newIndex = createForm.vehicles.length
     setCreateForm((prev) => ({
       ...prev,
       vehicles: [...prev.vehicles, { vehicleId: '', notes: '' }],
     }))
+    setCreateVehicleServices((prev) => ({ ...prev, [newIndex]: [] }))
+    setCreateVehiclePrices((prev) => ({ ...prev, [newIndex]: {} }))
   }
 
   const removeVehicle = (index: number) => {
     setCreateForm((prev) => {
       const updated = prev.vehicles.filter((_, i) => i !== index)
       if (index === 0) {
-        return { ...prev, vehicles: updated, appointmentId: '', serviceIds: [] }
+        return { ...prev, vehicles: updated, appointmentId: '' }
       }
       return { ...prev, vehicles: updated }
+    })
+    setCreateVehicleServices((prev) => {
+      const next: Record<number, string[]> = {}
+      Object.entries(prev).filter(([k]) => Number(k) !== index).forEach(([k, v], i) => { next[i] = v })
+      return next
+    })
+    setCreateVehiclePrices((prev) => {
+      const next: Record<number, Record<string, number>> = {}
+      Object.entries(prev).filter(([k]) => Number(k) !== index).forEach(([k, v], i) => { next[i] = v })
+      return next
     })
   }
 
@@ -293,13 +274,38 @@ export function Orders() {
     })
   }
 
+  const selectCreateAppointment = (index: number, appointmentId: string) => {
+    setCreateForm((prev) => {
+      const apt = appointments.find((a) => a.id === appointmentId)
+      if (!apt) return prev
+      const updated = [...prev.vehicles]
+      updated[index] = { ...updated[index], vehicleId: apt.vehicleId, appointmentId: apt.id }
+      if (index === 0) {
+        return { ...prev, vehicles: updated, appointmentId: apt.id }
+      }
+      return { ...prev, vehicles: updated }
+    })
+    if (!appointmentId) return
+    appointmentsApi.getById(appointmentId).then((apt) => {
+      const newServiceIds = apt.services.map((s) => s.id)
+      const newPrices: Record<string, number> = {}
+      apt.services.forEach((s) => { newPrices[s.id] = s.price })
+      setCreateVehicleServices((prev) => ({
+        ...prev,
+        [index]: index === 0 ? newServiceIds : [...new Set([...(prev[index] || []), ...newServiceIds])],
+      }))
+      setCreateVehiclePrices((prev) => ({
+        ...prev,
+        [index]: index === 0 ? newPrices : { ...(prev[index] || {}), ...newPrices },
+      }))
+    }).catch(() => {})
+  }
+
   const resetCreateForm = () => {
     setCreateForm({ clientId: '', vehicles: [], serviceIds: [], appointmentId: '' })
     setAppointments([])
-    setAppointmentServiceIds([])
-    setAptServices([])
-    setUsedServiceIds(new Set())
-    setServicePrices({})
+    setCreateVehicleServices({})
+    setCreateVehiclePrices({})
   }
 
   const handleCreateOrder = async (e: React.FormEvent) => {
@@ -309,12 +315,30 @@ export function Orders() {
       toast('error', 'Selecione o cliente e pelo menos um veículo')
       return
     }
-    if (createForm.serviceIds.length === 0) {
+    const hasAnyService = Object.values(createVehicleServices).some((ids) => ids.length > 0)
+    if (!hasAnyService) {
       toast('error', 'Selecione pelo menos um serviço')
       return
     }
     try {
       setSubmitting(true)
+      const seen = new Set<string>()
+      const srvPayload: any[] = []
+      Object.entries(createVehicleServices).forEach(([idxStr, sids]) => {
+        const idx = Number(idxStr)
+        sids.forEach((sid) => {
+          const key = `${sid}|${idx}`
+          if (!seen.has(key)) {
+            seen.add(key)
+            srvPayload.push({
+              service_id: sid,
+              price_at_time: createVehiclePrices[idx]?.[sid] ?? services.find(s => s.id === sid)?.price ?? 0,
+              quantity: 1,
+              vehicle_idx: idx,
+            })
+          }
+        })
+      })
       const payload: any = {
         client_id: createForm.clientId,
         vehicles: createForm.vehicles.map((v) => ({
@@ -323,11 +347,7 @@ export function Orders() {
           notes: v.notes || undefined,
         })),
         responsible_id: currentUser.id,
-        services: createForm.serviceIds.map((sid) => ({
-          service_id: sid,
-          price_at_time: servicePrices[sid] ?? services.find(s => s.id === sid)?.price ?? 0,
-          quantity: 1,
-        })),
+        services: srvPayload,
       }
       if (createForm.appointmentId) {
         payload.appointment_id = createForm.appointmentId
@@ -350,17 +370,19 @@ export function Orders() {
       vehicleId: v.vehicleId,
       notes: v.notes || '',
       orderVehicleId: v.id,
-      appointmentId: '',
+      appointmentId: v.appointmentId || '',
     }))
     setEditVehicles(vehicles)
     const initialServices: Record<number, string[]> = {}
     const initialPrices: Record<number, Record<string, number>> = {}
-    const allServiceIds = order.services.map((s) => s.serviceId)
-    const allPrices: Record<string, number> = {}
-    order.services.forEach((s) => { allPrices[s.serviceId] = s.price })
-    order.vehicles.forEach((_, i) => {
-      initialServices[i] = [...allServiceIds]
-      initialPrices[i] = { ...allPrices }
+    const orphan = order.services.filter((s) => !s.orderVehicleId)
+    order.vehicles.forEach((v, i) => {
+      let list = order.services.filter((s) => s.orderVehicleId === v.id)
+      if (i === 0) list = [...orphan, ...list]
+      initialServices[i] = list.map((s) => s.serviceId)
+      const prices: Record<string, number> = {}
+      list.forEach((s) => { prices[s.serviceId] = s.price })
+      initialPrices[i] = prices
     })
     setEditVehicleServices(initialServices)
     setEditVehiclePrices(initialPrices)
@@ -369,10 +391,17 @@ export function Orders() {
         appointmentsApi.getAll({
           clientId: order.clientId,
           status: AppointmentStatus.FINISHED,
+          pageSize: 100,
         }),
-        ordersApi.getAll({ clientId: order.clientId }),
+        ordersApi.getAll({ clientId: order.clientId, pageSize: 100 }),
       ])
-      const used = new Set(clientOrders.filter((o) => o.appointmentId && o.id !== order.id).map((o) => o.appointmentId!))
+      const used = new Set<string>()
+      clientOrders
+        .filter((o) => o.id !== order.id)
+        .forEach((o) => {
+          if (o.appointmentId) used.add(o.appointmentId)
+          ;(o.appointmentIds ?? []).forEach((id) => used.add(id))
+        })
       setEditAppointments(appts.filter((a) => !used.has(a.id)))
     } catch {
       toast('error', 'Erro ao carregar agendamentos')
@@ -438,13 +467,9 @@ export function Orders() {
   }
 
   const editAvailableAppts = useMemo(() => {
-    if (editVehicles.length === 0) return editAppointments
-    const firstVehicle = editVehicles[0]
-    if (!firstVehicle?.vehicleId) return editAppointments
-    const linkedAppt = editAppointments.find((a) => a.vehicleId === firstVehicle.vehicleId)
-    return linkedAppt
-      ? editAppointments.filter((a) => a.id !== linkedAppt.id)
-      : editAppointments
+    const selected = new Set<string>()
+    editVehicles.forEach((v) => { if (v.appointmentId) selected.add(v.appointmentId) })
+    return editAppointments.filter((a) => !selected.has(a.id))
   }, [editAppointments, editVehicles])
 
   const addEditVehicle = () => {
@@ -497,6 +522,31 @@ export function Orders() {
         }))
       }).catch(() => {})
     }
+  }
+
+  const selectEditAppointment = (index: number, appointmentId: string) => {
+    setEditVehicles((prev) => {
+      const apt = editAppointments.find((a) => a.id === appointmentId)
+      if (!apt) return prev
+      const updated = [...prev]
+      updated[index] = { ...updated[index], vehicleId: apt.vehicleId, appointmentId: apt.id }
+      return updated
+    })
+    const apt = editAppointments.find((a) => a.id === appointmentId)
+    if (!apt) return
+    appointmentsApi.getById(apt.id).then((aptDetail) => {
+      const newServiceIds = aptDetail.services.map((s) => s.id)
+      const newPrices: Record<string, number> = {}
+      aptDetail.services.forEach((s) => { newPrices[s.id] = s.price })
+      setEditVehicleServices((prev) => ({
+        ...prev,
+        [index]: index === 0 ? newServiceIds : [...new Set([...(prev[index] || []), ...newServiceIds])],
+      }))
+      setEditVehiclePrices((prev) => ({
+        ...prev,
+        [index]: index === 0 ? newPrices : { ...(prev[index] || {}), ...newPrices },
+      }))
+    }).catch(() => {})
   }
 
   const loadChecklist = useCallback(async (orderId: string) => {
@@ -973,13 +1023,17 @@ export function Orders() {
             placeholder="Selecione um cliente"
             options={clients.map((c) => ({ value: c.id, label: c.name }))}
             value={createForm.clientId}
-            onChange={(e) => setCreateForm({
-              ...createForm,
-              clientId: e.target.value,
-              appointmentId: '',
-              vehicles: [],
-              serviceIds: [],
-            })}
+            onChange={(e) => {
+              setCreateForm({
+                ...createForm,
+                clientId: e.target.value,
+                appointmentId: '',
+                vehicles: [],
+                serviceIds: [],
+              })
+              setCreateVehicleServices({})
+              setCreateVehiclePrices({})
+            }}
           />
 
           {!createForm.clientId ? (
@@ -1010,22 +1064,56 @@ export function Orders() {
             ) : (
               <div className="space-y-3">
                 {createForm.vehicles.map((v, index) => (
-                  <div key={index} className="flex flex-col gap-2 p-3 border border-border rounded-xl bg-surface">
+                  <div key={index} className="p-3 border border-border rounded-xl bg-surface space-y-3">
                     <div className="flex items-center gap-2">
                       <Select
                         label={`Veículo ${index + 1}`}
                         placeholder={appointments.length > 0 ? 'Selecione um agendamento' : 'Nenhum agendamento disponível'}
-                        options={getDistinctVehicleAppts(index === 0 ? appointments : availableAppts).map((a) => ({
-                          value: a.vehicleId,
-                          label: `${a.vehicle?.brand || ''} ${a.vehicle?.model || ''} - ${a.vehicle?.plate || ''} (${new Date(a.scheduledAt).toLocaleDateString('pt-BR')})`,
-                        }))}
-                        value={v.vehicleId}
-                        onChange={(e) => updateVehicle(index, 'vehicleId', e.target.value)}
+                        options={apptOptionsForRow(appointments, index === 0 ? appointments : availableAppts, v.appointmentId)}
+                        value={v.appointmentId}
+                        onChange={(e) => selectCreateAppointment(index, e.target.value)}
                         className="flex-1"
                       />
                       <Button type="button" variant="secondary" size="sm" onClick={() => removeVehicle(index)} className="mt-5 shrink-0">
                         Remover
                       </Button>
+                    </div>
+                    <div className="space-y-1.5">
+                      <label className="block text-xs font-medium text-text">
+                        Serviços
+                        {v.appointmentId && (
+                          <span className="text-xs text-text-secondary ml-2">(do agendamento — clique no valor para editar)</span>
+                        )}
+                      </label>
+                      <div className="space-y-2 max-h-48 overflow-y-auto border border-border rounded-lg p-2">
+                        {services.map((s) => {
+                          const checked = (createVehicleServices[index] || []).includes(s.id)
+                          return (
+                            <div key={s.id} className="flex items-center gap-3 p-2 rounded-lg hover:bg-surface-2">
+                              <input
+                                type="checkbox"
+                                checked={checked}
+                                onChange={() => toggleCreateVehicleService(index, s.id)}
+                                className="rounded border-border text-primary focus:ring-primary"
+                              />
+                              <Wrench className="h-4 w-4 shrink-0 text-text-secondary" />
+                              <span className="flex-1 text-sm text-text">{s.name}</span>
+                              <input
+                                type="number"
+                                step="0.01"
+                                min="0"
+                                value={(createVehiclePrices[index] || {})[s.id] ?? s.price}
+                                onChange={(e) => updateCreateVehiclePrice(index, s.id, parseFloat(e.target.value) || 0)}
+                                className="w-28 px-2 py-1 text-sm text-right border border-border rounded-lg bg-surface focus:outline-none focus:ring-1 focus:ring-primary"
+                              />
+                              <span className="text-sm text-text-secondary w-12 text-right">{s.estimatedMinutes}min</span>
+                            </div>
+                          )
+                        })}
+                        {services.length === 0 && (
+                          <p className="text-sm text-text-secondary text-center py-3">Nenhum serviço ativo cadastrado</p>
+                        )}
+                      </div>
                     </div>
                     <textarea
                       placeholder="Observações deste veículo (opcional)"
@@ -1040,71 +1128,12 @@ export function Orders() {
             )}
           </div>
 
-          <div className="space-y-1.5">
-            <label className="block text-sm font-medium text-text">
-              Serviços
-              {createForm.appointmentId && (
-                <span className="text-xs text-text-secondary ml-2">
-                  (serviços do agendamento — clique no valor para editar)
-                </span>
-              )}
-            </label>
-            {createForm.appointmentId && appointmentServiceIds.length === 0 ? (
-              <div className="flex items-center justify-center py-6">
-                <span className="inline-block h-5 w-5 animate-spin rounded-full border-2 border-border border-t-primary" />
-                <span className="ml-2 text-sm text-text-secondary">Carregando serviços...</span>
-              </div>
-            ) : createForm.appointmentId ? (
-              <div className="space-y-2 max-h-60 overflow-y-auto border border-border rounded-xl p-2">
-                {aptServices.map((s) => {
-                  const isUsed = usedServiceIds.has(s.id)
-                  if (isUsed) return null
-                  return (
-                    <div
-                      key={s.id}
-                      className="flex items-center gap-3 p-2 rounded-lg hover:bg-surface-2"
-                    >
-                      <input
-                        type="checkbox"
-                        checked={createForm.serviceIds.includes(s.id)}
-                        onChange={() => toggleCreateService(s.id)}
-                        className="rounded border-border text-primary focus:ring-primary"
-                      />
-                      <Wrench className="h-4 w-4 shrink-0 text-text-secondary" />
-                      <span className="flex-1 text-sm text-text">{s.name}</span>
-                      <input
-                        type="number"
-                        step="0.01"
-                        min="0"
-                        value={servicePrices[s.id] ?? s.price}
-                        onChange={(e) => updateServicePrice(s.id, parseFloat(e.target.value) || 0)}
-                        className="w-28 px-2 py-1 text-sm text-right border border-border rounded-lg bg-surface focus:outline-none focus:ring-1 focus:ring-primary"
-                      />
-                      <span className="text-sm text-text-secondary w-12 text-right">{s.estimatedMinutes}min</span>
-                    </div>
-                  )
-                })}
-                {aptServices.filter((s) => !usedServiceIds.has(s.id)).length === 0 && (
-                  <p className="text-sm text-text-secondary text-center py-4">
-                    Todos os serviços deste agendamento já estão em outras ordens de serviço
-                  </p>
-                )}
-              </div>
-            ) : (
-              <div className="p-3 rounded-xl bg-surface-2 text-sm text-text-secondary text-center">
-                {createForm.vehicles.some((v) => v.vehicleId && !appointments.find((a) => a.vehicleId === v.vehicleId))
-                  ? 'Nenhum agendamento encontrado para o veículo selecionado'
-                  : 'Selecione um veículo com agendamento para ver os serviços'}
-              </div>
+          <div className="flex justify-end items-center gap-3 pt-2">
+            {createTotal > 0 && (
+              <span className="text-sm text-text-secondary font-medium mr-auto">
+                Total: {new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(createTotal)}
+              </span>
             )}
-            {createForm.serviceIds.length > 0 && (
-              <p className="text-sm text-text-secondary text-right font-medium">
-                Total: {new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(selectedServicesTotal)}
-              </p>
-            )}
-          </div>
-
-          <div className="flex justify-end gap-3 pt-2">
             <Button type="button" variant="secondary" onClick={() => { setShowCreateModal(false); resetCreateForm() }}>
               Cancelar
             </Button>
@@ -1164,12 +1193,9 @@ export function Orders() {
                         <Select
                           label="Carro"
                           placeholder={editAppointments.length > 0 ? 'Selecione um agendamento' : 'Nenhum agendamento disponível'}
-                          options={getDistinctVehicleAppts(i === 0 ? editAppointments : editAvailableAppts).map((a) => ({
-                            value: a.vehicleId,
-                            label: `${a.vehicle?.brand || ''} ${a.vehicle?.model || ''} - ${a.vehicle?.plate || ''} (${new Date(a.scheduledAt).toLocaleDateString('pt-BR')})`,
-                          }))}
-                          value={v.vehicleId}
-                          onChange={(e) => updateEditVehicle(i, 'vehicleId', e.target.value)}
+                          options={apptOptionsForRow(editAppointments, i === 0 ? editAppointments : editAvailableAppts, v.appointmentId)}
+                          value={v.appointmentId}
+                          onChange={(e) => selectEditAppointment(i, e.target.value)}
                         />
                         {i === 0 && editOrder.appointmentId && (
                           <span className="text-xs text-primary">Agendamento vinculado</span>

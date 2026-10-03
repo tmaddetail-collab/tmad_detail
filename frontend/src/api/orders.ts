@@ -49,6 +49,7 @@ function mapOrderSummary(item: any): ServiceOrder {
     updatedAt: item.updated_at,
     appointmentId: item.appointment_id,
     appointmentScheduledAt: item.appointment_scheduled_at,
+    appointmentIds: item.appointment_ids ?? [],
     client: item.client_name ? { id: item.client_id, name: item.client_name } as any : undefined,
     vehicle: item.vehicle_info ? parseVehicleInfo(item.vehicle_info) : undefined,
     vehicles: [],
@@ -82,6 +83,7 @@ function mapOrderDetail(item: any): ServiceOrder {
     vehicles: (item.vehicles ?? []).map((v: any) => ({
       id: v.id,
       vehicleId: v.vehicle_id,
+      appointmentId: v.appointment_id || undefined,
       scheduledAt: v.scheduled_at,
       notes: v.notes,
       vehicle: v.vehicle_info ? parseVehicleInfo(v.vehicle_info) : undefined,

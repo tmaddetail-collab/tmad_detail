@@ -50,6 +50,7 @@ class OrderApprove(BaseModel):
 class OrderVehicleResponse(BaseModel):
     id: uuid.UUID
     vehicle_id: uuid.UUID
+    appointment_id: Optional[uuid.UUID] = None
     scheduled_at: Optional[datetime] = None
     notes: Optional[str] = None
     vehicle_info: Optional[str] = None
@@ -112,7 +113,9 @@ class OrderSummary(BaseModel):
     total_value: Decimal
     status: OrderStatus
     created_at: datetime
+    appointment_id: Optional[uuid.UUID] = None
     appointment_scheduled_at: Optional[datetime] = None
+    appointment_ids: list[uuid.UUID] = []
     client_name: Optional[str] = None
     vehicle_info: Optional[str] = None
 

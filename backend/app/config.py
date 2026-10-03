@@ -38,10 +38,10 @@ class Settings(BaseSettings):
     MAX_UPLOAD_SIZE: int = 10_485_760  # 10MB
 
     # Frontend
-    FRONTEND_URL: str = "http://localhost:3000"
+    FRONTEND_URL: str = "https://tmad-detail.vercel.app"
 
     # CORS
-    CORS_ORIGINS: str = "https://tmad-detail.vercel.app:3000,https://tmad-detail.vercel.app:5173,https://tmad-detail.vercel.app"
+    CORS_ORIGINS: str = "http://localhost:3000,http://localhost:5173,https://tmad-detail.vercel.app"
 
     model_config = SettingsConfigDict(
         env_file=".env",

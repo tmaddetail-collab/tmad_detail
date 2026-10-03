@@ -46,6 +46,28 @@ async def lifespan(app: FastAPI):
             await conn.execute(
                 text("ALTER TABLE order_vehicles ADD COLUMN scheduled_at DATETIME")
             )
+        # Add appointment_id column to order_vehicles if not exists
+        result = await conn.execute(
+            text("PRAGMA table_info(order_vehicles)")
+        )
+        cols = {row[1] for row in result.fetchall()}
+        if "appointment_id" not in cols:
+            await conn.execute(
+                text("ALTER TABLE order_vehicles ADD COLUMN appointment_id CHAR(32) REFERENCES appointments(id) ON DELETE SET NULL")
+            )
+            await conn.execute(text("""
+                UPDATE order_vehicles
+                SET appointment_id = (
+                    SELECT a.id FROM appointments a
+                    JOIN service_orders so ON so.id = order_vehicles.order_id
+                    WHERE a.vehicle_id = order_vehicles.vehicle_id
+                      AND a.scheduled_at = order_vehicles.scheduled_at
+                      AND a.client_id = so.client_id
+                    LIMIT 1
+                )
+                WHERE order_vehicles.appointment_id IS NULL
+                  AND order_vehicles.scheduled_at IS NOT NULL
+            """))
         # Recreate order_services table with composite PK
         if pk_cols != {"order_id", "service_id", "order_vehicle_id"}:
             await conn.execute(text("""
